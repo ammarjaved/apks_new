@@ -37,13 +37,14 @@
         var to_date = "{{$to_date}}";
         var pdfPaths = [];
         var folderName = '';
+        var cycle = $('#cycle').val();
 
 
 
 
             $.ajax(
                 {
-                    url: `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${ba}&from_date=${from_date}&to_date=${to_date}`,
+                    url: `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${ba}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}`,
                     method: 'GET',
                     success: function(response)
                     {
@@ -77,7 +78,7 @@
 
                 $.ajax(
                     {
-                        url: '/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + ba + '&visit_date=' + dates[index]+'&folder_name='+folderName,
+                        url: '/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + ba + '&visit_date=' + dates[index]+'&folder_name='+folderName'&cycle='+cycle,
                         method: 'GET',
                         success: function(response)
                         {

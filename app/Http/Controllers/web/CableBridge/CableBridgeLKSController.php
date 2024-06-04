@@ -29,7 +29,7 @@ class CableBridgeLKSController extends Controller
     {
         $result = CableBridge::query();
 
-        $result = $this->filter($result, 'visit_date', $req)->where('qa_status', 'Accept');
+        $result = $this->filter($result, 'visit_date', $req)->where('qa_status', 'Accept')->where('cycle',$req->cycle);
 
         $data = $result->select('id', 'ba','cable_bridge_image_1','cable_bridge_image_2','bushes_status', 'vandalism_status', 'pipe_staus', 'collapsed_status', 'rust_status', 'start_date', 'end_date', 'visit_date', 'voltage', 'coordinate', 'image_pipe', 'image_pipe_2', 'total_defects', 'image_vandalism', 'image_vandalism_2', 'image_collapsed', 'image_collapsed_2', 'image_rust', 'image_rust_2', 'images_bushes', 'images_bushes_2' , DB::raw('ST_X(geom) as X'), DB::raw('ST_Y(geom) as Y'))->get();
 

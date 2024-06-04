@@ -49,7 +49,7 @@ class TiangLKSController extends Controller
         // return Tiang::first();
 
 
-        $result = Tiang::where('ba',$req->ba)->where('review_date', $req->visit_date)->where('qa_status','Accept');
+        $result = Tiang::where('ba',$req->ba)->where('review_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
 
 
 

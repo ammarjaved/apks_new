@@ -29,7 +29,7 @@ class LinkBoxLKSController extends Controller
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
 
-        $result = LinkBox::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept');
+        $result = LinkBox::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
 
 
         $data = $result->select('id','ba', 'bushes_status','type','link_box_image_1', 'link_box_image_2',
