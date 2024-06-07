@@ -818,6 +818,7 @@
 
             }
             q_cql = baFilter;
+            q_cql = q_cql +` AND cycle=${cycle} `;
             if (from_date != '') {
                 q_cql = q_cql + "AND review_date >=" + from_date;
             }
@@ -883,8 +884,8 @@
                 map.removeLayer(ts_unsurveyed)
             }
 
-            ts_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ts_unsurveyed',
+            ts_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ts_unsurveyed_2',
                 format: 'image/png',
                 cql_filter: baFilter,
                 maxZoom: 21,
@@ -918,8 +919,8 @@
                 map.removeLayer(ts_with_defects)
             }
 
-            ts_with_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ts_with_defects',
+            ts_with_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ts_with_defects_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -935,8 +936,8 @@
                 map.removeLayer(ts_without_defects)
             }
 
-            ts_without_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ts_without_defects',
+            ts_without_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ts_without_defects_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -952,8 +953,8 @@
                 map.removeLayer(ts_pending)
             }
 
-            ts_pending= L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ts_pending',
+            ts_pending= L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ts_pending_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -969,8 +970,8 @@
                 map.removeLayer(ts_reject)
             }
 
-            ts_reject = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ts_reject',
+            ts_reject = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ts_reject_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
