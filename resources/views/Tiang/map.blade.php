@@ -88,7 +88,13 @@
                     <input type="date" class="form-control" id="to_date" onchange="filterByDate(this)" />
                 </div>
 
-
+                <div class="col-md-2">
+                    <label for="cycle">Cycle</label>
+                    <select name="cycle" id="cycle" class="form-control" onchange="setCycle(this.value)">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
                 <div class="col-md-2">
                     <br />
                     <input type="button" class="btn btn-secondary mt-2" id="reset" value="Reset"
@@ -829,7 +835,7 @@
             if (boundary !== '') {
                 map.removeLayer(boundary)
             }
-
+            console.log(q_cql);
 
             boundary = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
                 layers: 'cite:ba',

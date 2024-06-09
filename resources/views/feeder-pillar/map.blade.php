@@ -81,6 +81,14 @@
                     <label for="to_date">To</label>
                     <input type="date" class="form-control" id="to_date" onchange="filterByDate(this)" />
                 </div>
+                <div class="col-md-2">
+                    <label for="cycle">Cycle</label>
+                    <select name="cycle" id="cycle" class="form-control" onchange="setCycle(this.value)">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
 
 
                 <div class="col-md-2">
@@ -705,7 +713,7 @@
 
             }
             q_cql = baFilter;
-
+            q_cql = q_cql +` AND cycle=${cycle} `;
             if (from_date != '') {
                 q_cql = q_cql + "AND visit_date >=" + from_date;
             }
@@ -785,8 +793,8 @@
             if (fp_without_defects != '') {
                 map.removeLayer(fp_without_defects)
             }
-            fp_without_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:fp_without_defects',
+            fp_without_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:fp_without_defects_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -804,8 +812,8 @@
                 map.removeLayer(fp_with_defects)
             }
 
-            fp_with_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:fp_with_defects',
+            fp_with_defects = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:fp_with_defects_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -825,8 +833,8 @@
                 map.removeLayer(fp_reject)
             }
 
-            fp_reject = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:fp_reject',
+            fp_reject = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:fp_reject_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -844,8 +852,8 @@
                 map.removeLayer(fp_pending)
             }
 
-            fp_pending = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:fp_pending',
+            fp_pending = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:fp_pending_2',
                 format: 'image/png',
                 cql_filter: q_cql,
                 maxZoom: 21,
@@ -861,8 +869,8 @@
             if (fp_unsurveyed != '') {
                 map.removeLayer(fp_unsurveyed)
             }
-            fp_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:fp_unsurveyed',
+            fp_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:fp_unsurveyed_2',
                 format: 'image/png',
                 cql_filter: baFilter,
                 maxZoom: 21,

@@ -159,8 +159,8 @@
 
             var columns = [
                 {
-name:"tiang_id",
-data:'tiang_id'
+                    name:"tiang_id",
+                    data:'tiang_id'
                 },
 
                 {

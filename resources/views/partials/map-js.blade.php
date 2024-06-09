@@ -230,7 +230,7 @@ var g5_x_5_grid = '';
 
             }
 
-            
+
             else if (param == 'savt_unsurveyed') {
                 sel_lyr = savt_unsurveyed;
 
@@ -558,6 +558,7 @@ var g5_x_5_grid = '';
         ba='PUTRAJAYA & CYBERJAYA';
     }
     var f_ba = '';
+    var cycle = $('#cycle').val()
 
 
     // on page load
@@ -614,32 +615,37 @@ var g5_x_5_grid = '';
 
 
     function filterByDate(param) {
-            var inBa = $('#search_ba').val() ??'';
-            if (param.id == 'from_date') {
-                from_date = param.value;
-            } else if (param.id == 'to_date') {
-                to_date = param.value;
-            }
-            callLayers(inBa)
-
+        var inBa = $('#search_ba').val() ??'';
+        if (param.id == 'from_date') {
+            from_date = param.value;
+        } else if (param.id == 'to_date') {
+            to_date = param.value;
         }
+        callLayers(inBa)
 
+    }
 
-        function  resetMapFilters() {
+    function setCycle(param){
+        var inBa = $('#search_ba').val() ??'';
+        cycle = param
+        callLayers(inBa)
+    }
 
-                from_date = '';
-                to_date = '';
-                $('#from_date , #to_date , .tt-input').val('')
+    function  resetMapFilters() {
 
-                if (ba == '') {
-                    zoom = 8
-                    addRemoveBundary('', 2.75101756479656, 101.304931640625)
-                    $('#search_ba').val('');
-                } else {
-                    callLayers(ba);
-                }
-                if (marker != '') {
-                map.removeLayer(marker)
+            from_date = '';
+            to_date = '';
+            $('#from_date , #to_date , .tt-input').val('')
+
+            if (ba == '') {
+                zoom = 8
+                addRemoveBundary('', 2.75101756479656, 101.304931640625)
+                $('#search_ba').val('');
+            } else {
+                callLayers(ba);
             }
+            if (marker != '') {
+            map.removeLayer(marker)
         }
+    }
 </script>
