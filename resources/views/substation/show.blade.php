@@ -84,6 +84,12 @@
                                   </button>
                                 @endif
 
+                                @if ($data->qa_status != 'KIV')
+                                <a href="/{{ app()->getLocale() }}/substation-update-QA-Status?status=KIV&&id={{ $data->id }}" onclick="return confirm('are you sure?')">
+                                    <button type="submit" class="dropdown-item pl-3 w-100 text-left">KIV</button>
+                                  </a>
+                              @endif
+
                             </div>
 
                         @else
@@ -104,13 +110,13 @@
                         </div>
                     </div>
                 @endif
-                       
+
                     @include('substation.partials.form')
- 
+
             </div>
         </div>
     </section>
-    
+
     <x-reject-modal />
 @endsection
 
