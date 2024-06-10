@@ -768,10 +768,10 @@
             q_cql = q_cql +` AND cycle=${cycle} `;
 
             if (from_date != '') {
-                q_cql = q_cql + "AND review_date >=" + from_date;
+                q_cql = q_cql + "AND visit_date >=" + from_date;
             }
             if (to_date != '') {
-                q_cql = q_cql + "AND review_date <=" + to_date;
+                q_cql = q_cql + "AND visit_date <=" + to_date;
             }
 
 
