@@ -123,6 +123,19 @@ input[type="radio"]:checked.pending {
 background-color: #BF2BFF;
 border-color: #BF2BFF;
 }
+
+
+
+input[type="radio"].kiv {
+
+background-color: #000000;
+border-color: #000000;
+}
+
+input[type="radio"]:checked.kiv {
+background-color: #000000;
+border-color: #000000;
+}
     .tt-menu {
     z-index: 9999999999999 !important;
 }

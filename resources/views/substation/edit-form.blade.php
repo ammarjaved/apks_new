@@ -90,6 +90,7 @@
                                         <option value="{{ $data->qa_status }}" hidden>{{ $data->qa_status }}</option>
                                         <option value="Accept">Accept</option>
                                         <option value="Reject">Reject</option>
+                                        <option value="KIV">KIV</option>
                                     </select>
                                 </div>
                             </div>
@@ -123,23 +124,25 @@
 @section('script')
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
     <script>
-       
+
         $(document).ready(function() {
             $("#myForm").validate();
         });
 
 
-        function onChangeQa(status) 
+        function onChangeQa(status)
         {
-            if (status === 'Accept') {
-                $('#reject-reason').addClass('d-none');
-            } else if (status === 'Reject') {
+            if (status === 'Reject') {
                 $('#reject-reason').removeClass('d-none');
+
+            } else {
+
+                $('#reject-reason').addClass('d-none');
             }
         }
-       
 
-        function getStatus(event) 
+
+        function getStatus(event)
         {
             var val = event.value;
 
@@ -151,7 +154,7 @@
         }
 
 
-        function bulidingStatus(event) 
+        function bulidingStatus(event)
         {
             var val = event.value;
 
@@ -162,9 +165,9 @@
             }
         }
 
-        
+
          // Function to remove a record
-         function removeRecord(paramId) 
+         function removeRecord(paramId)
          {
             var confrim = confirm('Are you sure?')
             if (confrim) {

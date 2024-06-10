@@ -71,7 +71,7 @@ var unservey = '';
 var pano_layer = '';
 
 var work_package = '';
-
+var kiv = '';
 
 
 var substation = '';
@@ -138,6 +138,10 @@ var g5_x_5_grid = '';
             }
             else if (param == 'substation_without_defects') {
                 sel_lyr = substation_without_defects;
+
+            }
+            else if (param == 'sub_kiv') {
+                sel_lyr = kiv;
 
             }
             else if (param == 'substation_with_defects') {
