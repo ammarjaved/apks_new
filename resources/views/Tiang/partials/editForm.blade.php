@@ -562,23 +562,23 @@
                                             <div class="col-md-4 d-flex">
                                                 <input type="radio" name="umbang_defect_current_leakage" id="arus_pada_umbgan_no"
                                                     class="form-check" value="No"
-                                                    {{ array_key_exists('current_leakage' , $data->umbang_defect) && $data->umbang_defect['current_leakage'] === false ? 'checked' : '' }}>
+                                                    {{$data->umbang_defect != '' &&  array_key_exists('current_leakage' , $data->umbang_defect) && $data->umbang_defect['current_leakage'] === false ? 'checked' : '' }}>
                                                 <label for="arus_pada_umbgan_no">{{ __('messages.no') }}</label>
                                             </div>
 
                                             <div class="col-md-4 d-flex">
                                                 <input type="radio" name="umbang_defect_current_leakage" id="arus_pada_umbgan_yes"
                                                     class="form-check" value="Yes"
-                                                    {{ array_key_exists('current_leakage' , $data->umbang_defect) && $data->umbang_defect['current_leakage'] === true ? 'checked' : '' }}>
+                                                    {{$data->umbang_defect != '' && array_key_exists('current_leakage' , $data->umbang_defect) && $data->umbang_defect['current_leakage'] === true ? 'checked' : '' }}>
 
                                                 <label for="arus_pada_umbgan_yes">{{ __('messages.yes') }}</label>
                                             </div>
 
-                                            <div class="col-md-4 @if(!array_key_exists('current_leakage' , $data->umbang_defect) || $data->umbang_defect['current_leakage'] !== true) d-none @endif"
+                                            <div class="col-md-4 @if($data->umbang_defect != '' && !array_key_exists('current_leakage' , $data->umbang_defect) || $data->umbang_defect != '' &&  $data->umbang_defect['current_leakage'] !== true) d-none @endif"
                                                 id="arus_pada_umbgan_amp_div">
                                                 <label for="arus_pada_tiang_amp">{{ __('messages.Amp') }}</label>
                                                 <input type="text" name="umbang_defect[current_leakage_val]" id="arus_pada_tiang_amp"
-                                                    class="form-control" value="{{array_key_exists('current_leakage_val' , $data->umbang_defect) ? $data->umbang_defect['current_leakage_val'] : ''}}"
+                                                    class="form-control" value="{{$data->umbang_defect != '' && array_key_exists('current_leakage_val' , $data->umbang_defect) ? $data->umbang_defect['current_leakage_val'] : ''}}"
                                                     required>
 
                                             </div>
