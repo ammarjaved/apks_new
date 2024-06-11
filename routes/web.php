@@ -129,7 +129,7 @@ Route::group(
                 Route::post('generate-tiang-talian-vt-and-vr-excel', [TiangExcelController::class, 'generateTiangExcel'])->name('generate-tiang-talian-vt-and-vr-excel');
                 Route::view('/tiang-talian-vt-and-vr-map', 'Tiang.map')->name('tiang-talian-vt-and-vr-map');
                 Route::get('/search/find-tiang', [TiangMapController::class, 'seacrh'])->name('tiang-search');
-                Route::get('/search/find-tiang-cordinated/{q}/{searchBy}', [TiangMapController::class, 'seacrhCoordinated'])->name('tiang-coordinated');
+                Route::get('/search/find-tiang-cordinated/{q}/{searchBy}/{cycle}', [TiangMapController::class, 'seacrhCoordinated'])->name('tiang-coordinated');
                 Route::get('/get-tiang-edit/{id}', [TiangMapController::class, 'editMap'])->name('get-tiang-edit');
                 Route::post('/tiang-talian-vt-and-vr-map-edit/{id}', [TiangMapController::class, 'editMapStore'])->name('tiang-talian-vt-and-vr-map-edit');
                 Route::get('/tiang-talian-vt-and-vr-update-QA-Status', [TiangContoller::class, 'updateQAStatus'])->name('tiang-talian-vt-and-vr-update-QA-Status');
@@ -154,7 +154,7 @@ Route::group(
                 Route::view('/link-box-pelbagai-voltan-map', 'link-box.map')->name('link-box-pelbagai-voltan-map');
                 Route::get('/get-link-box-edit/{id}', [LinkBoxMapController::class, 'editMap'])->name('get-link-box-edit');
                 Route::post('/update-link-box-map-edit/{id}', [LinkBoxMapController::class, 'update'])->name('update-link-box-map-edit');
-                Route::get('/search/find-link-box/{q}', [LinkBoxMapController::class, 'seacrh'])->name('link-box-search');
+                Route::get('/search/find-link-box/{q}/{cycle}', [LinkBoxMapController::class, 'seacrh'])->name('link-box-search');
                 Route::get('/search/find-link-box-cordinated/{q}', [LinkBoxMapController::class, 'seacrhCoordinated'])->name('link-box-coordinated');
                 Route::get('/link-box-pelbagai-voltan-update-QA-Status', [LinkBoxController::class, 'updateQAStatus'])->name('link-box-pelbagai-voltane-update-QA-Status');
                 Route::any('/generate-link-box-lks', [LinkBoxLKSController::class, 'gene'])->name('generate-link-box-lks');
@@ -171,7 +171,7 @@ Route::group(
                 Route::view('/cable-bridge-map', 'cable-bridge.map')->name('cable-bridge-map');
                 Route::get('/get-cable-bridge-edit/{id}', [CableBridgeMapController::class, 'editMap'])->name('get-cable-bridge-edit');
                 Route::post('/update-cable-bridge-map-edit/{id}', [CableBridgeMapController::class, 'update'])->name('update-cable-bridge-map-edit');
-                Route::get('/search/find-cable-bridge/{q}', [CableBridgeMapController::class, 'seacrh'])->name('cable-bridge-search');
+                Route::get('/search/find-cable-bridge/{q}/{cycle}', [CableBridgeMapController::class, 'seacrh'])->name('cable-bridge-search');
                 Route::get('/search/find-cable-bridge-cordinated/{q}', [CableBridgeMapController::class, 'seacrhCoordinated'])->name('cable-bridge-coordinated');
                 Route::get('/cable-bridge-update-QA-Status', [CableBridgeController::class, 'updateQAStatus'])->name('cable-bridge-update-QA-Status');
                 Route::any('/generate-cable-bridge-lks', [CableBridgeLKSController::class, 'gene'])->name('generate-cable-bridge-lks');
@@ -193,7 +193,7 @@ Route::group(
                 Route::get('/substation-paginate', [SubstationController::class, 'paginate'])->name('substation-paginate');
                 Route::get('/get-substation-edit/{id}', [SubstationMapController::class, 'editMap'])->name('get-substation-edit');
                 Route::post('/update-substation-map-edit/{id}', [SubstationMapController::class, 'update'])->name('update-substation-map-edit');
-                Route::get('/search/find-substation/{q}', [SubstationMapController::class, 'seacrh'])->name('subsation-search');
+                Route::get('/search/find-substation/{q}/{cycle}', [SubstationMapController::class, 'seacrh'])->name('subsation-search');
                 Route::get('/search/find-substation-cordinated/{q}', [SubstationMapController::class, 'seacrhCoordinated'])->name('subsation-coordinated');
                 Route::get('/substation-update-QA-Status', [SubstationController::class, 'updateQAStatus'])->name('substation-update-QA-Status');
                 Route::get('/substation-lks',[SubstationLKSController::class,'index'])->name('substation-lks');
@@ -214,7 +214,7 @@ Route::group(
                 Route::post('generate-feeder-pillar-excel', [FeederPillarExcelController::class, 'generateFeederPillarExcel'])->name('generate-feeder-pillar-excel');
                 Route::get('/get-feeder-pillar-edit/{id}', [FeederPillarMapController::class, 'editMap'])->name('get-feeder-pillar-edit');
                 Route::post('/update-feeder-pillar-map-edit/{id}', [FeederPillarMapController::class, 'update'])->name('update-feeder-pillar-map-edit');
-                Route::get('/search/find-feeder-pillar/{q}', [FeederPillarMapController::class, 'seacrh'])->name('feeder-pillar-search');
+                Route::get('/search/find-feeder-pillar/{q}/{cycle}', [FeederPillarMapController::class, 'seacrh'])->name('feeder-pillar-search');
 
                 Route::get('/search/find-feeder-pillar-cordinated/{q}', [FeederPillarMapController::class, 'seacrhCoordinated'])->name('feeder-pillar-coordinated');
                 Route::get('/feeder-pillar-update-QA-Status', [FPController::class, 'updateQAStatus'])->name('feeder-pillar-update-QA-Status');
@@ -239,7 +239,7 @@ Route::group(
                 Route::get('/remove-savt/{id}',[SAVTController::class ,'destroySAVT'])->name("remove-savt");
                 Route::get('/search/savt-by-polygon',[SAVTSearchController::class,'getSAVTByPolygon'])->name('search-savt-by-polygon');
                 Route::get('/search/find-savt', [SAVTMapController::class, 'seacrh'])->name('savt-search');
-                Route::get('/search/find-savt-cordinated/{q}', [SAVTMapController::class, 'seacrhCoordinated'])->name('savt-coordinated');
+                Route::get('/search/find-savt-cordinated/{q}/', [SAVTMapController::class, 'seacrhCoordinated'])->name('savt-coordinated');
 
 
 

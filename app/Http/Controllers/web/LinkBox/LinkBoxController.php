@@ -21,23 +21,35 @@ class LinkBoxController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        if ($request->ajax()) {
+
+        if ($request->ajax())
+        {
             $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
             $result = LinkBox::query();
 
-           $result = $this->filter($result , 'visit_date' , $request);
+            $result = $this->filter($result , 'visit_date' , $request);
 
             $result->when(true, function ($query) {
-                return $query->select('id','qa_status' , 'reject_remarks', 'ba', 'zone', 'team', 'visit_date','total_defects' , 'qa_status');
+                return $query
+                        ->select(
+                            'id',
+                            'qa_status',
+                            'reject_remarks',
+                            'ba',
+                            'zone',
+                            'team',
+                            'visit_date',
+                            'total_defects',
+                            'qa_status'
+                        );
             });
 
             return datatables()
-                ->of($result->get())->addColumn('link_box_id', function ($row) {
-
-                    return "LB-" .$row->id;
-                })
-                ->make(true);
+                        ->of($result->get())
+                        ->addColumn('link_box_id', function ($row) {
+                                return "LB-" .$row->id;
+                            })
+                        ->make(true);
         }
         return view('link-box.index');
     }

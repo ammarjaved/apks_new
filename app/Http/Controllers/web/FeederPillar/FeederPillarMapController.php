@@ -57,12 +57,13 @@ class FeederPillarMapController extends Controller
         }
     }
 
-    public function seacrh($lang, $q)
+    public function seacrh($lang, $q,$cycle)
     {
         $ba = \Illuminate\Support\Facades\Auth::user()->ba;
 
         $data = FeederPillar::where('ba', 'LIKE', '%' . $ba . '%')
             ->where('id', 'LIKE', '%' . $q . '%')
+            ->where('cycle' , $cycle)
             ->select('id')
             ->limit(10)
             ->get();

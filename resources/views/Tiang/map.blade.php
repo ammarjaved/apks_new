@@ -419,7 +419,7 @@
 
 
                 $.ajax({
-                    url: `/{{ app()->getLocale() }}/search/find-tiang?type=${searchBy}&q=${q}`,
+                    url: `/{{ app()->getLocale() }}/search/find-tiang?type=${searchBy}&q=${q}&cycle=${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -634,7 +634,7 @@
         {
             $.ajax(
                 {
-                    url: `/{{ app()->getLocale() }}/search/tiang-by-polygon?json=${jsonData}`,
+                    url: `/{{ app()->getLocale() }}/search/tiang-by-polygon?json=${jsonData}&cycle=${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',

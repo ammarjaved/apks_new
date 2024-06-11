@@ -440,7 +440,7 @@
 
                 matches = [];
                 $.ajax({
-                    url: '/{{ app()->getLocale() }}/search/find-substation/' + q,
+                    url: `/{{ app()->getLocale() }}/search/find-substation/${q}/${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -585,7 +585,7 @@
         {
             $.ajax(
                 {
-                    url: `/{{ app()->getLocale() }}/search/substation-by-polygon?json=${jsonData}`,
+                    url: `/{{ app()->getLocale() }}/search/substation-by-polygon?json=${jsonData}&cycle=${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',

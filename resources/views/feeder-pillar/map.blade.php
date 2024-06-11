@@ -398,7 +398,7 @@
 
                 matches = [];
                 $.ajax({
-                    url: '/{{ app()->getLocale() }}/search/find-feeder-pillar/' + q,
+                    url: `/{{ app()->getLocale() }}/search/find-feeder-pillar/${q}/${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -541,7 +541,7 @@
         {
             $.ajax(
                 {
-                    url: `/{{ app()->getLocale() }}/search/feeder-pillar-by-polygon?json=${jsonData}`,
+                    url: `/{{ app()->getLocale() }}/search/feeder-pillar-by-polygon?json=${jsonData}&cycle=${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -703,6 +703,7 @@
             var q_cql = '';
             var boundaryFilter = '';
             var baFilter = '';
+            var cycle_filter = '';
 
             if (param == '') {
                 baFilter = "ba ILIKE '%" + param + "%' "
@@ -712,8 +713,8 @@
                 boundaryFilter = "station ='" + param + "' ";
 
             }
-            q_cql = baFilter;
-            q_cql = q_cql +` AND cycle=${cycle} `;
+            q_cql = baFilter +` AND cycle=${cycle} `;
+            cycle_filter = q_cql  ;
             if (from_date != '') {
                 q_cql = q_cql + "AND visit_date >=" + from_date;
             }
@@ -781,12 +782,12 @@
                 easeLinearity: 0.25,
             });
 
-            updateLayers(q_cql , baFilter);
+            updateLayers(q_cql , baFilter,cycle_filter);
 
         }
 
 
-        function updateLayers(q_cql , baFilter) {
+        function updateLayers(q_cql , baFilter , cycle_filter) {
 
 
 
@@ -872,7 +873,7 @@
             fp_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
                 layers: 'apks:fp_unsurveyed_2',
                 format: 'image/png',
-                cql_filter: baFilter,
+                cql_filter: cycle_filter,
                 maxZoom: 21,
                 transparent: true
             }, {

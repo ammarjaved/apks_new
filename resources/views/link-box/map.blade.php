@@ -428,7 +428,7 @@
 
                 matches = [];
                 $.ajax({
-                    url: '/{{ app()->getLocale() }}/search/find-link-box/' + q,
+                    url: `/{{ app()->getLocale() }}/search/find-link-box/${q}/${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -569,7 +569,7 @@
 
         function getRecoredByPolyGone() {
             $.ajax({
-                url: `/{{ app()->getLocale() }}/search/link-box-by-polygon?json=${jsonData}`,
+                url: `/{{ app()->getLocale() }}/search/link-box-by-polygon?json=${jsonData}&cycle=${cycle}`,
                 dataType: 'JSON',
                 //data: data,
                 method: 'GET',

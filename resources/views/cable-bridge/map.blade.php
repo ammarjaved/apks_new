@@ -403,7 +403,7 @@
 
                 matches = [];
                 $.ajax({
-                    url: '/{{ app()->getLocale() }}/search/find-cable-bridge/' + q,
+                    url: `/{{ app()->getLocale() }}/search/find-cable-bridge/${q}/${cycle}`,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
@@ -543,7 +543,7 @@
 
         function getRecoredByPolyGone() {
             $.ajax({
-                url: `/{{ app()->getLocale() }}/search/cable-bridge-by-polygon?json=${jsonData}`,
+                url: `/{{ app()->getLocale() }}/search/cable-bridge-by-polygon?json=${jsonData}&cycle${cycle}`,
                 dataType: 'JSON',
                 //data: data,
                 method: 'GET',

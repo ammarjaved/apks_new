@@ -57,30 +57,25 @@
 
 
                     <input type="hidden" readonly name="defect" id="form_defect_name">
+                    <div class="d-flex pt-2 ">
                     @isset($buttons)
-                        <div class="col-md-1 pt-2 ">
 
-                            <button type="button" class="btn text-white btn-sm mt-4 " class="form-control"
-                                style="background-color: #708090" onclick="$('#excel_to_date ,#excel_from_date').val('')">Reset</button>
-                        </div>
+                      <button type="button" class="btn text-white btn-sm m-2 " class="form-control" style="background-color: #708090" onclick="$('#excel_to_date ,#excel_from_date').val('')">Reset</button>
 
-                        @foreach ($buttons as $button)
-                            <div class="col-md-2 pt-2 ">
+                      @foreach ($buttons as $button)
 
-                                <button type="button" class="btn text-white btn-sm mt-4 " class="form-control submit-button"
-                                    style="background-color: #708090"  value="{{$button['url']}}" onclick="submitForm('{{$button['url']}}')" >{{$button['name']}}</button>
-                            </div>
-                        @endforeach
+                          <button type="button" class="btn text-white btn-sm m-2 " class="form-control submit-button"  style="background-color: #708090"  value="{{$button['url']}}" onclick="submitForm('{{$button['url']}}')" >{{$button['name']}}</button>
+
+                      @endforeach
 
                     @endisset
+
 
                     @isset($modalButton)
-                        <div class="col-md-2 pt-2 ">
-                            <button type="button" class="btn btn-sm btn-secondary mt-4"  data-toggle="modal" data-target="#pembersihanModal"> Pembersihan By Defect</button>
 
-                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary m-2"  data-toggle="modal" data-target="#pembersihanModal"> Pembersihan By Defect</button>
+
                     @endisset
-
             </form>
         </div>
     </div>

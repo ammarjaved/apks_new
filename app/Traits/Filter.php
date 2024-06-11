@@ -96,7 +96,9 @@ trait Filter
          if (!empty($ba)) {
             $model->where('ba', $ba);
         }
-
+        if ($request->filled('cycle')) {
+            $model->where('cycle',  $request->cycle);
+        }
         if ($request->filled('from_date')) {
             $model->where($column, '>=', $request->from_date);
         }

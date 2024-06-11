@@ -36,7 +36,7 @@ class SubstationMapController extends Controller
             // $data->updated_by = $user;
             if ($data->qa_status != $request->qa_status) {
                 $data->qa_status = $request->qa_status;
-                $data->qc_by = $user;   
+                $data->qc_by = $user;
                 $data->qc_at = now();
             }
             if ($request->qa_status == 'Reject') {
@@ -56,12 +56,13 @@ class SubstationMapController extends Controller
         }
     }
 
-    public function seacrh($lang, $q)
+    public function seacrh($lang, $q, $cycle)
     {
         $ba = \Illuminate\Support\Facades\Auth::user()->ba;
 
         $data = Substation::where('ba', 'LIKE', '%' . $ba . '%')
             ->where('name', 'LIKE', '%' . $q . '%')
+            ->where('cycle',$cycle)
             ->select('name')
             ->limit(10)
             ->get();

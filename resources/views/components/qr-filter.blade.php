@@ -54,6 +54,9 @@
                             <option value="Accept">Accept</option>
                             <option value="Reject">Reject</option>
                             <option value="pending">Pending</option>
+                            {{-- @if ($url == 'substation')
+                            <option value="KIV">KIV</option>
+                            @endif --}}
 
                         </select>
                     </div>

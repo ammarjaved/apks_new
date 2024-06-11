@@ -85,7 +85,15 @@ class LinkBoxMapController extends Controller
 
             $data->save();
 
-            return view('components.map-messages', ['id' => $id, 'success' => true, 'url' => 'link-box-pelbagai-voltan'])->with('success', 'Form Update');
+            return view(
+                        'components.map-messages',
+                            [
+                                'id' => $id,
+                                'success' => true,
+                                'url' => 'link-box-pelbagai-voltan'
+                            ]
+                        )->with('success', 'Form Update');
+
         } catch (\Throwable $th) {
             // return $th->getMessage();
             return view('components.map-messages', ['id' => $id, 'success' => false, 'url' => 'link-box-pelbagai-voltan'])->with('failed', 'Form Update Failed');
@@ -93,12 +101,17 @@ class LinkBoxMapController extends Controller
     }
 
 
-    public function seacrh($lang ,  $q)
+    public function seacrh($lang ,  $q, $cycle)
     {
 
         $ba = \Illuminate\Support\Facades\Auth::user()->ba;
 
-        $data = LinkBox::where('ba', 'LIKE', '%' . $ba . '%')->where('id' , 'LIKE' , '%' . $q . '%')->select('id')->limit(10)->get();
+        $data = LinkBox::where('ba', 'LIKE', '%' . $ba . '%')
+                        ->where('id' , 'LIKE' , '%' . $q . '%')
+                        ->where('cycle',$cycle)
+                        ->select('id')
+                        ->limit(10)
+                        ->get();
 
         return response()->json($data, 200);
     }
