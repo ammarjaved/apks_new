@@ -94,7 +94,7 @@ class TiangPembersihanController extends Controller
 
 
                 // GET GATE DATA AND IMMAGES
-                $gateUnlocked = $gateUnlocked->whereRaw("(tiang_defect->>'creepers')::text = 'true'")
+                $gateUnlocked = $gateUnlocked->whereRaw("(tiang_defect->>'creepers')::text = 'true'")->whereNotNull('remove_creepers_image')
                         ->select('pole_image_1','id','review_date' , DB::raw('ST_X(geom) as x' ), 'remove_creepers_image' , DB::raw('ST_Y(geom) as y'))->orderBy('review_date')->get();
 
 
