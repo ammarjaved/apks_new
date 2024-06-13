@@ -21,9 +21,9 @@ class LinkBoxSearchController extends Controller
             $data = DB::table('tbl_link_box_geom')
                     ->join('tbl_link_box', 'tbl_link_box_geom.id', '=', 'tbl_link_box.geom_id')
                     ->whereRaw("ST_Intersects(tbl_link_box_geom.geom, ST_GeomFromGeoJSON(?))", [$request->json])
-                    // ->where('qa_status', 'pending')
-                    // ->whereNotNull('link_box_image_1')
-                    // ->whereNotNull('visit_date')
+                    ->where('qa_status', 'pending')
+                    ->whereNotNull('link_box_image_1')
+                    ->whereNotNull('visit_date')
                     ->where('cycle',$request->cycle)
                     ->select(
                         'tbl_link_box.id',
