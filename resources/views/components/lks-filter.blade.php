@@ -55,6 +55,19 @@
                         </select>
                     </div>
 
+                    {{-- WORK PACKAGE --}}
+                    @isset($workPackages)
+
+                        <div class=" col-md-2">
+                            <label for="workPackages">WorkPackages : </label>
+                            <select name="workPackages" id="workPackages" class="form-input form-control" >
+                                <option value="" hidden></option>
+                                @foreach ($workPackages as $pack)
+                                    <option value="{{$pack->id}}">{{$pack->package_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endisset
 
                     <input type="hidden" readonly name="defect" id="form_defect_name">
                     <div class="d-flex pt-2 ">

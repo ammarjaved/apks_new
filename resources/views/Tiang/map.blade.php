@@ -959,7 +959,7 @@
             if (ts_pending != '') {
                 map.removeLayer(ts_pending)
             }
-
+            console.log(q_cql);
             ts_pending= L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
                 layers: 'apks:ts_pending_2',
                 format: 'image/png',
