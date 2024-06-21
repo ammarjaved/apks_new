@@ -24,6 +24,8 @@ class TiangSearchController extends Controller
         try
         {
 
+
+
             $data = DB::table('tbl_savr_geom')
                     ->join('tbl_savr', 'tbl_savr_geom.id', '=', 'tbl_savr.geom_id')
                     ->whereRaw("ST_Intersects(tbl_savr_geom.geom, ST_GeomFromGeoJSON(?))", [$request->json])
@@ -61,22 +63,34 @@ class TiangSearchController extends Controller
             //                 ->orderBy('id')
             //                 ->get();
 
+
+
+
                             foreach ($data as $rec)
                             {
+
                                 $from_img = Tiang::where('tiang_no' , $rec->section_from)
                                                     ->select('pole_image_1','pole_image_2')
                                                     ->first();
 
+
                                 if ($from_img)
                                 {
-                                    $rec['from_pole_image_1'] = $from_img->pole_image_1;
-                                    $rec['from_pole_image_2'] = $from_img->pole_image_2;
+                                    $rec->from_pole_image_1 = $from_img->pole_image_1;
+                                    $rec->from_pole_image_2 = $from_img->pole_image_2;
                                 }
+
+
 
                                 foreach ($spanColumns as $key => $value)
                                 {
+
+
+
                                     $spanValue = json_decode($rec->{$key});
                                     $span = '';
+
+
 
                                     foreach ($value['keys'] as $spanKey)
                                     {

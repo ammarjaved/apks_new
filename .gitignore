@@ -10,6 +10,7 @@
 /public/assets/updated-excels/qr-feeder-pillar.xlsx
 /public/assets/updated-excels/qr-tiang-talian.xlsx
 /public/*.zip
+/public/*.apk
 .env
 .env.backup
 .env.production
