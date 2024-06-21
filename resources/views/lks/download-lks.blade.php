@@ -23,6 +23,8 @@
         <input type="hidden" name="ba" id="ba" value="{{$ba}}">
         <input type="hidden" name="folder_name" id="folder_name">
         <input type="hidden" name="from_date" id="from_date" value="{{$from_date}}">
+        <input type="hidden" name="cycle" id="cycle" value="{{$cycle}}">
+
 
         <input type="hidden" name="to_date" id="to_date" value="{{$to_date}}">
     </form>
@@ -38,13 +40,16 @@
         var pdfPaths = [];
         var folderName = '';
         var cycle = $('#cycle').val();
+        var workPackage = '';
 
+            workPackage = "{{isset($workPackage) ?$workPackage : '' }}";
 
+        console.log(workPackage);
 
 
             $.ajax(
                 {
-                    url: `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${ba}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}`,
+                    url: `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${ba}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}&workPackages=${workPackage}`,
                     method: 'GET',
                     success: function(response)
                     {
@@ -78,7 +83,7 @@
 
                 $.ajax(
                     {
-                        url: '/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + ba + '&visit_date=' + dates[index]+'&folder_name='+folderName'&cycle='+cycle,
+                        url: '/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + ba + '&visit_date=' + dates[index]+'&folder_name='+folderName+'&cycle='+cycle+'&workPackages='+workPackage,
                         method: 'GET',
                         success: function(response)
                         {

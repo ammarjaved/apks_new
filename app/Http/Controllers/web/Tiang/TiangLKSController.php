@@ -5,8 +5,8 @@ namespace App\Http\Controllers\web\Tiang;
 use App\Constants\TiangConstants;
 use App\Http\Controllers\Controller;
 use App\Models\Tiang;
+use App\Models\WorkPackage;
 use Illuminate\Http\Request;
-
 use App\Traits\Filter;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +23,7 @@ class TiangLKSController extends Controller
     public function index()
     {
         $defects = TiangConstants::TIANG_DEFECTS_KEYS;
+        $workPackages = WorkPackage::where('ba',Auth::user()->ba)->select('id','package_name')->get();
         $button =[];
         $button=[
             ['url'=>'generate-tiang-talian-vt-and-vr-lks' , 'name'=>'Generate LKS'],
@@ -35,7 +36,8 @@ class TiangLKSController extends Controller
                         'url'=>'tiang-talian-vt-and-vr-lks',
                         'buttons'=>$button,
                         'defects'=>$defects ,
-                        'modalButton'=>'generate-tiang-talian-vt-and-vr-pembersihan-by-defect'
+                        'modalButton'=>'generate-tiang-talian-vt-and-vr-pembersihan-by-defect',
+                        'workPackages'=>$workPackages
                     ]);
     }
 
@@ -55,15 +57,15 @@ class TiangLKSController extends Controller
 
           $data = $result
 
-           ->select('id','fp_road','fp_name','tiang_no','review_date','section_from','section_to','total_defects','talian_utama_connection','talian_utama',
+           ->select('tbl_savr.id','fp_road','fp_name','tiang_no','review_date','section_from','section_to','total_defects','talian_utama_connection','talian_utama',
            'pole_image_1','pole_image_2','pole_image_3','pole_image_4','pole_image_5',
            'size_tiang','jenis_tiang','abc_span','pvc_span','bare_span',
            'jarak_kelegaan','talian_spec','arus_pada_tiang',
            'tiang_defect_image','talian_defect_image','umbang_defect_image','ipc_defect_image','blackbox_defect_image','jumper_image','kilat_defect_image',
            'servis_defect_image','pembumian_defect_image','bekalan_dua_defect_image','kaki_lima_defect_image', 'tapak_road_img','tapak_no_vehicle_entry_img',
            'tapak_no_vehicle_entry_img','kawasan_bend_img','kawasan_road_img','kawasan_forest_img','kawasan_other_img','coords',
-            DB::raw("ST_Y(geom) as Y"),
-            DB::raw("ST_X(geom) as X"),
+            DB::raw("ST_Y(tbl_savr.geom) as Y"),
+            DB::raw("ST_X(tbl_savr.geom) as X"),
             DB::raw("CASE WHEN (tiang_defect->>'cracked')::text='true' THEN 'Ya' ELSE 'Tidak' END as tiang_defect_cracked"),
             DB::raw("CASE WHEN (tiang_defect->>'leaning')::text='true' THEN 'Ya' ELSE 'Tidak' END as tiang_defect_leaning"),
             DB::raw("CASE WHEN (tiang_defect->>'dim')::text='true' THEN 'Ya' ELSE 'Tidak' END as tiang_defect_dim"),
@@ -127,9 +129,25 @@ class TiangLKSController extends Controller
             DB::raw("CASE WHEN (kawasan::json->>'forest')::text='true' THEN 'Ya' ELSE 'Tidak' END as kawasan_forest"),
             DB::raw("CASE WHEN (kawasan::json->>'other')::text='true' THEN 'Ya' ELSE 'Tidak' END as kawasan_other"),
             DB::raw("kawasan::json->>'other_value' as kawasan_other_value"),
-            DB::raw('ST_X(geom) as X'), DB::raw('ST_Y(geom) as Y')
+            DB::raw('ST_X(tbl_savr.geom) as X'), DB::raw('ST_Y(tbl_savr.geom) as Y')
 
-           )->get();
+        );
+
+
+    if ($req->filled('workPackages'))
+    {
+        // Fetch the geometry of the work package
+        $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+        // Execute the query
+        $data = $data
+            ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+            ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+    }
+
+     $data =  $data->get();
+
 
 
             $fpdf->AddPage('L', 'A4');
@@ -562,11 +580,24 @@ class TiangLKSController extends Controller
     {
         if ($req->ajax())
         {
+            // return $req;
 
             $result = Tiang::query();
 
             $result = $this->filter($result , 'review_date',$req)->where('qa_status','Accept');
-            $getResultByVisitDate= $result->select('review_date as visit_date',DB::raw("count(*)"))->groupBy('visit_date')->get();  //get total count against visit_date
+
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                // Execute the query
+                $result = $result
+                    ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+                    ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
+            $getResultByVisitDate= $result->select('tbl_savr.review_date as visit_date',DB::raw("count(*)"))->groupBy('tbl_savr.review_date')->get();  //get total count against visit_date
 
 
             $fpdf->AddPage('L', 'A4');
@@ -640,8 +671,8 @@ class TiangLKSController extends Controller
         }
 
 
-
-        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'to_date'=>$req->to_date,'url'=>'tiang-talian-vt-and-vr']);
+        // return $req;
+        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'cycle'=>$req->cycle,'to_date'=>$req->to_date,'url'=>'tiang-talian-vt-and-vr', 'workPackage' =>$req->workPackages]);
 
     }
 }

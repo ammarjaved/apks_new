@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use App\Models\WorkPackage;
 
 class TiangPembersihanByDefect extends Controller
 {
@@ -25,16 +26,35 @@ class TiangPembersihanByDefect extends Controller
             if (empty($req->defect)) {
                 return redirect()->back()->with('failed', 'Request Failed Select Defect');
             }
-        $defect = TiangConstants::TIANG_DEFECTS_DB_NAME[$req->defect];
+         $defect = TiangConstants::TIANG_DEFECTS_DB_NAME[$req->defect];
         $images = array_slice(TiangConstants::TIANG_IMAGES , 0 , 5 , true);
 
         // return $defect;
+
+
+        // $query = DB::table('tbl_savr_geom')
+        //             ->join('tbl_savr', 'tbl_savr_geom.id', '=', 'tbl_savr.geom_id')
+        //             ->whereRaw("ST_Intersects(tbl_savr_geom.geom, ST_GeomFromGeoJSON(?))", [$request->json])
+
+
         $query = $this->filter(Tiang::query() , 'review_date' , $req)
                     ->where('qa_status', 'Accept')
                     ->whereRaw("($defect)::text IN ('true', 'Yes')");
+
+                    if ($req->filled('workPackages'))
+                    {
+                        // Fetch the geometry of the work package
+                        $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                        // Execute the query
+                        $query = $query
+                            ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+                            ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+                    }
         $totalCounts = clone $query;
-        $totalCounts = $totalCounts->selectRaw('review_date, COUNT(*) as count')
-                    ->groupBy('review_date')->orderBy('review_date')
+         $totalCounts = $totalCounts->selectRaw('tbl_savr.review_date, COUNT(*) as count')
+                    ->groupBy('tbl_savr.review_date')->orderBy('tbl_savr.review_date')
                     ->get();
 
 
@@ -80,7 +100,7 @@ class TiangPembersihanByDefect extends Controller
         $worksheet->setCellValue('B' . $i, $defectsCounts);
         $worksheet->getStyle('A4' . ':B' . $i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $advertisePoster = $query->select("pole_image_1" , "pole_image_2" ,"pole_image_3" ,"pole_image_4" , "pole_image_5",'id','review_date' , DB::raw('ST_X(geom) as x' ), DB::raw('ST_Y(geom) as y'))->orderBy('review_date')->get();
+        $advertisePoster = $query->select("tbl_savr.pole_image_1" , "tbl_savr.pole_image_2" ,"tbl_savr.pole_image_3" ,"tbl_savr.pole_image_4" , "tbl_savr.pole_image_5",'tbl_savr.id','tbl_savr.review_date' , DB::raw('ST_X(tbl_savr.geom) as x' ), DB::raw('ST_Y(tbl_savr.geom) as y'))->orderBy('tbl_savr.review_date')->get();
 
 
         $advertiseSheet = $spreadsheet->createSheet();

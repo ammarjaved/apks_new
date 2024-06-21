@@ -41,7 +41,7 @@ trait Filter
             $model->where($column, '<=', $request->to_date);
         }
 
-        if ($request->filled('cycle')) {
+        if ($request->filled('cycle') && $request->cycle != 'undefined') {
             $model->where('cycle',  $request->cycle);
         }else{
             $model->where('cycle',  1);

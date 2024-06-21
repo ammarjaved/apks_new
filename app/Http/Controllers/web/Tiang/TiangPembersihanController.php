@@ -14,6 +14,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\WorkPackage;
 
 
 class TiangPembersihanController extends Controller
@@ -38,8 +39,20 @@ class TiangPembersihanController extends Controller
                 ->selectRaw("sum(CASE WHEN clean_banner_image is not null THEN 1 ELSE 0 END) AS advertise_banner")
                 ->selectRaw('review_date')
                 ->groupBy('review_date')
-                ->havingRaw('sum(CASE WHEN (tiang_defect->>\'creepers\')::text = \'true\' THEN 1 ELSE 0 END) <> 0 OR sum(CASE WHEN clean_banner_image is not null THEN 1 ELSE 0 END) <> 0')
-                ->get();
+                ->havingRaw('sum(CASE WHEN (tiang_defect->>\'creepers\')::text = \'true\' THEN 1 ELSE 0 END) <> 0 OR sum(CASE WHEN clean_banner_image is not null THEN 1 ELSE 0 END) <> 0');
+
+                if ($req->filled('workPackages'))
+                {
+                    // Fetch the geometry of the work package
+                    $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                    // Execute the query
+                    $totalCounts = $totalCounts
+                        ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+                        ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+                }
+                $totalCounts = $totalCounts->get();
 
 
             if ($totalCounts)
@@ -95,7 +108,18 @@ class TiangPembersihanController extends Controller
 
                 // GET GATE DATA AND IMMAGES
                 $gateUnlocked = $gateUnlocked->whereRaw("(tiang_defect->>'creepers')::text = 'true'")->whereNotNull('remove_creepers_image')
-                        ->select('pole_image_1','id','review_date' , DB::raw('ST_X(geom) as x' ), 'remove_creepers_image' , DB::raw('ST_Y(geom) as y'))->orderBy('review_date')->get();
+                        ->select('pole_image_1','tbl_savr.id','review_date' , DB::raw('ST_X(tbl_savr.geom) as x' ), 'remove_creepers_image' , DB::raw('ST_Y(tbl_savr.geom) as y'));
+                        if ($req->filled('workPackages'))
+                        {
+
+                            // Execute the query
+                            $gateUnlocked = $gateUnlocked
+                                ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+                                ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+                        }
+
+                $gateUnlocked =    $gateUnlocked->orderBy('tbl_savr.review_date')->get();
 
 
 
@@ -160,7 +184,20 @@ class TiangPembersihanController extends Controller
 
                 // GET POSTER DATA AND IMMAGES
                 $advertisePoster = $advertisePoster->whereNotNull("clean_banner_image")
-                        ->select('pole_image_2','id','review_date' , DB::raw('ST_X(geom) as x' ) , DB::raw('ST_Y(geom) as y'), 'clean_banner_image')->orderBy('review_date')->get();
+                        ->select('pole_image_2','tbl_savr.id','review_date' , DB::raw('ST_X(tbl_savr.geom) as x' ) , DB::raw('ST_Y(tbl_savr.geom) as y'), 'clean_banner_image');
+
+                        if ($req->filled('workPackages'))
+                        {
+
+                            // Execute the query
+                            $advertisePoster = $advertisePoster
+                                ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
+                                ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+                        }
+
+                $advertisePoster =    $advertisePoster->orderBy('tbl_savr.review_date')->get();
+
 
                 $advertiseSheet = $spreadsheet->createSheet();
                 $advertiseSheet->setTitle('PEMBERSIHAN IKLAN HARAM');
@@ -230,7 +267,8 @@ class TiangPembersihanController extends Controller
         }
         catch (\Throwable $th)
         {
-            return redirect()->back()->with('failed', 'Request Failed '. $th->getMessage());
+            return $th->getMessage();
+            return redirect()->back()->with('failed', 'Request Failed ');
         }
     }
 }
