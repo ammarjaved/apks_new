@@ -814,6 +814,7 @@
             var q_cql = '';
             var boundaryFilter = '';
             var baFilter = '';
+            var cycle_filter = ''
 
             if (param == '') {
                 baFilter = "ba ILIKE '%" + param + "%' "
@@ -823,8 +824,8 @@
                 boundaryFilter = "station ='" + param + "' ";
 
             }
-            q_cql = baFilter;
-            q_cql = q_cql +` AND cycle=${cycle} `;
+            q_cql = baFilter +` AND cycle=${cycle} `;
+            cycle_filter = q_cql ;
             if (from_date != '') {
                 q_cql = q_cql + "AND review_date >=" + from_date;
             }
@@ -837,8 +838,8 @@
             }
             console.log(q_cql);
 
-            boundary = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:ba',
+            boundary = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:ba_2',
                 format: 'image/png',
                 cql_filter: boundaryFilter,
                 maxZoom: 21,
@@ -859,10 +860,10 @@
                 map.removeLayer(substation)
             }
 
-            substation = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:tiang_substation',
+            substation = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:tiang_substation_2',
                 format: 'image/png',
-                cql_filter: baFilter,
+                cql_filter: cycle_filter,
                 maxZoom: 21,
                 transparent: true
             }, {
@@ -872,8 +873,8 @@
             // map.addLayer(substation)
             // substation.bringToFront()
 
-            road = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:tbl_roads',
+            road = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:tbl_roads_2',
                 format: 'image/png',
                 cql_filter: baFilter,
                 maxZoom: 21,
@@ -893,7 +894,7 @@
             ts_unsurveyed = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
                 layers: 'apks:ts_unsurveyed_2',
                 format: 'image/png',
-                cql_filter: baFilter,
+                cql_filter: cycle_filter,
                 maxZoom: 21,
                 transparent: true
             }, {
@@ -910,10 +911,10 @@
                 map.removeLayer(feeder_pillar)
             }
 
-            feeder_pillar = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:tiang_feeder_pillar',
+            feeder_pillar = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:tiang_feeder_pillar_2',
                 format: 'image/png',
-                cql_filter: baFilter,
+                cql_filter: cycle_filter,
                 maxZoom: 21,
                 transparent: true
             }, {
@@ -958,7 +959,7 @@
             if (ts_pending != '') {
                 map.removeLayer(ts_pending)
             }
-
+            console.log(q_cql);
             ts_pending= L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
                 layers: 'apks:ts_pending_2',
                 format: 'image/png',
@@ -993,8 +994,8 @@
             if (pano_layer !== '') {
                 map.removeLayer(pano_layer)
             }
-            pano_layer = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                layers: 'cite:pano_apks',
+            pano_layer = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:pano_apks_2',
                 format: 'image/png',
                 cql_filter: baFilter,
                 maxZoom: 21,
@@ -1010,8 +1011,8 @@
             map.removeLayer(work_package);
             }
 
-            work_package = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                    layers: 'cite:tbl_workpackage',
+            work_package = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                    layers: 'apks:tbl_workpackage_2',
                     format: 'image/png',
                     cql_filter: baFilter,
                     maxZoom: 21,
@@ -1025,8 +1026,8 @@
             if(g5_x_5_grid){
                 map.removeLayer(g5_x_5_grid);
             }
-            g5_x_5_grid = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/cite/wms", {
-                    layers: 'cite:grid_5x5',
+            g5_x_5_grid = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                    layers: 'apks:grid_5x5_2',
                     format: 'image/png',
                     cql_filter: baFilter,
                     maxZoom: 21,
