@@ -71,13 +71,19 @@ class SAVTMapController extends Controller
     {
         // return $searchBy;
         $name = urldecode($name);
-        $data = SAVT::query();
+        $data = SAVT::where('id' ,$name )
+                    ->pluck('geom_id')
+                    ->first();
 
-        $data = $data->where('id' ,$name );
 
-        $data =$data->select( \DB::raw('ST_X(geom) as x'),\DB::raw('ST_Y(geom) as y'))->first();
+        $geom =DB::table('tbl_savt_geom')
+                    ->where('id',$data)
+                    ->select(
+                        \DB::raw('ST_X(geom) as x'),
+                        \DB::raw('ST_Y(geom) as y')
+                    )->first();
 
-        return response()->json($data, 200);
+        return response()->json($geom, 200);
     }
 
 }

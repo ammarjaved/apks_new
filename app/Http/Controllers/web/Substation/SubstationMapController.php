@@ -74,9 +74,17 @@ class SubstationMapController extends Controller
     {
         $name = urldecode($name);
         $data = Substation::where('name', 'LIKE', '%' . $name . '%')
-            ->select('name', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))
-            ->first();
+                            ->pluck('geom_id')->first();
 
-        return response()->json($data, 200);
+
+        $geom = DB::table('tbl_substation_geom')
+                    ->where('id',$data)
+                    ->select(
+                            DB::raw('ST_X(geom) as x'),
+                            DB::raw('ST_Y(geom) as y')
+                        )->first();
+
+
+        return response()->json($geom, 200);
     }
 }

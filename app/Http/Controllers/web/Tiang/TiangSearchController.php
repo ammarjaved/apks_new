@@ -138,8 +138,11 @@ class TiangSearchController extends Controller
         if ($searchBy == 'substation_id') {
             $data = $data->where('id' ,$name );
         }
-        $data =$data->select( DB::raw('ST_X(geom) as x'),DB::raw('ST_Y(geom) as y'))->first();
 
-        return response()->json($data, 200);
+        $data =$data->value('geom_id')->first();
+
+        $geom = DB::table('tbl_substation_geom')->where('id',$data)->select( DB::raw('ST_X(geom) as x'),DB::raw('ST_Y(geom) as y'))->first();
+
+        return response()->json($geom, 200);
     }
 }
