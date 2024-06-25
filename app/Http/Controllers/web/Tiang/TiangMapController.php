@@ -81,7 +81,7 @@ class TiangMapController extends Controller
 
     public function seacrh(Request $req)
     {
-         
+
         $ba = \Illuminate\Support\Facades\Auth::user()->ba;
 
         $data = Tiang::where('ba', 'LIKE', '%' . $ba . '%');
@@ -125,14 +125,16 @@ class TiangMapController extends Controller
         {
             $data = $data->where('id' ,$name );
         }
+        $geomId = $data->pluck('geom_id');
 
-        $data =  $data
+        $geom =  DB::table('tbl_savr_geom')
+                    ->where('id',$geomId)
                     ->select(
                         \DB::raw('ST_X(geom) as x'),
                         \DB::raw('ST_Y(geom) as y')
-                        )
-                    ->first();
+                    )->first();
 
-        return response()->json($data, 200);
+
+        return response()->json($geom, 200);
     }
 }

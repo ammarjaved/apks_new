@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FeederPillar;
 use App\Repositories\FeederPillarRepo;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,10 +74,15 @@ class FeederPillarMapController extends Controller
     public function seacrhCoordinated($lang, $name)
     {
         $name = urldecode($name);
-        $data = FeederPillar::where('id', $name)
-            ->select('id', \DB::raw('ST_X(geom) as x'), \DB::raw('ST_Y(geom) as y'))
-            ->first();
+        $data = FeederPillar::where('id', $name)->pluck('geom_id')->first();
 
-        return response()->json($data, 200);
+        $geom = DB::table('tbl_feeder_pillar_geom')
+                    ->where('id',$data)
+                    ->select(
+                        DB::raw('ST_X(geom) as x'),
+                        DB::raw('ST_Y(geom) as y')
+                    )->first();
+
+        return response()->json($geom, 200);
     }
 }
