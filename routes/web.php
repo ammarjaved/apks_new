@@ -36,6 +36,7 @@ use App\Http\Controllers\web\tnbes\StatusController;
 use App\Http\Controllers\web\ThirdPartyDiggingController;
 use App\Http\Controllers\web\Substation\SubstationController;
 use App\Http\Controllers\web\Substation\SubstationLKSController;
+use App\Http\Controllers\web\Substation\SubstationDocumentsController;
 use App\Http\Controllers\web\Tiang\TiangLKSController;
 use App\Http\Controllers\web\FeederPillar\FPController;
 use App\Http\Controllers\web\FeederPillar\OPSFeederPillarController;
@@ -134,7 +135,7 @@ Route::group(
                 Route::post('/tiang-talian-vt-and-vr-map-edit/{id}', [TiangMapController::class, 'editMapStore'])->name('tiang-talian-vt-and-vr-map-edit');
                 Route::get('/tiang-talian-vt-and-vr-update-QA-Status', [TiangContoller::class, 'updateQAStatus'])->name('tiang-talian-vt-and-vr-update-QA-Status');
                 Route::any('/generate-tiang-talian-vt-and-vr-lks', [TiangLKSController::class, 'gene'])->name('generate-tiang-talian-vt-and-vr-lks');
-                Route::get('/tiang-talian-vt-and-vr-lks',[TiangLKSController::class,'index'])->name('tiang-talian-vt-and-vr-lks');
+                Route::get('/tiang-talian-vt-and-vr-documents',[\App\Http\Controllers\web\Tiang\TiangDocumentsController::class,'index'])->name('tiang-talian-vt-and-vr-documents');
                 Route::get('/generate-tiang-talian-vt-and-vr-lks-by-visit-date', [TiangLKSController::class, 'generateByVisitDate'])->name('generate-tiang-talian-vt-and-vr-lks-by-visit-date');
                 Route::post('/tiang-test',[TiangDocumentsRedirectController::class,'redirectFunction'])->name('tiang-test');
                 Route::post('/tiang-talian-vt-and-vr-SBUM-report',[TiangSBUMReportController::class,'generateSBUMReport'])->name('tiang-talian-vt-and-vr-SBUM-report');
@@ -158,7 +159,7 @@ Route::group(
                 Route::get('/search/find-link-box-cordinated/{q}', [LinkBoxMapController::class, 'seacrhCoordinated'])->name('link-box-coordinated');
                 Route::get('/link-box-pelbagai-voltan-update-QA-Status', [LinkBoxController::class, 'updateQAStatus'])->name('link-box-pelbagai-voltane-update-QA-Status');
                 Route::any('/generate-link-box-lks', [LinkBoxLKSController::class, 'gene'])->name('generate-link-box-lks');
-                Route::get('/link-box-lks',[LinkBoxLKSController::class,'index'])->name('link-box-lks');
+                Route::get('/link-box-documents',[\App\Http\Controllers\web\LinkBox\LinkBoxDocumentsController::class,'index'])->name('link-box-documents');
                 Route::get('/generate-link-box-lks-by-visit-date', [LinkBoxLKSController::class, 'generateByVisitDate'])->name('generate-link-box-lks-by-visit-date');
                 Route::get('/search/link-box-by-polygon',[LinkBoxSearchController::class,'getLinkBoxByPolygon'])->name('search-link-box-by-polygon');
                 Route::get('remove-link-box/{id}',[LinkBoxController::class ,'destroyLinkBox'])->name("remove-link-box");
@@ -175,7 +176,7 @@ Route::group(
                 Route::get('/search/find-cable-bridge-cordinated/{q}', [CableBridgeMapController::class, 'seacrhCoordinated'])->name('cable-bridge-coordinated');
                 Route::get('/cable-bridge-update-QA-Status', [CableBridgeController::class, 'updateQAStatus'])->name('cable-bridge-update-QA-Status');
                 Route::any('/generate-cable-bridge-lks', [CableBridgeLKSController::class, 'gene'])->name('generate-cable-bridge-lks');
-                Route::get('/cable-bridge-lks',[CableBridgeLKSController::class,'index'])->name('cable-bridge-lks');
+                Route::get('/cable-bridge-documents',[\App\Http\Controllers\web\CableBridge\CableBridgeDocumentsController::class,'index'])->name('cable-bridge-documents');
                 Route::get('/generate-cable-bridge-lks-by-visit-date', [CableBridgeLKSController::class, 'generateByVisitDate'])->name('generate-cable-bridge-lks-by-visit-date');
                 Route::get('/search/cable-bridge-by-polygon',[CableBridgeSearchController::class,'getCableBridgeByPolygon'])->name('search-cable-bridge-by-polygon');
                 Route::get('remove-cable-bridge/{id}',[CableBridgeController::class ,'destroyCableBridge'])->name("remove-cable-bridge");
@@ -196,7 +197,7 @@ Route::group(
                 Route::get('/search/find-substation/{q}/{cycle}', [SubstationMapController::class, 'seacrh'])->name('subsation-search');
                 Route::get('/search/find-substation-cordinated/{q}', [SubstationMapController::class, 'seacrhCoordinated'])->name('subsation-coordinated');
                 Route::get('/substation-update-QA-Status', [SubstationController::class, 'updateQAStatus'])->name('substation-update-QA-Status');
-                Route::get('/substation-lks',[SubstationLKSController::class,'index'])->name('substation-lks');
+                Route::get('/substation-documents',[SubstationDocumentsController::class,'index'])->name('substation-documents');
                 Route::get('/get-substation-lks',[SubstationLKSController::class,'getDataForLKS'])->name('get-substation-lks');
                 Route::any('/generate-substation-lks', [SubstationLKSController::class, 'gene'])->name('generate-substation-lks');
                 Route::get('/generate-substation-lks-by-visit-date', [SubstationLKSController::class, 'generateByVisitDate'])->name('generate-substation-lks-by-visit-date');
@@ -220,7 +221,7 @@ Route::group(
                 Route::get('/feeder-pillar-update-QA-Status', [FPController::class, 'updateQAStatus'])->name('feeder-pillar-update-QA-Status');
                 Route::any('/generate-feeder-pillar-lks', [FeederPillarLKSController::class, 'gene'])->name('generate-feeder-pillar-lks');
                 Route::post('/generate-feeder-pillar-ops', [OPSFeederPillarController::class, 'generateOPS'])->name('generate-feeder-pillar-ops');
-                Route::get('/feeder-pillar-lks',[FeederPillarLKSController::class,'index'])->name('feeder-pillar-lks');
+                Route::get('/feeder-pillar-documents',[\App\Http\Controllers\web\FeederPillar\FeederPillarDocumentsController::class,'index'])->name('feeder-pillar-documents');
                 Route::get('/generate-feeder-pillar-lks-by-visit-date', [FeederPillarLKSController::class, 'generateByVisitDate'])->name('generate-feeder-pillar-lks-by-visit-date');
                 Route::post('/generate-feeder-pillar-pembersihan', [FeederPillarPembersihanController::class, 'pembersihan'])->name('generate-feeder-pillar-pembersihan');
                 Route::get('/search/feeder-pillar-by-polygon',[FeederPillarSearchController::class,'getFeederPillarByPolygon'])->name('search-feeder-pillar-by-polygon');

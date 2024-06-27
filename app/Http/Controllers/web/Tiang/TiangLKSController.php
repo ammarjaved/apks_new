@@ -20,28 +20,6 @@ class TiangLKSController extends Controller
 
     use Filter;
 
-    public function index()
-    {
-        $defects = TiangConstants::TIANG_DEFECTS_KEYS;
-        $workPackages = WorkPackage::where('ba',Auth::user()->ba)->select('id','package_name')->get();
-        $button =[];
-        $button=[
-            ['url'=>'generate-tiang-talian-vt-and-vr-lks' , 'name'=>'Generate LKS'],
-            ['url'=>'generate-tiang-talian-vt-and-vr-pembersihan' , 'name'=>'Generate Pembersihan'],
-
-            // ['url'=>'tiang-talian-vt-and-vr-SBUM-report' , 'name'=>'SBUM Report'],
-        ];
-        return view('lks.generate-lks',[
-                        'title'=>'tiang' ,
-                        'url'=>'tiang-talian-vt-and-vr-lks',
-                        'buttons'=>$button,
-                        'defects'=>$defects ,
-                        'modalButton'=>'generate-tiang-talian-vt-and-vr-pembersihan-by-defect',
-                        'workPackages'=>$workPackages
-                    ]);
-    }
-
-
 
 
     public function generateByVisitDate(Fpdf $fpdf, Request $req){
@@ -129,20 +107,18 @@ class TiangLKSController extends Controller
             DB::raw("CASE WHEN (kawasan::json->>'forest')::text='true' THEN 'Ya' ELSE 'Tidak' END as kawasan_forest"),
             DB::raw("CASE WHEN (kawasan::json->>'other')::text='true' THEN 'Ya' ELSE 'Tidak' END as kawasan_other"),
             DB::raw("kawasan::json->>'other_value' as kawasan_other_value"),
-            DB::raw('ST_X(tbl_savr.geom) as X'), DB::raw('ST_Y(tbl_savr.geom) as Y')
+            DB::raw('ST_X(g.geom) as X'), DB::raw('ST_Y(g.geom) as Y')
 
         );
 
-
+        $data = $data->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
     if ($req->filled('workPackages'))
     {
         // Fetch the geometry of the work package
         $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
 
         // Execute the query
-        $data = $data
-            ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
-            ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+        $data = $data  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
 
     }
 
@@ -672,7 +648,14 @@ class TiangLKSController extends Controller
 
 
         // return $req;
-        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'cycle'=>$req->cycle,'to_date'=>$req->to_date,'url'=>'tiang-talian-vt-and-vr', 'workPackage' =>$req->workPackages]);
+        return view('lks.download-lks', [
+            'ba'=>$req->ba,
+            'from_date'=>$req->from_date,
+            'cycle'=>$req->cycle,
+            'to_date'=>$req->to_date,
+            'url'=>'tiang-talian-vt-and-vr',
+            'workPackage' =>$req->workPackages
+        ]);
 
     }
 }

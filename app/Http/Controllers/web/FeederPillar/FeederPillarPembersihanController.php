@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Models\WorkPackage;
 
 class FeederPillarPembersihanController extends Controller
 {
@@ -24,6 +25,18 @@ class FeederPillarPembersihanController extends Controller
         {
             $data = FeederPillar::query();
             $data = $this->filter($data , 'visit_date' , $req)->where('qa_status', 'Accept');
+
+            $data = $data ->join('tbl_feeder_pillar_geom as g', 'tbl_feeder_pillar.geom_id', '=', 'g.id');
+
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                // Execute the query
+                $data = $data ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
 
             $gateUnlocked       = clone $data;
             $advertisePoster    = clone $data;
@@ -81,7 +94,7 @@ class FeederPillarPembersihanController extends Controller
                 // GET GATE DATA AND IMMAGES
                 $gateUnlocked = $gateUnlocked
                                     ->whereRaw("(gate_status->>'unlocked')::text = 'true'")
-                                    ->select('image_gate','id','visit_date' ,  DB::raw('ST_X(geom) as x') ,'image_gate_2' , DB::raw('ST_Y(geom) as y'))
+                                    ->select('image_gate','tbl_feeder_pillar.id','visit_date' ,  DB::raw('ST_X(g.geom) as x') ,'image_gate_2' , DB::raw('ST_Y(g.geom) as y'))
                                     ->orderBy('visit_date')
                                     ->get();
 
@@ -143,7 +156,7 @@ class FeederPillarPembersihanController extends Controller
                 // GET POSTER DATA AND IMMAGES
                 $advertisePoster = $advertisePoster
                                             ->where('advertise_poster_status', 'Yes')
-                                            ->select('images_advertise_poster','id','visit_date' , DB::raw('ST_X(geom) as x' ) , DB::raw('ST_Y(geom) as y'), 'image_advertisement_after_1')
+                                            ->select('images_advertise_poster','tbl_feeder_pillar.id','visit_date' , DB::raw('ST_X(g.geom) as x' ) , DB::raw('ST_Y(g.geom) as y'), 'image_advertisement_after_1')
                                             ->orderBy('visit_date')
                                             ->get();
 

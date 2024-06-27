@@ -15,54 +15,63 @@ use Illuminate\Support\Facades\Auth;
 use PDF;
 use Illuminate\Support\Facades\File;
 use App\Constants\FeederPillarConstants;
+use App\Models\WorkPackage;
 
 
 class FeederPillarLKSController extends Controller
 {
     use Filter;
 
-    public function index()
-    {
-        $defects = FeederPillarConstants::FP_DEFECTS;
-        $button =[];
-        $button=[
-            ['url'=>'generate-feeder-pillar-lks' , 'name'=>'Generate LKS'],
-            // ['url'=>'generate-feeder-pillar-ops' , 'name'=>'Generate OPS'],
-            ['url'=>'generate-feeder-pillar-pembersihan' , 'name'=>'Generate Pembersihan'],
-        ];
-        return view('lks.generate-lks',[
-                            'title'=>'feeder_pillar',
-                            'buttons'=>$button,
-                            'defects'=>$defects ,
-                            'modalButton'=>'generate-feeder-pillar-pembersihan-by-defect'
-                    ]);
-
-    }
 
 
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
 
         $result = FeederPillar::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+        $result = $result ->join('tbl_feeder_pillar_geom as g', 'tbl_feeder_pillar.geom_id', '=', 'g.id');
 
-        $data = $result->select('id','guard_status','image_advertisement_after_1','paint_status','image_name_plate', 'ba','feeder_pillar_image_1','feeder_pillar_image_2', DB::raw("CASE WHEN (gate_status->>'unlocked')::text='true' THEN 'Ya' ELSE 'Tidak' END as unlocked"), DB::raw("CASE WHEN (gate_status->>'demaged')::text='true' THEN 'Ya' ELSE 'Tidak' END as demaged"), DB::raw("CASE WHEN (gate_status->>'other')::text='true' THEN 'Ya' ELSE 'Tidak' END as other_gate"),DB::raw("CASE WHEN (gate_status->>'other')::text='true' THEN (gate_status->>'other_value')::text ELSE '' END as gate_other_value") , 'vandalism_status', 'leaning_staus', 'rust_status', 'advertise_poster_status', 'visit_date', 'size', 'coordinate', 'image_gate', 'image_gate_2', 'total_defects', 'image_vandalism', 'image_vandalism_2', 'image_leaning', 'image_leaning_2', 'image_rust', 'image_rust_2', 'images_advertise_poster', 'images_advertise_poster_2'  , DB::raw('ST_X(geom) as X'), DB::raw('ST_Y(geom) as Y'))->get();
+        if ($req->filled('workPackages'))
+        {
+            // Fetch the geometry of the work package
+            $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+            $result = $result ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
 
+        }
 
-        // $pdf = PDF::loadView('feeder-pillar.lks-feeder-pillar-template',['datas'=>$data,'ba'=>$req->ba , 'visit_date'=>$req->visit_date]);
-        // $pdf->setPaper('A4', 'landscape');
-        // $pdfFileName = $req->ba.' - Feeder-pillar - '.$req->visit_date.'.pdf';
-        // $folderPath = 'temp/'.$req->folder_name .'/'. $pdfFileName;
-        // $pdfFilePath = public_path( $folderPath);
-        // if (file_exists($pdfFilePath)) {
-        //     File::delete($pdfFilePath);
-        // }
-        // $pdf->save($pdfFilePath);
-
-        // $response = [
-        //     'pdfPath' => $pdfFileName,
-        // ];
-
-        // return response()->json($response);
+        $data = $result->select(
+                            'tbl_feeder_pillar.id',
+                            'guard_status',
+                            'image_advertisement_after_1',
+                            'paint_status',
+                            'image_name_plate',
+                            'ba',
+                            'feeder_pillar_image_1',
+                            'feeder_pillar_image_2',
+                            DB::raw("CASE WHEN (gate_status->>'unlocked')::text='true' THEN 'Ya' ELSE 'Tidak' END as unlocked"),
+                            DB::raw("CASE WHEN (gate_status->>'demaged')::text='true' THEN 'Ya' ELSE 'Tidak' END as demaged"),
+                            DB::raw("CASE WHEN (gate_status->>'other')::text='true' THEN 'Ya' ELSE 'Tidak' END as other_gate"),
+                            DB::raw("CASE WHEN (gate_status->>'other')::text='true' THEN (gate_status->>'other_value')::text ELSE '' END as gate_other_value"),
+                            'vandalism_status',
+                            'leaning_staus',
+                            'rust_status',
+                            'advertise_poster_status',
+                            'visit_date',
+                            'size',
+                            'coordinate',
+                            'image_gate',
+                            'image_gate_2',
+                            'total_defects',
+                            'image_vandalism',
+                            'image_vandalism_2',
+                            'image_leaning',
+                            'image_leaning_2',
+                            'image_rust',
+                            'image_rust_2',
+                            'images_advertise_poster',
+                            'images_advertise_poster_2',
+                            DB::raw('ST_X(g.geom) as X'),
+                            DB::raw('ST_Y(g.geom) as Y')
+                        )->get();
 
 
         $fpdf->AddPage('L', 'A4');
@@ -296,8 +305,18 @@ class FeederPillarLKSController extends Controller
         {
 
             $result = FeederPillar::query();
-
             $result = $this->filter($result , 'visit_date',$req)->where('qa_status','Accept')->whereNotNull('visit_date');
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                // Execute the query
+                $result = $result
+                    ->join('tbl_feeder_pillar_geom as g', 'tbl_feeder_pillar.geom_id', '=', 'g.id')
+                    ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
             $getResultByVisitDate= $result->select('visit_date',DB::raw("count(*)"))->groupBy('visit_date')->get();  //get total count against visit_date
 
 
@@ -366,7 +385,13 @@ class FeederPillarLKSController extends Controller
             $req['to_date'] = FeederPillar::max('visit_date');
         }
 
-        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'cycle'=>$req->cycle,'to_date'=>$req->to_date,'url'=>'feeder-pillar']);
-
+        return view('lks.download-lks',[
+            'ba'=>$req->ba,
+            'from_date'=>$req->from_date,
+            'cycle'=>$req->cycle,
+            'to_date'=>$req->to_date,
+            'url'=>'feeder-pillar',
+            'workPackage' =>$req->workPackages
+        ]);
     }
 }

@@ -61,7 +61,7 @@
                         <div class=" col-md-2">
                             <label for="workPackages">WorkPackages : </label>
                             <select name="workPackages" id="workPackages" class="form-input form-control" >
-                                <option value="" hidden></option>
+                                <option value="" >All</option>
                                 @foreach ($workPackages as $pack)
                                     <option value="{{$pack->id}}">{{$pack->package_name}}</option>
                                 @endforeach
@@ -71,24 +71,25 @@
 
                     <input type="hidden" readonly name="defect" id="form_defect_name">
                     <div class="d-flex pt-2 ">
-                    @isset($buttons)
+                        @isset($buttons)
 
-                      <button type="button" class="btn text-white btn-sm m-2 " class="form-control" style="background-color: #708090" onclick="$('#excel_to_date ,#excel_from_date').val('')">Reset</button>
+                        <button type="button" class="btn text-white btn-sm m-2 " class="form-control" style="background-color: #708090" onclick="$('#excel_to_date ,#excel_from_date').val('')">Reset</button>
 
-                      @foreach ($buttons as $button)
+                            @foreach ($buttons as $button)
 
-                          <button type="button" class="btn text-white btn-sm m-2 " class="form-control submit-button"  style="background-color: #708090"  value="{{$button['url']}}" onclick="submitForm('{{$button['url']}}')" >{{$button['name']}}</button>
+                                <button type="button" class="btn text-white btn-sm m-2 " class="form-control submit-button"  style="background-color: #708090"  value="{{$button['url']}}" onclick="submitForm('{{$button['url']}}')" >{{$button['name']}}</button>
 
-                      @endforeach
+                            @endforeach
 
-                    @endisset
+                        @endisset
 
 
-                    @isset($modalButton)
+                        @isset($modalButton)
 
-                        <button type="button" class="btn btn-sm btn-secondary m-2"  data-toggle="modal" data-target="#pembersihanModal"> Pembersihan By Defect</button>
+                            <button type="button" class="btn btn-sm btn-secondary m-2"  data-toggle="modal" data-target="#pembersihanModal"> Pembersihan By Defect</button>
 
-                    @endisset
+                        @endisset
+                    </div>
             </form>
         </div>
     </div>

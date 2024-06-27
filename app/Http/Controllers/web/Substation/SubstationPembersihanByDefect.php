@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use App\Models\WorkPackage;
 
 
 
@@ -37,6 +38,16 @@ class SubstationPembersihanByDefect extends Controller
                     ->whereNotNull($images[0])
                     ->whereNotNull($images[1])
                     ->whereRaw("($defect)::text IN ('true', 'Yes')");
+
+        $query = $query ->join('tbl_substation_geom as g', 'tbl_substation.geom_id', '=', 'g.id');
+
+        if ($req->filled('workPackages'))
+        {
+            // Fetch the geometry of the work package
+            $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+            $query = $query->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+        }
         $totalCounts = clone $query;
         $totalCounts = $totalCounts->selectRaw('visit_date, COUNT(*) as count')
                     ->groupBy('visit_date')->orderBy('visit_date')
@@ -85,7 +96,16 @@ class SubstationPembersihanByDefect extends Controller
         $worksheet->setCellValue('B' . $i, $defectsCounts);
         $worksheet->getStyle('A4' . ':B' . $i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $advertisePoster = $query->select("$images[0] as image_1" , "$images[1] as image_2",'id','visit_date' , DB::raw('ST_X(geom) as x' ), DB::raw('ST_Y(geom) as y'))->orderBy('visit_date')->get();
+        $advertisePoster = $query->select(
+                                        "$images[0] as image_1",
+                                        "$images[1] as image_2",
+                                        'tbl_substation.id',
+                                        'visit_date' ,
+                                        DB::raw('ST_X(g.geom) as x' ),
+                                        DB::raw('ST_Y(g.geom) as y')
+                                    )
+                                    ->orderBy('visit_date')
+                                    ->get();
 
 
         $advertiseSheet = $spreadsheet->createSheet();
