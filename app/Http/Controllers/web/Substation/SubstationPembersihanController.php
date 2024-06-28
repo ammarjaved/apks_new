@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use App\Models\WorkPackage;
 
 class SubstationPembersihanController extends Controller
 {
@@ -26,6 +27,15 @@ class SubstationPembersihanController extends Controller
         {
             $data = Substation::query();
             $data = $this->filter($data , 'visit_date' , $req)->where('qa_status', 'Accept');
+            $data = $data ->join('tbl_substation_geom as g', 'tbl_substation.geom_id', '=', 'g.id');
+
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+                $data = $data->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
 
             $gateUnlocked       = clone $data;
             $advertisePoster    = clone $data;
@@ -79,7 +89,17 @@ class SubstationPembersihanController extends Controller
 
                 // GET GATE DATA AND IMMAGES
                 $gateUnlocked = $gateUnlocked->whereRaw("(gate_status->>'unlocked')::text = 'true'")
-                        ->select('image_gate' , 'image_gate_2','id','visit_date' , DB::raw('ST_X(geom) as x' ), 'images_gate_after_lock' , 'images_gate_after_lock_2' , DB::raw('ST_Y(geom) as y'))->orderBy('visit_date')->get();
+                                             ->select(
+                                                'image_gate',
+                                                'image_gate_2',
+                                                'tbl_substation.id',
+                                                'visit_date' ,
+                                                'images_gate_after_lock' ,
+                                                'images_gate_after_lock_2' ,
+                                                DB::raw('ST_X(g.geom) as x' ),
+                                                DB::raw('ST_Y(g.geom) as y')
+                                            )->orderBy('visit_date')
+                                            ->get();
 
 
 
@@ -103,7 +123,7 @@ class SubstationPembersihanController extends Controller
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$gate->image_gate; // Provide the path to your image file
                     if ($gate->image_gate !=''
-                    // && file_exists($imagePath)
+                    && file_exists($imagePath)
                     )
                     {
                         $image = new Drawing();
@@ -115,24 +135,19 @@ class SubstationPembersihanController extends Controller
                     }
 
                     $imagePath1 = '' ;// Provide the path to your image file
-                    if ($gate->images_gate_after_lock !=''
-                    // && file_exists( public_path($gate->images_gate_after_lock))
-                    )
+                    if ($gate->images_gate_after_lock !=''  )
                     {
                         $imagePath1 =  config('globals.APP_IMAGES_LOCALE_PATH').$gate->images_gate_after_lock;
                     }
-                    elseif($gate->images_gate_after_lock_2 !=''
-                    // && file_exists( public_path($gate->images_gate_after_lock_2))
-                    )
+                    elseif($gate->images_gate_after_lock_2 !=''  )
                     {
                         $imagePath1 =  config('globals.APP_IMAGES_LOCALE_PATH').$gate->images_gate_after_lock_2;
                     }
-                    elseif($gate->image_gate_2 !=''
-                    // && file_exists( public_path($gate->image_gate_2))
-                    ){
+                    elseif($gate->image_gate_2 !=''   )
+                    {
                         $imagePath1 =  config('globals.APP_IMAGES_LOCALE_PATH').$gate->image_gate_2;
                     }
-                    if ($imagePath1 != '') {
+                    if ($imagePath1 != ''  && file_exists($imagePath1)) {
 
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
@@ -161,7 +176,15 @@ class SubstationPembersihanController extends Controller
 
                 // GET POSTER DATA AND IMMAGES
                 $advertisePoster = $advertisePoster->where('advertise_poster_status', 'Yes')
-                        ->select('image_advertisement_before_1','id','visit_date' , DB::raw('ST_X(geom) as x' ) , DB::raw('ST_Y(geom) as y'), 'image_advertisement_after_1')->orderBy('visit_date')->get();
+                                                   ->select(
+                                                        'image_advertisement_before_1',
+                                                        'tbl_substation.id',
+                                                        'visit_date',
+                                                        DB::raw('ST_X(g.geom) as x' ),
+                                                        DB::raw('ST_Y(g.geom) as y'),
+                                                        'image_advertisement_after_1'
+                                                    )->orderBy('visit_date')
+                                                    ->get();
 
                 $advertiseSheet = $spreadsheet->getSheet(1);
                 $g = 4;
@@ -181,9 +204,7 @@ class SubstationPembersihanController extends Controller
                     $advertiseSheet->mergeCells('I'.$g.':O'.$k);
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_before_1;
-                    if ($advertise->image_advertisement_before_1 != ''
-                    // && file_exists($imagePath)
-                    )
+                    if ($advertise->image_advertisement_before_1 != '' && file_exists($imagePath))
                     {
                         $image = new Drawing();
                         $image->setPath($imagePath);
@@ -194,9 +215,7 @@ class SubstationPembersihanController extends Controller
                     }
 
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_after_1;
-                    if ($advertise->image_advertisement_after_1 !=''
-                    // && file_exists($imagePath1)
-                    )
+                    if ($advertise->image_advertisement_after_1 !=''&& file_exists($imagePath1))
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);

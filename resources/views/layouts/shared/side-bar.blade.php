@@ -150,7 +150,7 @@
 
 
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/substation-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/substation-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>
@@ -188,7 +188,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/feeder-pillar-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/feeder-pillar-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>
@@ -227,7 +227,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/tiang-talian-vt-and-vr-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/tiang-talian-vt-and-vr-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>
@@ -266,7 +266,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/link-box-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/link-box-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>
@@ -306,7 +306,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/cable-bridge-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/cable-bridge-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>

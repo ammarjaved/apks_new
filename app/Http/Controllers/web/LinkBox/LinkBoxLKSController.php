@@ -10,31 +10,66 @@ use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\WorkPackage;
 
 
 class LinkBoxLKSController extends Controller
 {
     use Filter;
 
-    public function index(){
-        $button =[];
-        $button=[
-            ['url'=>'generate-link-box-lks' , 'name'=>'Generate LKS'],
-        ];
-        return view('lks.generate-lks',['title'=>'link_box' ,'buttons'=>$button]);
-
-    }
 
 
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
 
-        $result = LinkBox::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+        $result = LinkBox::where('ba',$req->ba)
+                            ->where('visit_date', $req->visit_date)
+                            ->where('qa_status','Accept')
+                            ->where('cycle',$req->cycle)
+                            ->join('tbl_link_box_geom as g', 'tbl_link_box.geom_id', '=', 'g.id');
 
+        if ($req->filled('workPackages'))
+        {
+            // Fetch the geometry of the work package
+            $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
 
-        $data = $result->select('id','ba', 'bushes_status','type','link_box_image_1', 'link_box_image_2',
-        'vandalism_status', 'cover_status','leaning_status','rust_status','advertise_poster_status','start_date','end_date','visit_date','coordinate','image_cover','image_cover_2','total_defects',
-        'image_vandalism','image_vandalism_2','image_leaning','image_leaning_2','image_rust','image_rust_2','images_bushes','images_bushes_2','images_advertise_poster','images_advertise_poster_2' , DB::raw('ST_X(geom) as X'), DB::raw('ST_Y(geom) as Y'))->get();
+            // Execute the query
+            $result = $result->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+        }
+
+        $data = $result->select(
+                            'tbl_link_box.id',
+                            'ba',
+                            'bushes_status',
+                            'type',
+                            'link_box_image_1',
+                            'link_box_image_2',
+                            'vandalism_status',
+                            'cover_status',
+                            'leaning_status',
+                            'rust_status',
+                            'advertise_poster_status',
+                            'start_date',
+                            'end_date',
+                            'visit_date',
+                            'coordinate',
+                            'image_cover',
+                            'image_cover_2',
+                            'total_defects',
+                            'image_vandalism',
+                            'image_vandalism_2',
+                            'image_leaning',
+                            'image_leaning_2',
+                            'image_rust',
+                            'image_rust_2',
+                            'images_bushes',
+                            'images_bushes_2',
+                            'images_advertise_poster',
+                            'images_advertise_poster_2',
+                            DB::raw('ST_X(g.geom) as X'),
+                            DB::raw('ST_Y(g.geom) as Y')
+                        )->get();
 
         $fpdf->AddPage('L', 'A4');
         $fpdf->SetFont('Arial', 'B', 22);
@@ -301,6 +336,17 @@ class LinkBoxLKSController extends Controller
             $result = LinkBox::query();
 
             $result = $this->filter($result , 'visit_date',$req)->where('qa_status','Accept');
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                // Execute the query
+                $result = $result
+                    ->join('tbl_link_box_geom as g', 'tbl_link_box.geom_id', '=', 'g.id')
+                    ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
             $getResultByVisitDate= $result->select('visit_date',DB::raw("count(*)"))->groupBy('visit_date')->get();  //get total count against visit_date
 
 
@@ -373,7 +419,14 @@ class LinkBoxLKSController extends Controller
             $req['to_date'] = LinkBox::max('visit_date');
         }
 
-        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'cycle'=>$req->cycle,'to_date'=>$req->to_date,'url'=>'link-box' ]);
+        return view('lks.download-lks',[
+            'ba'=>$req->ba,
+            'from_date'=>$req->from_date,
+            'cycle'=>$req->cycle,
+            'to_date'=>$req->to_date,
+            'url'=>'link-box',
+            'workPackage' =>$req->workPackages
+        ]);
 
     }
 }

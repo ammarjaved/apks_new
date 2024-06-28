@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Font;
+use App\Models\WorkPackage;
 
 class SubstationTOCController extends Controller
 {
@@ -24,15 +25,26 @@ class SubstationTOCController extends Controller
 
     public function generateTOC(Request $req)
     {
-        try 
-        {    
+        try
+        {
             $data = Substation::query();
             $data = $this->filter($data , 'visit_date' , $req)->where('qa_status', 'Accept');
+
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                // Execute the query
+                $data = $data ->join('tbl_substation_geom as g', 'tbl_substation.geom_id', '=', 'g.id');
+                $data = $data->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
             $totalCounts = $data->select('visit_date' , 'name')->orderBy('visit_date')->get();
 
-            if ($totalCounts) 
+            if ($totalCounts)
             {
-                
+
                 $spreadsheet = new Spreadsheet();
 
                 $workSheet =  $spreadsheet->getActiveSheet();
@@ -58,14 +70,14 @@ class SubstationTOCController extends Controller
                 $preVisitDate = '';
                 $startCell = 6;
                 $totalRec = 0 ;
-                foreach ($totalCounts as $count) 
+                foreach ($totalCounts as $count)
                 {
-           
+
                     // $workSheet->setCellValue('B'.$i, $count->visit_date);
                     // $workSheet->setCellValue('C'.$i, $count->visit_date);
                     $workSheet->setCellValue('D'.$i, $count->name);
                     $totalRec++;
-                    if ($preVisitDate != '' && $preVisitDate != $count->visit_date) 
+                    if ($preVisitDate != '' && $preVisitDate != $count->visit_date)
                     {
                         $workSheet->mergeCells('B'.$startCell.':B'.$i);
                         $workSheet->mergeCells('C'.$startCell.':C'.$i);
@@ -78,11 +90,8 @@ class SubstationTOCController extends Controller
                         $totalRec = 0;
                         $startCell = $i +1;
 
-                        // $workSheet->getStyle('B'.$startCell.':B'.$i)->getAlignment()->setHorizontal(Alignment::VERTICAL_CENTER);
-                        // $alignment->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                        // $alignment->setVertical(Alignment::VERTICAL_CENTER);
-                    
-                    }  
+
+                    }
                     $preVisitDate = $count->visit_date;
                     $i++;
 
@@ -97,8 +106,8 @@ class SubstationTOCController extends Controller
                 $filename = "PENCAWANG_TOC {$req->ba} {$req->from_date} - {$req->to_date} ".rand(2,10000).'.xlsx';
                 $writer->save(public_path('assets/updated-excels/') . $filename);
                 return response()->download(public_path('assets/updated-excels/') . $filename)->deleteFileAfterSend(true);
-            } 
-            else 
+            }
+            else
             {
                 return redirect()->back()->with('failed', 'No records found ');
             }
@@ -106,6 +115,7 @@ class SubstationTOCController extends Controller
         }
         catch (\Throwable $th)
         {
+            return $th->getMessage();
             return redirect()->back()->with('failed', 'Request Failed '. $th->getMessage());
         }
     }

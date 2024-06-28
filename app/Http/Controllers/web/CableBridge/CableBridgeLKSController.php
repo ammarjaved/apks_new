@@ -10,28 +10,63 @@ use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\WorkPackage;
 
 class CableBridgeLKSController extends Controller
 {
     use Filter;
 
-    public function index()
-    {
-        $button =[];
-        $button=[
-            ['url'=>'generate-cable-bridge-lks' , 'name'=>'Generate LKS'],
-        ];
-        return view('lks.generate-lks',['title'=>'cable_bridge' ,'buttons'=>$button]);
 
-    }
 
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
         $result = CableBridge::query();
 
-        $result = $this->filter($result, 'visit_date', $req)->where('qa_status', 'Accept')->where('cycle',$req->cycle);
 
-        $data = $result->select('id', 'ba','cable_bridge_image_1','cable_bridge_image_2','bushes_status', 'vandalism_status', 'pipe_staus', 'collapsed_status', 'rust_status', 'start_date', 'end_date', 'visit_date', 'voltage', 'coordinate', 'image_pipe', 'image_pipe_2', 'total_defects', 'image_vandalism', 'image_vandalism_2', 'image_collapsed', 'image_collapsed_2', 'image_rust', 'image_rust_2', 'images_bushes', 'images_bushes_2' , DB::raw('ST_X(geom) as X'), DB::raw('ST_Y(geom) as Y'))->get();
+        $result = LinkBox::where('ba',$req->ba)
+                            ->where('visit_date', $req->visit_date)
+                            ->where('qa_status','Accept')
+                            ->where('cycle',$req->cycle)
+                            ->join('tbl_cable_bridge_geom as g', 'tbl_cable_bridge.geom_id', '=', 'g.id');
+
+
+        if ($req->filled('workPackages'))
+        {
+            // Fetch the geometry of the work package
+            $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+            $result = $result->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+        }
+
+        $data = $result->select(
+                            'id',
+                            'ba',
+                            'cable_bridge_image_1',
+                            'cable_bridge_image_2',
+                            'bushes_status',
+                            'vandalism_status',
+                            'pipe_staus',
+                            'collapsed_status',
+                            'rust_status',
+                            'start_date',
+                            'end_date',
+                            'visit_date',
+                            'voltage',
+                            'coordinate',
+                            'image_pipe',
+                            'image_pipe_2',
+                            'total_defects',
+                            'image_vandalism',
+                            'image_vandalism_2',
+                            'image_collapsed',
+                            'image_collapsed_2',
+                            'image_rust',
+                            'image_rust_2',
+                            'images_bushes',
+                            'images_bushes_2',
+                            DB::raw('ST_X(geom) as X'),
+                            DB::raw('ST_Y(geom) as Y')
+                        )->get();
 
 
         $fpdf->AddPage('L', 'A4');
@@ -243,6 +278,15 @@ class CableBridgeLKSController extends Controller
             $result = CableBridge::query();
 
             $result = $this->filter($result , 'visit_date',$req)->where('qa_status','Accept')->whereNotNull('visit_date');
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+                $result = $result
+                    ->join('tbl_cable_bridge_geom as g', 'tbl_cable_bridge.geom_id', '=', 'g.id')
+                    ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
             $getResultByVisitDate= $result->select('visit_date',DB::raw("count(*)"))->groupBy('visit_date')->get();  //get total count against visit_date
 
 
@@ -314,7 +358,14 @@ class CableBridgeLKSController extends Controller
             $req['to_date'] = CableBridge::max('visit_date');
         }
 
-        return view('lks.download-lks',['ba'=>$req->ba,'from_date'=>$req->from_date,'cycle'=>$req->cycle,'to_date'=>$req->to_date,'url'=>'cable-bridge']);
+        return view('lks.download-lks',[
+            'ba'=>$req->ba,
+            'from_date'=>$req->from_date,
+            'cycle'=>$req->cycle,
+            'to_date'=>$req->to_date,
+            'url'=>'cable-bridge',
+            'workPackages'=>$workPackages
+        ]);
 
     }
 

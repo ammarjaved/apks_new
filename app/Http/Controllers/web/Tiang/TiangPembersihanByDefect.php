@@ -40,20 +40,16 @@ class TiangPembersihanByDefect extends Controller
         $query = $this->filter(Tiang::query() , 'review_date' , $req)
                     ->where('qa_status', 'Accept')
                     ->whereRaw("($defect)::text IN ('true', 'Yes')");
-
+        $query = $query->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
                     if ($req->filled('workPackages'))
                     {
                         // Fetch the geometry of the work package
                         $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
-
-                        // Execute the query
-                        $query = $query
-                            ->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id')
-                            ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+                        $query = $query->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
 
                     }
         $totalCounts = clone $query;
-         $totalCounts = $totalCounts->selectRaw('tbl_savr.review_date, COUNT(*) as count')
+        $totalCounts = $totalCounts->selectRaw('tbl_savr.review_date, COUNT(*) as count')
                     ->groupBy('tbl_savr.review_date')->orderBy('tbl_savr.review_date')
                     ->get();
 
@@ -100,7 +96,17 @@ class TiangPembersihanByDefect extends Controller
         $worksheet->setCellValue('B' . $i, $defectsCounts);
         $worksheet->getStyle('A4' . ':B' . $i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        $advertisePoster = $query->select("tbl_savr.pole_image_1" , "tbl_savr.pole_image_2" ,"tbl_savr.pole_image_3" ,"tbl_savr.pole_image_4" , "tbl_savr.pole_image_5",'tbl_savr.id','tbl_savr.review_date' , DB::raw('ST_X(tbl_savr.geom) as x' ), DB::raw('ST_Y(tbl_savr.geom) as y'))->orderBy('tbl_savr.review_date')->get();
+        $advertisePoster = $query->select(
+                                        "tbl_savr.pole_image_1",
+                                        "tbl_savr.pole_image_2",
+                                        "tbl_savr.pole_image_3",
+                                        "tbl_savr.pole_image_4",
+                                        "tbl_savr.pole_image_5",
+                                        'tbl_savr.id',
+                                        'tbl_savr.review_date',
+                                        DB::raw('ST_X(g.geom) as x' ),
+                                        DB::raw('ST_Y(g.geom) as y')
+                                )->orderBy('tbl_savr.review_date')->get();
 
 
         $advertiseSheet = $spreadsheet->createSheet();
