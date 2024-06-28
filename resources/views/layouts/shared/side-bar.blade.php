@@ -54,7 +54,7 @@
 
 
                         <li class="nav-item">
-                            <a href="/{{app()->getLocale()}}/patrolling-lks" class="nav-link">
+                            <a href="/{{app()->getLocale()}}/patrolling-documents" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Documents</p>
                             </a>

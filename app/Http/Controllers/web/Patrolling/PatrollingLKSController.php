@@ -17,13 +17,7 @@ class PatrollingLKSController extends Controller
 {
     //
     use Filter;
-    public function index(){
-        $button =[];
-        $button=[ 
-            ['url'=>'generate-patrolling-lks' , 'name'=>'Generate LKS'],
-        ];
-        return view('lks.generate-lks',['title'=>'patrolling','buttons'=>$button]);
-    }
+
 
     public function genet(Request $req)
     {
