@@ -263,7 +263,7 @@ Route::group(
                 Route::post('/generate-patrolling-excel', [PatrollingExcelController::class, 'generateExcel'])->name('generate-patrolling-excel');
                 Route::get('/patrolling-update-QA-Status', [PatrollingController::class, 'updateQAStatus'])->name('patrolling-update-QA-Status');
                 Route::post('/generate-patrolling-lks', [PatrollingLKSController::class, 'genet'])->name('generate-patrolling-lks');
-                Route::get('/patrolling-lks',[PatrollingLKSController::class,'index'])->name('patrolling-lks');
+                Route::get('/patrolling-documents',[\App\Http\Controllers\web\Patrolling\PatrollingDocumentsController::class,'index'])->name('patrolling-documents');
 
 
                 Route::get('/get-roads-name/{id}', [PatrollingController::class, 'getRoads']);
