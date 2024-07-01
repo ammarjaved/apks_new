@@ -97,6 +97,8 @@ class SubstationPembersihanByDefect extends Controller
         $worksheet->getStyle('A4' . ':B' . $i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         $advertisePoster = $query->select(
+                                        "substation_image_1",
+                                        "substation_image_2",
                                         "$images[0] as image_1",
                                         "$images[1] as image_2",
                                         'tbl_substation.id',
@@ -115,11 +117,19 @@ class SubstationPembersihanByDefect extends Controller
                 foreach ($advertisePoster as $advertise)
                 {
 
+
+
                     $advertiseSheet->mergeCells('B'.$g.':H'.$g);
-                    $advertiseSheet->setCellValue('B'.$g, 'SEBELUM');
+                    $advertiseSheet->setCellValue('B'.$g , 'SUBSTATION 1');
 
                     $advertiseSheet->mergeCells('I'.$g.':O'.$g);
-                    $advertiseSheet->setCellValue('I'.$g , 'SELEPAS');
+                    $advertiseSheet->setCellValue('I'.$g , 'SUBSTATION 2');
+
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$g);
+                    $advertiseSheet->setCellValue('P'.$g, 'SEBELUM');
+
+                    $advertiseSheet->mergeCells('W'.$g.':AC'.$g);
+                    $advertiseSheet->setCellValue('W'.$g , 'SELEPAS');
 
                     $g++;
                     // Add image to cell
@@ -127,12 +137,37 @@ class SubstationPembersihanByDefect extends Controller
                     $advertiseSheet->mergeCells('B'.$g.':H'.$k);
                     $advertiseSheet->mergeCells('I'.$g.':O'.$k);
 
+                    $subImagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->substation_image_1;
+                    if ($advertise->substation_image_1 != '' && file_exists($subImagePath))
+                    {
+
+                        $image = new Drawing();
+                        $image->setPath($subImagePath);
+                        $image->setCoordinates('B' . $g); // Cell coordinate where you want to insert the image
+                        $image->setWidth(300); // Set the width of the image (adjust as needed)
+                        $image->setHeight(300); // Set the height of the image (adjust as needed)
+                        $image->setWorksheet($advertiseSheet);
+                    }
+
+                    $subImagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->substation_image_2;
+                    if ($advertise->substation_image_2 != '' && file_exists($subImagePath1))
+                    {
+                        $image = new Drawing();
+                        $image->setPath($subImagePath1);
+                        $image->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image->setWidth(300); // Set the width of the image (adjust as needed)
+                        $image->setHeight(300); // Set the height of the image (adjust as needed)
+                        $image->setWorksheet($advertiseSheet);
+                    }
+
+
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_1;
                     if ($advertise->image_1 != '' && file_exists($imagePath))
                     {
+                        $advertiseSheet->mergeCells('P'.$g.':V'.$k);
                         $image = new Drawing();
                         $image->setPath($imagePath);
-                        $image->setCoordinates('B' . $g); // Cell coordinate where you want to insert the image
+                        $image->setCoordinates('P' . $g); // Cell coordinate where you want to insert the image
                         $image->setWidth(300); // Set the width of the image (adjust as needed)
                         $image->setHeight(300); // Set the height of the image (adjust as needed)
                         $image->setWorksheet($advertiseSheet);
@@ -141,9 +176,11 @@ class SubstationPembersihanByDefect extends Controller
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_2;
                     if ($advertise->image_2 !='' && file_exists($imagePath1) )
                     {
+
+                        $advertiseSheet->mergeCells('W'.$g.':AC'.$k);
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('W' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);

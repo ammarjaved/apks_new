@@ -358,13 +358,13 @@ class CableBridgeLKSController extends Controller
             $req['to_date'] = CableBridge::max('visit_date');
         }
 
-        return view('lks.download-lks',[
+        return view('Documents.download-lks',[
             'ba'=>$req->ba,
             'from_date'=>$req->from_date,
             'cycle'=>$req->cycle,
             'to_date'=>$req->to_date,
             'url'=>'cable-bridge',
-            'workPackages'=>$workPackages
+            'workPackage' =>$req->workPackages
         ]);
 
     }

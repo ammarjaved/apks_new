@@ -419,7 +419,7 @@ class LinkBoxLKSController extends Controller
             $req['to_date'] = LinkBox::max('visit_date');
         }
 
-        return view('lks.download-lks',[
+        return view('Documents.download-lks',[
             'ba'=>$req->ba,
             'from_date'=>$req->from_date,
             'cycle'=>$req->cycle,

@@ -648,7 +648,7 @@ class TiangLKSController extends Controller
 
 
         // return $req;
-        return view('lks.download-lks', [
+        return view('Documents.download-lks', [
             'ba'=>$req->ba,
             'from_date'=>$req->from_date,
             'cycle'=>$req->cycle,
