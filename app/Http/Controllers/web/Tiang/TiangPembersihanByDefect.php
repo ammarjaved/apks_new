@@ -169,7 +169,7 @@ class TiangPembersihanByDefect extends Controller
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath2);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('P' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);
@@ -180,7 +180,7 @@ class TiangPembersihanByDefect extends Controller
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath3);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('W' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);
@@ -191,7 +191,7 @@ class TiangPembersihanByDefect extends Controller
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath4);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('AD' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);
