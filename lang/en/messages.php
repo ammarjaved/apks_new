@@ -344,7 +344,7 @@ return [
         'need_repair'=>'Need Repair',
 
         'needs_repaint' => 'Need Repaint',
-    
+
     'insulation_status' => 'Insulation Status',
 
     'earth_bounding'    =>'Earth Bounding',
@@ -405,8 +405,31 @@ return [
     'main_line_service_line' => 'Main Line (M) / Servis (S)',
 
     'total_recoreds'=>'Total Recoreds',
-    'remove'=>'Remove'
+    'remove'=>'Remove',
 
-    
+
+
+
+
+    /******************SAVR FFA */
+
+
+    'savr_ffa' =>'SAVR FFA',
+    'pole_no'  => 'Pole No',
+    'pole_id'  => 'Pole ID',
+    'house_number' => 'House Number',
+    'wayar_tertanggal' => 'Wayar Tertanggal',
+    'joint_box' => 'Joint Box',
+    'ipc_terbakar' => 'IPC Terbakar',
+    'house_renovation' => 'House Renovation',
+    'other' => 'Other',
+    'other_name' => 'Other Name',
+    'house_image' => 'House Image',
+
+
+    /****************** END SAVR FFA */
+
+
+
 ];
 ?>

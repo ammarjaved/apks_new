@@ -80,6 +80,9 @@ var substation_without_defects ='';
 var sub_pending = '';
 var sub_reject = '';
 
+var savr_ffa_accept = '';
+var savr_ffa_reject = '';
+var savr_ffa_pending = '';
 
 
 
@@ -125,147 +128,80 @@ var g5_x_5_grid = '';
 
             if (param == 'sub_reject') {
                 sel_lyr = sub_reject;
-
-            }
-            else if (param == 'substation_without_defects') {
+            } else if (param == 'substation_without_defects') {
                 sel_lyr = substation_without_defects;
-
-            }
-
-            else if (param == 'sub_pending') {
+            } else if (param == 'sub_pending') {
                 sel_lyr = sub_pending;
-
-            }
-            else if (param == 'substation_without_defects') {
+            } else if (param == 'substation_without_defects') {
                 sel_lyr = substation_without_defects;
-
-            }
-            else if (param == 'sub_kiv') {
+            } else if (param == 'sub_kiv') {
                 sel_lyr = kiv;
-
-            }
-            else if (param == 'substation_with_defects') {
+            } else if (param == 'substation_with_defects') {
                 sel_lyr = substation_with_defects;
-
-            }
-            else if (param == 'fp_unsurveyed') {
+            } else if (param == 'fp_unsurveyed') {
                 sel_lyr = fp_unsurveyed;
-
-            }
-            else if (param == 'fp_without_defects') {
+            } else if (param == 'fp_without_defects') {
                 sel_lyr = fp_without_defects;
-
-            }
-
-            else if (param == 'fp_with_defects') {
+            } else if (param == 'fp_with_defects') {
                 sel_lyr = fp_with_defects;
-
-            }
-
-            else if (param == 'fp_pending') {
+            } else if (param == 'fp_pending') {
                 sel_lyr = fp_pending;
-
-            }
-            else if (param == 'fp_reject') {
+            } else if (param == 'fp_reject') {
                 sel_lyr = fp_reject;
-
-            }
-
-            else if (param == 'main_substation') {
+            } else if (param == 'main_substation') {
                 sel_lyr = substation;
-
             } else if (param == 'tbl_savr') {
                 sel_lyr = tbl_savr;
-
-            }  else if (param == 'cb_unsurveyed') {
+            } else if (param == 'cb_unsurveyed') {
                 sel_lyr = cb_unsurveyed;
-
-            }
-            else if (param == 'cb_with_defects') {
+            } else if (param == 'cb_with_defects') {
                 sel_lyr = cb_with_defects;
-
-            }
-            else if (param == 'cb_without_defects') {
+            } else if (param == 'cb_without_defects') {
                 sel_lyr = cb_without_defects;
-
-            }
-
-            else if (param == 'cb_pending') {
+            } else if (param == 'cb_pending') {
                 sel_lyr = cb_pending;
-
-            }
-            else if (param == 'cb_reject') {
+            } else if (param == 'cb_reject') {
                 sel_lyr = cb_reject;
-
-            }
-
-
-            else if (param == 'ts_unsurveyed') {
+            } else if (param == 'ts_unsurveyed') {
                 sel_lyr = ts_unsurveyed;
-
-            }
-            else if (param == 'ts_with_defects') {
+            } else if (param == 'ts_with_defects') {
                 sel_lyr = ts_with_defects;
-
-            }
-            else if (param == 'ts_without_defects') {
+            } else if (param == 'ts_without_defects') {
                 sel_lyr = ts_without_defects;
-
-            }
-
-            else if (param == 'lb_unsurveyed') {
+            } else if (param == 'lb_unsurveyed') {
                 sel_lyr = lb_unsurveyed;
-
-            }
-            else if (param == 'lb_with_defects') {
+            } else if (param == 'lb_with_defects') {
                 sel_lyr = lb_with_defects;
-
-            }
-            else if (param == 'lb_without_defects') {
+            } else if (param == 'lb_without_defects') {
                 sel_lyr = lb_without_defects;
-
-            }
-            else if (param == 'lb_pending') {
+            } else if (param == 'lb_pending') {
                 sel_lyr = lb_pending;
-
-            }
-            else if (param == 'lb_reject') {
+            } else if (param == 'lb_reject') {
                 sel_lyr = lb_reject;
-
-            }
-
-
-            else if (param == 'savt_unsurveyed') {
+            } else if (param == 'savt_unsurveyed') {
                 sel_lyr = savt_unsurveyed;
-
-            }
-            else if (param == 'savt_with_defects') {
+            } else if (param == 'savt_with_defects') {
                 sel_lyr = savt_with_defects;
-
-            }
-            else if (param == 'savt_without_defects') {
+            } else if (param == 'savt_without_defects') {
                 sel_lyr = savt_without_defects;
-
-            }
-            else if (param == 'savt_pending') {
+            } else if (param == 'savt_pending') {
                 sel_lyr = savt_pending;
-
-            }
-            else if (param == 'savt_reject') {
+            } else if (param == 'savt_reject') {
                 sel_lyr = savt_reject;
-
-            }
-            else if (param == 'road') {
+            } else if (param == 'road') {
                 sel_lyr = road;
-
-            }else if(param == 'unsurveyed'){
+            } else if (param == 'unsurveyed'){
                 sel_lyr =  unservey;
-            }
-            else if(param == 'ts_pending'){
+            } else if (param == 'ts_pending'){
                 sel_lyr =  ts_pending;
-            }
-            else if(param == 'ts_reject'){
+            } else if(param == 'ts_reject'){
                 sel_lyr =  ts_reject;
+            } else if (param == 'ffa_accept'){
+                sel_lyr =  savr_ffa_accept;
+            } else if (param == 'ffa_reject'){
+                sel_lyr =  savr_ffa_reject;
+            } else if (param == 'ffa_pending'){
+                sel_lyr =  savr_ffa_pending;
             }
             callSelfLayer(param);
         }

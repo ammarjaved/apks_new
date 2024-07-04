@@ -70,7 +70,7 @@
                             @csrf
 
 
-@include('cable-bridge.partials.form')
+                                @include('cable-bridge.partials.form')
 
                             <div class="text-center p-4"><button class="btn btn-sm btn-success">{{__("messages.update")}}</button></div>
                         </form>

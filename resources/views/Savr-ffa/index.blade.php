@@ -29,7 +29,7 @@
         <div class="container-  ">
             <div class="row mb-2" style="flex-wrap:nowrap">
                 <div class="col-sm-6">
-                    <h3>Tiang</h3>
+                    <h3>{{__("messages.savr_ffa")}}</h3>
                 </div>
                 <div class="col-sm-6 text-right">
                     <ol class="breadcrumb float-right">
@@ -69,23 +69,23 @@
 
 
             <div class="row">
-                @include('components.qr-filter', ['url' => 'generate-tiang-talian-vt-and-vr-excel'])
+                {{-- @include('components.qr-filter', ['url' => 'generate-savt-excel']) --}}
 
                 <div class="col-12">
                     <div class="card">
 
                         <div class="card-header d-flex justify-content-between ">
-                            <div class="card-title">
-                                Tiang
-                            </div>
+                            <div class="card-title">SAVR FFA</div>
+
                             <div class="d-flex ml-auto">
-                                <a href="{{ route('tiang-talian-vt-and-vr.create', app()->getLocale()) }}"><button
-                                        class="btn text-white btn-success  btn-sm mr-4">Add Tiang</button></a>
-                                <button class="btn text-white  btn-sm mr-4" type="button" data-toggle="collapse"
+                                {{-- <a href="{{ route('savt.create', app()->getLocale()) }}">
+                                    <button class="btn text-white btn-success  btn-sm mr-4">Add SAVT</button>
+                                </a>
+                                 <button class="btn text-white  btn-sm mr-4" type="button" data-toggle="collapse"
                                     style="background-color: #708090" data-target="#collapseQr" aria-expanded="false"
                                     aria-controls="collapseQr">
-                                    QR Tiang
-                                </button>
+                                    QR SAVT
+                                  </button> --}}
 
                             </div>
                         </div>
@@ -101,16 +101,11 @@
                                     <thead style="background-color: #E4E3E3 !important">
                                         <tr>
                                             <th>ID</th>
-                                            <th>TIANG NO</th>
                                             <th>BA</th>
-                                            <th>REVIEW DATE</th>
+                                            <th>POLE ID</th>
+                                            <th>POLE NO</th>
                                             <th></th>
-
-                                            <th>TOTAL DEFECTS</th>
-                                            {{-- @if (Auth::user()->ba !== '') --}}
-                                                <th>QA Status</th>
-                                            {{-- @endif --}}
-
+                                            <th>QA Status</th>
                                             <th>ACTION</th>
 
                                         </tr>
@@ -151,7 +146,7 @@
 
     <script>
         var lang = "{{ app()->getLocale() }}";
-        var url = "tiang-talian-vt-and-vr"
+        var url = "savr-ffa"
         var auth_ba = "{{ Auth::user()->ba }}"
 
         $(document).ready(function() {
@@ -159,13 +154,8 @@
 
             var columns = [
                 {
-                    name:"tiang_id",
-                    data:'tiang_id'
-                },
-
-                {
-                    data: 'tiang_no',
-                    name: 'tiang_no'
+                name:"ffa_id",
+                data:'ffa_id'
                 },
                 {
                     data: 'ba',
@@ -173,18 +163,18 @@
                     orderable: true
                 },
                 {
-                    data: 'review_date',
-                    name: 'review_date'
+                    data: 'pole_id',
+                    name: 'pole_id'
+                },
+                {
+                    data: 'pole_no',
+                    name: 'pole_no'
                 },
                 {
                     data: 'id',
                     name: 'id',
                     visible: false,
                 },
-                {
-                    data: 'total_defects',
-                    name: 'total_defects'
-                }
             ];
             // if (auth_ba !== '') {
                 columns.push({
@@ -202,7 +192,7 @@
                 serverSide: true,
                 stateSave: true,
                 ajax: {
-                    url: '{{ route('tiang-talian-vt-and-vr.index', app()->getLocale()) }}',
+                    url: '{{ route('savr-ffa.index', app()->getLocale()) }}',
                     type: "GET",
                     data: function(d) {
                         if (from_date) {
@@ -213,13 +203,7 @@
                             d.ba = excel_ba;
                         }
 
-                        if (to_date) {
-                            d.to_date = to_date;
-                        }
-                        if (f_status) {
-                            d.status = f_status;
-                            d.image = 'pole_image_1';
-                        }
+
                         if (qa_status) {
                             d.qa_status = qa_status;
                         }
@@ -229,7 +213,10 @@
                     }
                 },
                 columns: columns,
-                order: [[3, 'desc']]
+                order: [
+                    [3, 'desc'],
+                    [4,'desc']
+                ]
             });
 
 

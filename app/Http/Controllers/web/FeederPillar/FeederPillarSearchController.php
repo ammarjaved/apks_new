@@ -19,9 +19,9 @@ class FeederPillarSearchController extends Controller
             $data = DB::table('tbl_feeder_pillar_geom')
                     ->join('tbl_feeder_pillar', 'tbl_feeder_pillar_geom.id', '=', 'tbl_feeder_pillar.geom_id')
                     ->whereRaw("ST_Intersects(tbl_feeder_pillar_geom.geom, ST_GeomFromGeoJSON(?))", [$request->json])
-                    // ->where('qa_status', 'pending')
-                    // ->whereNotNull('feeder_pillar_image_1')
-                    // ->whereNotNull('visit_date')
+                    ->where('qa_status', 'pending')
+                    ->whereNotNull('feeder_pillar_image_1')
+                    ->whereNotNull('visit_date')
                     ->where('cycle',$request->cycle)
                     ->select(
                         'tbl_feeder_pillar.id',

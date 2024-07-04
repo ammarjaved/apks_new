@@ -243,6 +243,18 @@ Route::group(
                 Route::get('/search/find-savt-cordinated/{q}/', [SAVTMapController::class, 'seacrhCoordinated'])->name('savt-coordinated');
 
 
+                // savr ffa routes
+
+                Route::resource('savr-ffa', \App\Http\Controllers\web\SavrFFA\SavrFfaController::class);
+                Route::get('/savr-ffa-update-QA-Status', [\App\Http\Controllers\web\SavrFFA\SavrFfaController::class, 'updateQAStatus'])->name('savr-ffa-update-QA-Status');
+
+                Route::get('/get-savr-ffa-edit/{id}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'editMap'])->name('get-savr-ffa-edit');
+                Route::post('/savr-ffa-map-edit/{id}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'editMapStore'])->name('savr-ffa-edit');
+                Route::view('/savr-ffa-map', 'Savr-ffa.map')->name('savr-ffa-map');
+                Route::get('remove-savr-ffa/{id}',[\App\Http\Controllers\web\SavrFFA\SavrFfaController::class,'destroySavrFFA'])->name("remove-savr-ffa");
+                Route::get('/search/savr-ffa-by-polygon',[\App\Http\Controllers\web\SavrFFA\SavrFfaSearchController::class,'getSavrFFAByPolygon'])->name('search-savr-ffa-by-polygon');
+                Route::get('/search/find-savr-ffa', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'seacrh'])->name('savr-ffa-search');
+                Route::get('/search/find-savr-ffa-cordinated/{q}/{searchBy}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'seacrhCoordinated'])->name('savr-ffa-coordinated');
 
                 //generate notice pdf
                 Route::get('/generate-notice/{id}', [GenerateNoticeController::class, 'generateNotice']);

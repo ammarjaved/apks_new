@@ -9,7 +9,7 @@ use App\Traits\Filter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class TiangContoller extends Controller
 {
@@ -28,22 +28,30 @@ class TiangContoller extends Controller
     public function index(Request $request)
     {
         //
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
-            $result = Tiang::query();
 
-           $result = $this->filter($result , 'review_date' , $request);
+            $result = $this->filter(Tiang::query(), 'review_date', $request);
 
-            $result->when(true, function ($query) {
-                return $query->select('id', 'ba' ,'qa_status' , 'reject_remarks', 'review_date', 'tiang_no', 'total_defects' );
-            });
+            $result->orderByRaw('review_date IS NULL, review_date DESC')
+                   ->select(
+                        'id',
+                        'ba',
+                        'qa_status',
+                        'reject_remarks',
+                        'review_date',
+                        'tiang_no',
+                        'total_defects'
+                );
 
-            return datatables()
-                ->of($result->get())->addColumn('tiang_id', function ($row) {
-                    
-                    return "SAVR-" .$row->id;
-                })
-                ->make(true);
+
+            return DataTables::eloquent($result)
+                            ->addColumn('tiang_id', function ($row) {
+                                return "SAVR-" . $row->id;
+                            })
+                            ->make(true);
+
         }
 
         return view('Tiang.index');
@@ -72,7 +80,7 @@ class TiangContoller extends Controller
             $create = $this->tiangRepository->store($request);
             $data = $this->tiangRepository->prepareData($create , $request);
             $data->save();
-            
+
             Session::flash('success', 'Request Success');
         } catch (\Throwable $th) {
             // return $th->getMessage();
@@ -156,9 +164,9 @@ class TiangContoller extends Controller
             Tiang::find($id)->delete();
 
             Session::flash('failed', 'Request Failed');
-        } 
-        catch (\Throwable $th) 
-        { 
+        }
+        catch (\Throwable $th)
+        {
         // return $th->getMessage();
             Session::flash('failed', 'Request Failed');
         }
@@ -173,9 +181,9 @@ class TiangContoller extends Controller
             Tiang::find($id)->delete();
 
            return response()->json(['success'=>true],200);
-        } 
-        catch (\Throwable $th) 
-        { 
+        }
+        catch (\Throwable $th)
+        {
         // return $th->getMessage();
             return response()->json(['success'=>false],400);
 
@@ -193,7 +201,7 @@ class TiangContoller extends Controller
             if ($req->status == 'Reject') {
                 $qa_data->reject_remarks = $req->reject_remakrs;
             }
-            $user = Auth::user()->name;            
+            $user = Auth::user()->name;
             $qa_data->qc_by = $user;
             $qa_data->qc_at = now();
 
