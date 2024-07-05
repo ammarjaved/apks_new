@@ -23,7 +23,7 @@ class CableBridgeLKSController extends Controller
         $result = CableBridge::query();
 
 
-        $result = LinkBox::where('ba',$req->ba)
+        $result = CableBridge::where('ba',$req->ba)
                             ->where('visit_date', $req->visit_date)
                             ->where('qa_status','Accept')
                             ->where('cycle',$req->cycle)
@@ -39,7 +39,7 @@ class CableBridgeLKSController extends Controller
         }
 
         $data = $result->select(
-                            'id',
+                            'tbl_cable_bridge.id',
                             'ba',
                             'cable_bridge_image_1',
                             'cable_bridge_image_2',
@@ -64,8 +64,8 @@ class CableBridgeLKSController extends Controller
                             'image_rust_2',
                             'images_bushes',
                             'images_bushes_2',
-                            DB::raw('ST_X(geom) as X'),
-                            DB::raw('ST_Y(geom) as Y')
+                            DB::raw('ST_X(g.geom) as X'),
+                            DB::raw('ST_Y(g.geom) as Y')
                         )->get();
 
 
@@ -322,7 +322,7 @@ class CableBridgeLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Pencawang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = $req->ba.' - Cable Bridge - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

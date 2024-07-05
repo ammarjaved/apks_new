@@ -120,6 +120,7 @@ class TiangContoller extends Controller
     public function edit($language, $id)
     {
         $data = $this->tiangRepository->getRecoreds($id);
+      //  return json_decode($data);
         return $data ? view('Tiang.edit', ['data' => $data]) : abort(404);
     }
 

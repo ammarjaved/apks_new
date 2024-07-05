@@ -21,7 +21,7 @@ class TiangRepository
     public function getRecoreds($id)
     {
         // dd($id);
-      return  $data = Tiang::with('FFA')->find($id);
+      $data = Tiang::find($id);
         // dd($data);
         if ($data) {
             $data['abc_span'] = json_decode($data->abc_span);

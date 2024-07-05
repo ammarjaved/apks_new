@@ -356,6 +356,8 @@ function tiangSpanRadio($value , $key , $subkey , $status)
     $id = $arr_name . '_' . $key;
     $name = $arr_name . '[' . $key . ']';
 
+
+
     $key_exist = !empty($arr) && array_key_exists($key, $arr) && $arr[$key] == true;
         $html .= "<td class='d-flex'>
                         <input type='checkbox' name='$name' id='$id' " . ($key_exist? 'checked' : '') . " class='form-check' ".($disabled ? '' : 'disabled').">
