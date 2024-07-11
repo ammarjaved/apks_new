@@ -12,7 +12,7 @@ class FeederPillarConstants
         'rust_status'               =>  ['image_rust', 'image_rust_2'],
         'fp_gaurd'                  =>  ['image_name_plate', 'feeder_pillar_image_1'],
         'paint_status'              =>  ['feeder_pillar_image_1', 'feeder_pillar_image_2'],
-        'advertise_poster_status'   =>  ['image_advertisement_before_1', 'image_advertisement_after_1'],
+        'advertise_poster_status'   =>  ['images_advertise_poster', 'images_advertise_poster_2'],
     ];
 
     public const FP_DEFECTS = [
