@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tiang;
 use App\Repositories\TiangRepository;
 use App\Traits\Filter;
+use App\Models\WorkPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -28,6 +29,7 @@ class TiangContoller extends Controller
     public function index(Request $request)
     {
         //
+        $workPackages = WorkPackage::where('ba',Auth::user()->ba)->select('id','package_name')->get();
         if ($request->ajax())
         {
             $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
@@ -54,7 +56,7 @@ class TiangContoller extends Controller
 
         }
 
-        return view('Tiang.index');
+        return view('Tiang.index',[ 'workPackages'=>$workPackages]);
     }
 
     /**

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use App\Models\WorkPackage;
 
 class TiangExcelController extends Controller
 {
@@ -79,6 +80,18 @@ class TiangExcelController extends Controller
                 ->whereNotNull('review_date')
                 ->whereNotNull('fp_road');
                 $query = $this->filter($query , 'review_date',$req);
+
+                if ($req->filled('workPackages'))
+                {
+                    // Fetch the geometry of the work package
+                    $query = $query->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
+                    $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+                    // Execute the query
+                    $query =  $query  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+                }
+
 
                 $roadStatistics = $query->groupBy('fp_road' )->get();
 
@@ -421,7 +434,7 @@ class TiangExcelController extends Controller
                     ->with('failed', 'No records found ');
             }
         } catch (\Throwable $th) {
-            // return $th->getMessage();
+           //  return $th->getMessage();
             return redirect()
                 ->back()
                 ->with('failed', 'Request Failed');

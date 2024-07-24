@@ -85,6 +85,19 @@
                         </select>
                     </div>
 
+                    @isset($workPackages)
+
+                    <div class=" col-md-2">
+                        <label for="workPackages">WorkPackages : </label>
+                        <select name="workPackages" id="workPackages" class="form-input form-control" >
+                            <option value="" >All</option>
+                            @foreach ($workPackages as $pack)
+                                <option value="{{$pack->id}}">{{$pack->package_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endisset
+
                     @isset($url)
                     <div class="col-md-1 pt-2 ">
 

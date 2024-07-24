@@ -17,11 +17,10 @@ use App\Constants\SubstationConstants;
 use App\Models\WorkPackage;
 
 
+
 class SubstationLKSController extends Controller
 {
    use Filter;
-
-
 
 
     private function getImageUrl($path)
@@ -39,6 +38,7 @@ class SubstationLKSController extends Controller
 
     public function generateByVisitDate($lanf ,Fpdf $fpdf,Request $req)
     {
+
 
 
 
@@ -98,6 +98,23 @@ class SubstationLKSController extends Controller
                             DB::raw("CASE WHEN (building_status->>'other')::text='true' THEN 'Ya' ELSE 'Tidak' END as building_other"),
                         )->get();
 
+        // return view ('substation.lks-pdf-template',['datas'=>$data , 'ba'=>$req->ba, 'visit_date'=>$req->from_date]);
+
+        // $pdf = PDF::loadView('substation.lks-substation-template',['datas'=>$data,'ba'=>$req->ba , 'visit_date'=>$req->visit_date]);
+        // $pdf->setPaper('A4', 'landscape');
+        // $pdfFileName = $req->ba.' - Pencawang - '.$req->visit_date.'.pdf';
+        // $folderPath = 'temp/'.$req->folder_name .'/'. $pdfFileName;
+        // $pdfFilePath = public_path( $folderPath);
+        // if (file_exists($pdfFilePath)) {
+        //     File::delete($pdfFilePath);
+        // }
+        // $pdf->save($pdfFilePath);
+
+        // $response = [
+        //     'pdfPath' => $pdfFileName,
+        // ];
+
+        // return response()->json($response);
 
         $fpdf->AddPage('L', 'A4');
         $fpdf->SetFont('Arial', 'B', 22);
@@ -122,32 +139,33 @@ class SubstationLKSController extends Controller
         foreach ($data as $row)
         {
 
-            if ( $sr_no > 0) {
+            if ($sr_no % 2 == 1 && $sr_no > 0) {
                 $fpdf->AddPage('L', 'A4');
             }
             $sr_no++;
-            $fpdf->Cell(80, 6, 'SR # : '.$sr_no ,0);
+            $fpdf->Cell(100, 6, 'SR # : '.$sr_no ,0);
 
             // add substation image 1 and substation image 2
-            $fpdf->Cell(100, 6, 'Pencawang Gambar 1' ,0);
+            $fpdf->Cell(120, 6, 'Pencawang Gambar 1' ,0);
             $fpdf->Cell(100, 6, 'Pencawang Gambar 2' ,0);
             $fpdf->Ln();
 
 
 
+
+            $fpdf->Cell(80, 6, 'Nama : '.$row->name,0);
             $substation_image_1 = config('globals.APP_IMAGES_LOCALE_PATH').$row->substation_image_1;
-            $fpdf->Cell(100, 6, 'Nama : '.$row->name,0);
-            if ($row->substation_image_1 != '' && file_exists($substation_image_1))
+            if ($row->substation_image_1 != '' && file_exists($substation_image_1) )
             {
-                $fpdf->Image($substation_image_1, $fpdf->GetX(), $fpdf->GetY(), 75, 75);
+                $fpdf->Image($substation_image_1, $fpdf->GetX(), $fpdf->GetY(), 40, 45);
             }
-            $fpdf->Cell(100,6);
+            $fpdf->Cell(120,6);
             // $fpdf->Ln();
 
             $substation_image_2 = config('globals.APP_IMAGES_LOCALE_PATH').$row->substation_image_2;
-            if ($row->substation_image_2 != '' && file_exists($substation_image_2))
+            if ($row->substation_image_2 != '' && file_exists($substation_image_2) )
             {
-                $fpdf->Image($substation_image_2, $fpdf->GetX(), $fpdf->GetY(), 75, 75);
+                $fpdf->Image($substation_image_2, $fpdf->GetX(), $fpdf->GetY(), 40, 45);
             }
             $fpdf->Ln();
             $fpdf->Cell(50, 6, 'Tarikh Lawatan : '.$row->visit_date,0,1);          //VISIT  DATE
@@ -155,13 +173,7 @@ class SubstationLKSController extends Controller
             $fpdf->Cell(50, 6, 'Bil Janggal : ' .$row->total_defects,0,1);         // total defects
             $fpdf->Ln();
             $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
+        //    $fpdf->Ln();
 
 
 
@@ -236,7 +248,7 @@ class SubstationLKSController extends Controller
 
                 if ($row->other_image != '' && file_exists($other_image))
                 {
-                    $fpdf->Image($other_image, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
+                    $fpdf->Image(config('globals.APP_IMAGES_URL').$row->other_image, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
                 }
                 $fpdf->Cell(29, 25);
             }
@@ -244,8 +256,10 @@ class SubstationLKSController extends Controller
 
 
             $fpdf->Cell(4, 25);
+
             $image_grass = config('globals.APP_IMAGES_LOCALE_PATH').$row->image_grass;
-            if ($row->image_grass != '' && file_exists($image_grass))
+
+            if ($row->image_grass != ''  && file_exists($image_grass))
             {
                 $fpdf->Image($image_grass, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
             }
@@ -254,6 +268,7 @@ class SubstationLKSController extends Controller
 
             $fpdf->Cell(4, 25);
             $image_tree_branches = config('globals.APP_IMAGES_LOCALE_PATH').$row->image_tree_branches;
+
             if ($row->image_tree_branches !='' && file_exists($image_tree_branches))
             {
                 $fpdf->Image($image_tree_branches, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
@@ -263,7 +278,8 @@ class SubstationLKSController extends Controller
 
             $fpdf->Cell(20, 25);
             $image_building = config('globals.APP_IMAGES_LOCALE_PATH').$row->image_building;
-            if ($row->image_building !='' && file_exists($image_building))
+
+            if ($row->image_building !=''  && file_exists($image_building))
             {
                 $fpdf->Image($image_building, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
             }
@@ -275,6 +291,7 @@ class SubstationLKSController extends Controller
 
             $fpdf->Cell(4, 25);
             $image_advertisement_before_1 = config('globals.APP_IMAGES_LOCALE_PATH').$row->image_advertisement_before_1;
+
             if ($row->image_advertisement_before_1 != '' && file_exists($image_advertisement_before_1))
             {
                 $fpdf->Image($image_advertisement_before_1, $fpdf->GetX(), $fpdf->GetY(), 20, 20);
@@ -330,7 +347,6 @@ class SubstationLKSController extends Controller
 
     public function gene(Fpdf $fpdf, Request $req)
     {
-        // return "Sdfsd";
         if ($req->ajax())
         {
 
@@ -354,7 +370,11 @@ class SubstationLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-            $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
+            $fpdf->Cell(180, 15, strtoupper($req->ba) .' LKS PENCAWANG',0,1);
+            $fpdf->Cell(180, 25, 'PO NO :');
+
+
+            // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
             $fpdf->SetFont('Arial', 'B', 16);
                 // visit date table start
@@ -364,6 +384,7 @@ class SubstationLKSController extends Controller
             $totalRecords = 0;
 
             $visitDates = [];
+
             foreach ($getResultByVisitDate as $visit_date)
             {
                 $fpdf->SetFont('Arial', 'B', 9);
@@ -373,8 +394,8 @@ class SubstationLKSController extends Controller
                 $totalRecords += $visit_date->count;
                 $visitDates[]=$visit_date->visit_date;
 
-
             }
+
             $fpdf->Cell(50,7,'JUMLAH REKOD',1,0,'C',true);
             $fpdf->Cell(50,7,$totalRecords,1,0,'C');
             // visit date table end
@@ -425,6 +446,7 @@ class SubstationLKSController extends Controller
             'url'=>'substation',
             'workPackage' =>$req->workPackages
         ]);
+
     }
 
 
