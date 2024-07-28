@@ -420,7 +420,7 @@
 
 
 
-            
+
             <div class="col-md-12">
                 <div class="card card-danger">
                     <div class="card-header"> SAVT</div>
@@ -1000,31 +1000,31 @@
 
 
                     if (data && data['patrolling'] != '') {
-                        makeArray(data['patrolling'], 'patrolling-container', 'Defcets')
+                        makeArray(data['patrolling'], 'patrolling-container', 'Defects')
                     }
 
                     if (data && data['substation'] != '') {
-                        makeArray(data['substation'], 'substation-container', 'Defcets')
+                        makeArray(data['substation'], 'substation-container', 'Defects')
                     }
 
                     if (data && data['feeder_pillar'] != '') {
-                        makeArray(data['feeder_pillar'], 'feeder_pillar-container', 'Defcets')
+                        makeArray(data['feeder_pillar'], 'feeder_pillar-container', 'Defects')
                     }
 
                     if (data && data['link_box'] != '') {
-                        makeArray(data['link_box'], 'link_box-container', 'Defcets')
+                        makeArray(data['link_box'], 'link_box-container', 'Defects')
                     }
 
                     if (data && data['cable_bridge'] != '') {
-                        makeArray(data['cable_bridge'], 'cable_bridge-container', 'Defcets')
+                        makeArray(data['cable_bridge'], 'cable_bridge-container', 'Defects')
                     }
 
                     if (data && data['tiang'] != '') {
-                        makeArray(data['tiang'], 'tiang-container', 'Defcets')
+                        makeArray(data['tiang'], 'tiang-container', 'Defects')
                     }
 
                     if (data && data['savt'] != '') {
-                        makeArray(data['savt'], 'savt-container', 'Defcets')
+                        makeArray(data['savt'], 'savt-container', 'Defects')
                     }
 
                     // if (data && data['suryed_patrolling'] != '') {
