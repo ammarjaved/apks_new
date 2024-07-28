@@ -3,7 +3,7 @@ return [
     //*****************DASHBOARD */
 
     'patroling' => 'Patroling',
-    'total_patrollig_done' => 'Total Patrollig Done',
+    'total_patrollig_done' => 'Total Patrolling Done',
     'total_notice_generated' => 'Total Notice Generated',
     'total_supervision' => 'Total Supervision',
     'substation' => 'Substation',

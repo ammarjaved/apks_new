@@ -689,6 +689,7 @@
         }
 
 
+        var ffaYes='';
 
         // for add and remove layers
         function addRemoveBundary(param, paramY, paramX) {
@@ -772,6 +773,30 @@
 
             map.addLayer(savr_ffa_accept)
             savr_ffa_accept.bringToFront()
+
+
+
+            if (ffaYes != '') {
+                map.removeLayer(ffaYes)
+            }
+
+            ffaYes = L.tileLayer.wms("http://121.121.232.54:7090/geoserver/apks/wms", {
+                layers: 'apks:tiang_ffa_yes',
+                format: 'image/png',
+                cql_filter: cycle_filter,
+                maxZoom: 21,
+                transparent: true
+            }, {
+                buffer: 10
+            })
+
+
+
+            // map.addLayer(ffaYes)
+            // ffaYes.bringToFront()
+
+
+
 
             // PENDING
             if (savr_ffa_pending != '') {
@@ -877,7 +902,8 @@
                     'Accept' : savr_ffa_accept,
                     'Pending' : savr_ffa_pending,
                     'Roads': road,
-                    'Work Package':work_package
+                    'Work Package':work_package,
+                    'TIANG': ffaYes
 
                 }
             };
