@@ -86,7 +86,7 @@
                                             <th>BA</th>
                                             <th>VISIT DATE</th>
                                             <th>UNLOCKED</th>
-                                            <th>DEMAGED</th>
+                                            <th>DAMAGED</th>
                                             <th>OTHER</th>
                                             <th>VANDALISM</th>
                                             <th>LEANING</th>
