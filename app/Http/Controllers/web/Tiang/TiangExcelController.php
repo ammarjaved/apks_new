@@ -35,6 +35,18 @@ class TiangExcelController extends Controller
             $defectsImg = ['pole_image_1', 'pole_image_2', 'pole_image_3', 'pole_image_4', 'pole_image_5'];
 
 
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+                $result = $result->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+
+                // Execute the query
+                $result=  $result  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+
+            }
+
               $res = $result->whereNotNull('review_date')->orderBy('fp_name')->get()
                             ->makeHidden(['geom' , 'tiang_defect_image' , 'talian_defect_image' ,
                             'umbang_defect_image' , 'ipc_defect_image' ,'jumper_image','kilat_defect_image',
@@ -86,6 +98,7 @@ class TiangExcelController extends Controller
                     // Fetch the geometry of the work package
                     $query = $query->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
                     $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
 
                     // Execute the query
                     $query =  $query  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
