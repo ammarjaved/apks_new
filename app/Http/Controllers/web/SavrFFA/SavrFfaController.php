@@ -8,7 +8,7 @@ use App\Models\SavrFfa;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\SAVRFFARepo;
 use Illuminate\Support\Facades\Session;
-// use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class SavrFfaController extends Controller
 {
@@ -20,9 +20,12 @@ class SavrFfaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            if($request->filled('ba')){
             $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
             $result = SavrFfa::where('ba',$ba);
-
+            }else{
+                $result = SavrFfa::query();
+            }
         //    $result = $this->filter($result , 'visit_date' , $request);
 
             $result->when(true, function ($query) {
@@ -37,12 +40,19 @@ class SavrFfaController extends Controller
                             );
             });
 
-            return datatables()
-                ->of($result->get())->addColumn('ffa_id', function ($row) {
+            // return datatables()
+            //     ->of($result->get())->addColumn('ffa_id', function ($row) {
 
-                    return "FFA-" .$row->id;
+            //         return "FFA-" .$row->id;
+            //     })
+            //     ->make(true);
+
+                return DataTables::eloquent($result)
+                ->addColumn('ffa_id', function ($row) {
+                    return "FFA-" . $row->id;
                 })
                 ->make(true);
+
         }
 
         return view('savr-ffa.index');

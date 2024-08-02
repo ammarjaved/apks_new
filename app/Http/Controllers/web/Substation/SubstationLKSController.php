@@ -146,20 +146,20 @@ class SubstationLKSController extends Controller
             $fpdf->Cell(100, 6, 'SR # : '.$sr_no ,0);
 
             // add substation image 1 and substation image 2
-            $fpdf->Cell(120, 6, 'Pencawang Gambar 1' ,0);
+            $fpdf->Cell(100, 6, 'Pencawang Gambar 1' ,0);
             $fpdf->Cell(100, 6, 'Pencawang Gambar 2' ,0);
             $fpdf->Ln();
 
 
 
 
-            $fpdf->Cell(80, 6, 'Nama : '.$row->name,0);
+            $fpdf->Cell(100, 6, 'Nama : '.$row->name,0);
             $substation_image_1 = config('globals.APP_IMAGES_LOCALE_PATH').$row->substation_image_1;
             if ($row->substation_image_1 != '' && file_exists($substation_image_1) )
             {
                 $fpdf->Image($substation_image_1, $fpdf->GetX(), $fpdf->GetY(), 40, 45);
             }
-            $fpdf->Cell(120,6);
+            $fpdf->Cell(100,6);
             // $fpdf->Ln();
 
             $substation_image_2 = config('globals.APP_IMAGES_LOCALE_PATH').$row->substation_image_2;

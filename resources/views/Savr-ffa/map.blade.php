@@ -150,10 +150,14 @@
                                 <input type="radio" name="search-by" value="ffa_house_no" id="search-by-house-no"  onclick="$('#search-input').attr('placeholder','Search by House No')"> <label for="search-by-house-no">House No</label>
                             </div>
                             <div class="col-6">
-                                <input type="radio" name="search-by" value="ffa_id" id="search-by-id" checked onclick="document.getElementById('search-input').placeholder = 'Search by ID'"> <label for="search-by-id">Id</label>
+                                <input type="radio" name="search-by" value="ffa_id" id="search-by-id"  onclick="document.getElementById('search-input').placeholder = 'Search by ID'"> <label for="search-by-id">Id</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="radio" name="search-by" value="tiang_id" id="search-by-tiang" checked onclick="document.getElementById('search-input').placeholder = 'Search by tiang id'"> <label for="search-by-tiang">Tiang Id</label>
                             </div>
                         </div>
                         <input class="typeahead" type="text" placeholder="search by id" id="search-input" class="form-control">
+
                     </div>
                 </div>
             </div>
@@ -389,19 +393,29 @@
 
                 var matches;
                 var searchBy= $('input[name="search-by"]:checked').val();
+                var nameUrl='';
+
+                if(searchBy!='tiang_id'){
+                    nameUrl=`/{{ app()->getLocale() }}/search/find-savr-ffa?type=${searchBy}&q=${q}&cycle=${cycle}`;
+                }else{
+                    nameUrl=`/{{ app()->getLocale() }}/search/find-tiang?type=${searchBy}&q=${q}&cycle=${cycle}`;
+                }
 
                 matches = [];
 
                 $.ajax({
-                    url: `/{{ app()->getLocale() }}/search/find-savr-ffa?type=${searchBy}&q=${q}&cycle=${cycle}`,
+                    url: nameUrl,
                     dataType: 'JSON',
                     //data: data,
                     method: 'GET',
                     async: false,
                     success: function callback(data) {
                         $.each(data, function(i, str) {
-
+                            if(searchBy!='tiang_id'){
                             matches.push(str.house_number);
+                            }else{
+                                matches.push(str.tiang_no);
+                            }
 
                         });
                     }
@@ -413,6 +427,7 @@
 
 
         var marker = '';
+        var typeahead_url;
         $('#the-basics .typeahead').typeahead({
             hint: true,
             highlight: true,
@@ -425,13 +440,17 @@
         $('.typeahead').on('typeahead:select', function(event, suggestion) {
             var name = encodeURIComponent(suggestion);
             var searchBy= $('input[name="search-by"]:checked').val();
-
+           if(searchBy!='tiang_id'){
+            typeahead_url='/{{ app()->getLocale() }}/search/find-savr-ffa-cordinated/' + encodeURIComponent(name)+'/'+searchBy;
+           }else{
+            typeahead_url='/{{ app()->getLocale() }}/search/find-tiang-cordinated/' + encodeURIComponent(name)+'/'+searchBy;
+           }
 
             if (marker != '') {
                 map.removeLayer(marker)
             }
             $.ajax({
-                url: '/{{ app()->getLocale() }}/search/find-savr-ffa-cordinated/' + encodeURIComponent(name)+'/'+searchBy,
+                url: typeahead_url,
                 dataType: 'JSON',
                 //data: data,
                 method: 'GET',

@@ -69,7 +69,7 @@
     <div class="container">
         <img src="{{ URL::asset('assets/web-images/main-logo.png') }}" alt="" height="265">
         <a href="{{app()->getLocale()}}/dashboard">
-            <button class="btn  btn-success mt-4"> GOTO MAIN</button>
+            <button class="btn  btn-success mt-4"> GO TO MAIN</button>
         </a>
     </div>
 </body>

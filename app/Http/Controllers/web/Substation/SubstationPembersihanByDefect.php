@@ -203,7 +203,7 @@ class SubstationPembersihanByDefect extends Controller
 
             $writer = new Xlsx($spreadsheet);
 
-            $filename = "TIANG_PEMBERSIHAN {$req->ba} {$req->from_date} - {$req->to_date} ".rand(2,10000).'.xlsx';
+            $filename = "SUBSTATION_PEMBERSIHAN {$req->ba} {$req->from_date} - {$req->to_date} ".rand(2,10000).'.xlsx';
             $writer->save(public_path('assets/updated-excels/') . $filename);
             return response()->download(public_path('assets/updated-excels/') . $filename)->deleteFileAfterSend(true);
         //code...

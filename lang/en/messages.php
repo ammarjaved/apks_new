@@ -414,7 +414,7 @@ return [
     /******************SAVR FFA */
 
 
-    'savr_ffa' =>'SAVR FFA',
+    'savr_ffa' =>'SAVR FFW',
     'pole_no'  => 'Pole No',
     'pole_id'  => 'Pole ID',
     'house_number' => 'House Number',

@@ -101,13 +101,13 @@
 
 
                                 <th scope="col">BA</th>
-                                <th scope="col">Patroling(KM)</th>
+                                {{-- <th scope="col">Patroling(KM)</th> --}}
                                 <th scope="col">Substation</th>
                                 <th scope="col">Feeder Pillar</th>
                                 <th scope="col">Tiang</th>
                                 <th scope="col">Link Box</th>
                                 <th scope="col">Cable Bridge</th>
-                                <th scope="col">SAVT</th>
+                                {{-- <th scope="col">SAVT</th> --}}
 
 
                             </thead>
@@ -141,7 +141,7 @@
           </div>
     </div> --}}
 
-            <div class="col-md-12">
+            <div class="col-md-12" style="display: none;">
                 <div class="card card-success">
                     <div class="card-header">{{ __('messages.patroling') }}</div>
                     <div class="card-body">
@@ -421,7 +421,7 @@
 
 
 
-            <div class="col-md-12">
+            <div class="col-md-12" style="display: none;">
                 <div class="card card-danger">
                     <div class="card-header"> SAVT</div>
                     <div class="card-body">
@@ -1184,29 +1184,39 @@
                     }
 
                     var str = '';
+                    // var totals = {
+                    //     patroling: 0,
+                    //     substation: 0,
+                    //     feeder_pillar: 0,
+                    //     tiang: 0,
+                    //     link_box: 0,
+                    //     cable_bridge: 0,
+                    //     savt:0
+                    // };
+
                     var totals = {
-                        patroling: 0,
                         substation: 0,
                         feeder_pillar: 0,
                         tiang: 0,
                         link_box: 0,
                         cable_bridge: 0,
-                        savt:0
                     };
 
                     for (var i = 0; i < data.length; i++) {
-                        str += '<tr><td>' + data[i].ba + '</td><td>' + data[i].patroling + '</td><td>' +
+                        str += '<tr><td>' + data[i].ba + '</td><td>' +
+                            //data[i].patroling + '</td><td>' +
                             data[i].substation + '</td><td>' + data[i].feeder_pillar + '</td><td>' + data[i]
                             .tiang + '</td><td>' +
-                            data[i].link_box + '</td><td>' + data[i].cable_bridge + '</td><td>' + data[i].savt + '</td></tr>';
+                            data[i].link_box + '</td><td>' + data[i].cable_bridge + '</td>';
+                         //   '<td>' + data[i].savt + '</td></tr>';
 
-                        totals.patroling += parseFloat(data[i].patroling) || 0;
+                        // totals.patroling += parseFloat(data[i].patroling) || 0;
                         totals.substation += parseFloat(data[i].substation) || 0;
                         totals.feeder_pillar += parseFloat(data[i].feeder_pillar) || 0;
                         totals.tiang += parseFloat(data[i].tiang) || 0;
                         totals.link_box += parseFloat(data[i].link_box) || 0;
                         totals.cable_bridge += parseFloat(data[i].cable_bridge) || 0;
-                        totals.savt += parseFloat(data[i].savt) || 0;
+                        // totals.savt += parseFloat(data[i].savt) || 0;
 
                     }
 
