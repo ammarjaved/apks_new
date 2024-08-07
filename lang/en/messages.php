@@ -425,6 +425,8 @@ return [
     'other' => 'Other',
     'other_name' => 'Other Name',
     'house_image' => 'House Image',
+    'house_image1' => 'House Image2',
+    'house_image2' => 'House Image3',
 
 
     /****************** END SAVR FFA */

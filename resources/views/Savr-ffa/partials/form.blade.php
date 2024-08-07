@@ -117,3 +117,13 @@
         <div class="col-md-4"><label for="house_image">{{ __('messages.house_image') }}</label></div>
         <div class="col-md-8 row">{!!  viewAndUpdateImage($data->house_image , 'house_image' , $disabled)   !!}</div>
     </div>
+
+    <div class="row">
+        <div class="col-md-4"><label for="house_image">{{ __('messages.house_image1') }}</label></div>
+        <div class="col-md-8 row">{!!  viewAndUpdateImage($data->image2 , 'house_image2' , $disabled)   !!}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"><label for="house_image">{{ __('messages.house_image2') }}</label></div>
+        <div class="col-md-8 row">{!!  viewAndUpdateImage($data->image3 , 'house_image3' , $disabled)   !!}</div>
+    </div>

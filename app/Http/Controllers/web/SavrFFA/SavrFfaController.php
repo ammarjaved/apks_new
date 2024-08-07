@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\SAVRFFARepo;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
+use App\Traits\Filter;
+
 
 class SavrFfaController extends Controller
 {
@@ -17,16 +19,18 @@ class SavrFfaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use Filter;
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            if($request->filled('ba')){
-            $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
-            $result = SavrFfa::where('ba',$ba);
-            }else{
-                $result = SavrFfa::query();
-            }
-        //    $result = $this->filter($result , 'visit_date' , $request);
+            // if($request->filled('ba')){
+            // $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
+            // $result = SavrFfa::where('ba',$ba);
+            // }else{
+                 $result = SavrFfa::query();
+            // }
+            $result = $this->filter($result , 'updated_at' , $request);
 
             $result->when(true, function ($query) {
                 return $query->select(
