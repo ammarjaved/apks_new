@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class CableBridgeExcelController extends Controller
 {
     use Filter;
-    
+
     public function generateCableBridgeExcel(Request $req)
     {
         try
@@ -22,15 +22,15 @@ class CableBridgeExcelController extends Controller
             $result = CableBridge::query();
             $result = $this->filter($result , 'visit_date',$req);
             $result = $result->whereNotNull('visit_date')->select('*', DB::raw("st_x(geom) as x") ,DB::raw("st_y(geom) as y"))->get();
- 
-            if ($result) 
+
+            if ($result)
             {
                 $excelFile = public_path('assets/excel-template/cable-bridge.xlsx');
                 $spreadsheet = IOFactory::load($excelFile);
                 $worksheet = $spreadsheet->getActiveSheet();
 
                 $i = 4;
-                foreach ($result as $rec) 
+                foreach ($result as $rec)
                 {
                     $worksheet->setCellValue('A' . $i, $i - 3);
                     $worksheet->setCellValue('B' . $i, $rec->zone);
@@ -54,23 +54,25 @@ class CableBridgeExcelController extends Controller
                     $worksheet->setCellValue('T' . $i, $rec->rust_status);
                     $worksheet->setCellValue('U' . $i, '');
                     $worksheet->setCellValue('V' . $i, $rec->bushes_status);
-
+                    $worksheet->setCellValue('X' . $i, config('globals.APP_IMAGES_URL').$rec->cable_bridge_image_1
+                    .' , '.config('globals.APP_IMAGES_URL').$rec->cable_bridge_image_2
+                    );
                     $i++;
                 }
 
                 $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-                
+
                 $filename = 'qr-cable-bridge'.rand(2,10000).'.xlsx';
                 $writer->save(public_path('assets/updated-excels/') . $filename);
                 return response()->download(public_path('assets/updated-excels/') . $filename)->deleteFileAfterSend(true);
 
             }
-            else 
+            else
             {
                 return redirect()->back()->with('failed', 'No records found ');
             }
-        } 
-        catch (\Throwable $th) 
+        }
+        catch (\Throwable $th)
         {
             return $th->getMessage();
             return redirect()->back()->with('failed', 'Request Failed');

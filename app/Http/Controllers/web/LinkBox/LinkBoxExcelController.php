@@ -16,15 +16,15 @@ class LinkBoxExcelController extends Controller
 
     use Filter;
     public function generateLinkBoxExcel(Request $req){
-        try{ 
-            
+        try{
+
         $result = LinkBox::query();
 
         $result = $this->filter($result , 'visit_date',$req);
 
         $result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();
 
-         
+
         if ($result) {
                 $excelFile = public_path('assets/excel-template/link-box.xlsx');
 
@@ -54,6 +54,8 @@ class LinkBoxExcelController extends Controller
                     $worksheet->setCellValue('R' . $i, $rec->paint_status);
                     $worksheet->setCellValue('S' . $i, $rec->advertise_poster_status);
                     $worksheet->setCellValue('T' . $i, $rec->bushes_status);
+                    $worksheet->setCellValue('V' . $i, config('globals.APP_IMAGES_URL').$rec->link_box_image_1
+                    .' , '.config('globals.APP_IMAGES_URL').$rec->link_box_image_2);
 
                     $i++;
                 }
