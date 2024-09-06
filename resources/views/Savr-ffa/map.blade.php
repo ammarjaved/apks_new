@@ -598,6 +598,7 @@
                                                 <td>${element.ba}</td>
                                                 <td>${element.pole_no}</td>
                                                 <td>${element.pole_id}</td>
+                                                <td>${element.house_number}</td>
                                                 <td>${element.wayar_tertanggal}</td>
                                                 <td>${element.joint_box}</td>
                                                 <td>${element.ipc_terbakar}</td>

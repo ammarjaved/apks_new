@@ -8,6 +8,7 @@ use App\Repositories\SAVRFFARepo;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SavrFfa;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 
 class SavrFfaMapController extends Controller
@@ -34,6 +35,7 @@ class SavrFfaMapController extends Controller
     {
         try {
             $recored = SavrFfa::find($id);
+            $orignal_date=$recored->updated_at;
             if ($recored) {
                 $user = Auth::user()->name;
                 if ($recored->qa_status != $request->qa_status) {
@@ -49,7 +51,10 @@ class SavrFfaMapController extends Controller
 
                 }
                 $data = $savr_repo->store($recored,$request);
+             //   return $data;
                 $data->update();
+                DB::statement("update tbl_savr_ffa set updated_at='$orignal_date' where id =$recored->id ");
+
 
                 Session::flash('success', 'Request Success');
                 return view('components.map-messages',['id'=>$id,'success'=>true , 'url'=>'savr-ffa']);
@@ -59,7 +64,7 @@ class SavrFfaMapController extends Controller
             }
 
         } catch (\Throwable $th) {
-            // return $th->getMessage();
+             return $th->getMessage();
             Session::flash('failed', 'Request Failed');
 
         }

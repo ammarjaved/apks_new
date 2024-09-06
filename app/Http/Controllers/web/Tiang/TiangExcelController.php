@@ -39,11 +39,14 @@ class TiangExcelController extends Controller
             {
                 // Fetch the geometry of the work package
                 $result = $result->join('tbl_savr_geom as g', 'tbl_savr.geom_id', '=', 'g.id');
+
                 $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
 
 
                 // Execute the query
                 $result=  $result  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+                return $result->get()->count();
 
             }
 

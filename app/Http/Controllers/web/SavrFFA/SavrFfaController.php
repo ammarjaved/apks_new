@@ -10,6 +10,7 @@ use App\Repositories\SAVRFFARepo;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use App\Traits\Filter;
+use Illuminate\Support\Facades\DB;
 
 
 class SavrFfaController extends Controller
@@ -128,8 +129,11 @@ class SavrFfaController extends Controller
         try
         {
             $data = SavrFfa::find($id);
+            $orignal_date=$data->updated_at;
             $savr_repo->store($data,$request);
             $data->update();
+            DB::statement("update tbl_savr_ffa set updated_at='$orignal_date' where id =$data->id ");
+
             Session::flash('success', 'Request Success');
         }
         catch (\Throwable $th)
@@ -178,6 +182,9 @@ class SavrFfaController extends Controller
     {
         try {
             $qa_data = SavrFfa::find($req->id);
+          //  return   $qa_data;
+            $orignal_date=$qa_data->updated_at;
+            $rec_id=$qa_data->id;
             $qa_data->qa_status = $req->status;
             if ($req->status == 'Reject') {
                 $qa_data->reject_remarks = $req->reject_remakrs;
@@ -187,6 +194,7 @@ class SavrFfaController extends Controller
             $qa_data->qc_at = now();
 
             $qa_data->update();
+            DB::statement("update tbl_savr_ffa set updated_at='$orignal_date' where id = $rec_id ");
 
             // return redirect()->back();
         } catch (\Throwable $th) {

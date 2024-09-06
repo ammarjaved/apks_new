@@ -52,6 +52,7 @@
     </div>
 
     {{-- JOINT BOX --}}
+
     <div class="row">
         <div class="col-md-4"><label for="joint_box">{{__("messages.joint_box")}} </label></div>
         <div class="col-md-4">
