@@ -242,9 +242,10 @@
                             <th>IPC TERBAKAR</th>
                             <th>HOUSE RENOVATION</th>
                             <th>OTHER</th>
-                            <th>OTHER</th>
-                            <th>HOUSE IMAGE</th>
+                            <th>OTHER NAME</th>
                             <th>QA Status</th>
+                            <th>HOUSE IMAGE</th>
+
                             {{-- <th>IMAGE 1</th>
                             <th>IMAGE 2</th>
                             <th>FROM IMAGE 1</th>

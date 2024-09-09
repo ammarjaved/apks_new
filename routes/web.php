@@ -52,6 +52,8 @@ use Illuminate\Support\Facades\App;
 use App\Http\Controllers\web\Patrolling\PatrollingExcelController;
 use App\Http\Controllers\web\SAVT\SAVTController;
 use App\Http\Controllers\web\SAVT\SAVTExcelController;
+use App\Http\Controllers\web\SavrFFA\FFAExcelController;
+use App\Http\Controllers\web\SavrFFA\FFALKSController;
 use App\Http\Controllers\web\SAVT\SAVTMapController;
 use App\Http\Controllers\web\SAVT\SAVTSearchController;
 use App\Http\Controllers\web\Substation\SubstationPembersihanByDefect;
@@ -247,7 +249,7 @@ Route::group(
 
                 Route::resource('savr-ffa', \App\Http\Controllers\web\SavrFFA\SavrFfaController::class);
                 Route::get('/savr-ffa-update-QA-Status', [\App\Http\Controllers\web\SavrFFA\SavrFfaController::class, 'updateQAStatus'])->name('savr-ffa-update-QA-Status');
-
+                Route::post('generate-ffa-excel', [FFAExcelController::class, 'generateFFAExcel'])->name('generate-ffa-excel');
                 Route::get('/get-savr-ffa-edit/{id}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'editMap'])->name('get-savr-ffa-edit');
                 Route::post('/savr-ffa-map-edit/{id}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'editMapStore'])->name('savr-ffa-edit');
                 Route::view('/savr-ffa-map', 'Savr-ffa.map')->name('savr-ffa-map');
@@ -255,6 +257,9 @@ Route::group(
                 Route::get('/search/savr-ffa-by-polygon',[\App\Http\Controllers\web\SavrFFA\SavrFfaSearchController::class,'getSavrFFAByPolygon'])->name('search-savr-ffa-by-polygon');
                 Route::get('/search/find-savr-ffa', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'seacrh'])->name('savr-ffa-search');
                 Route::get('/search/find-savr-ffa-cordinated/{q}/{searchBy}', [\App\Http\Controllers\web\SavrFFA\SavrFfaMapController::class, 'seacrhCoordinated'])->name('savr-ffa-coordinated');
+                Route::get('/ffa-documents',[\App\Http\Controllers\web\SavrFFA\FFADocumentsController::class,'index'])->name('ffa-documents');
+                Route::any('/generate-ffa-lks', [FFALKSController::class, 'gene'])->name('generate-ffa-lks');
+                Route::get('/generate-ffa-lks-by-visit-date', [FFALKSController::class, 'generateByVisitDate'])->name('generate-ffa-lks-by-visit-date');
 
                 //generate notice pdf
                 Route::get('/generate-notice/{id}', [GenerateNoticeController::class, 'generateNotice']);

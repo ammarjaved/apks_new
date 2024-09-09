@@ -69,7 +69,7 @@
 
 
             <div class="row">
-                @include('components.qr-filter', ['url' => 'generate-savt-excel'])
+                @include('components.qr-filter', ['url' => 'generate-ffa-excel'])
 
                 <div class="col-12">
                     <div class="card">

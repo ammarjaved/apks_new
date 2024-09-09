@@ -344,12 +344,13 @@
                                     <p>{{__('messages.index')}}</p>
                                 </a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a href="/{{app()->getLocale()}}/tiang-talian-vt-and-vr-lks" class="nav-link">
+                            <li class="nav-item">
+                                <a href="/{{app()->getLocale()}}/ffa-documents" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Documents</p>
                                 </a>
-                            </li> --}}
+                            </li>
+
                         </ul>
                     </li>
                 </li>
