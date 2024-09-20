@@ -46,7 +46,7 @@ class TiangExcelController extends Controller
 
                 // Execute the query
                 $result=  $result  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
-                return $result->get()->count();
+               // return $result->get()->count();
 
             }
 
@@ -308,7 +308,7 @@ class TiangExcelController extends Controller
                     // $secondWorksheet->setCellValue('AK' . $i, $secondRec->total_defects);
                     $secondWorksheet->setCellValue('BA' . $i, $other_defects);
 
-                    $secondWorksheet->setCellValue('BC' . $i, $secondRec->coords);
+                    $secondWorksheet->setCellValue('BC' . $i, $secondRec->coords1);
                     $secondWorksheet->setCellValue('BD' . $i, $secondRec->total_defects);
 
                     $images = '';
@@ -430,7 +430,7 @@ class TiangExcelController extends Controller
                     $thirdWorksheet->setCellValue('P' . $i, $rec->arus_pada_tiang == "Yes" ? '/' : '');
                     $thirdWorksheet->setCellValue('S' . $i, 'AEROSYNERGY SOLUTIONS');
                     $thirdWorksheet->setCellValue('T' . $i, $rec->fp_road);
-                    $thirdWorksheet->setCellValue('U' . $i, $rec->coords);
+                    $thirdWorksheet->setCellValue('U' . $i, $rec->coords1);
 
 
 
@@ -686,7 +686,7 @@ class TiangExcelController extends Controller
 
                     $secondWorksheet->setCellValue('AF' . $i, $secondRec->total_defects);
                     $secondWorksheet->setCellValue('AI' . $i, $other_defects);
-                    $secondWorksheet->setCellValue('AJ' . $i, $secondRec->coords);
+                    $secondWorksheet->setCellValue('AJ' . $i, $secondRec->coords1);
 
 
                     $images = '';
@@ -757,7 +757,7 @@ class TiangExcelController extends Controller
                     $thirdWorksheet->setCellValue('P' . $i, $rec->arus_pada_tiang == "Yes" ? '/' : '');
                     $thirdWorksheet->setCellValue('S' . $i, 'AEROSYNERGY SOLUTIONS');
                     $thirdWorksheet->setCellValue('T' . $i, $rec->fp_road);
-                    $thirdWorksheet->setCellValue('U' . $i, $rec->coords);
+                    $thirdWorksheet->setCellValue('U' . $i, $rec->coords1);
 
 
 

@@ -16,7 +16,7 @@
         <div class="col-md-4"><label for="pole_no">{{__("messages.pole_no")}} </label></div>
         <div class="col-md-4">
 
-            <input   type="text" name="pole_no"   readonly value="{{$data->pole_no}}"   class="form-control" required {{!$disabled ?: "disabled"}}>
+            <input   type="text" name="pole_no"    value="{{$data->pole_no}}"   class="form-control" required >
 
         </div>
     </div>
