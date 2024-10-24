@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\WorkPackage;
+
 
 class FeederPillarExcelController extends Controller
 {
@@ -20,7 +22,33 @@ class FeederPillarExcelController extends Controller
         {
             $result = FeederPillar::query();
             $result = $this->filter($result , 'visit_date',$req);
-            $result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();
+            //$result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();
+            $result = $result->join('tbl_feeder_pillar_geom as g', 'tbl_feeder_pillar.geom_id', '=', 'g.id');
+            
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+
+
+                // Execute the query
+                $result=  $result  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+               // return $result->get()->count();
+
+            }
+
+            $result = $result
+            ->whereNotNull('visit_date')
+            ->select(
+                'tbl_feeder_pillar.*',  // Select all columns from main table
+                DB::raw('ST_X(g.geom) as x'),  // Specify g.geom for ST_X
+                DB::raw('ST_Y(g.geom) as y')   // Specify g.geom for ST_Y
+            )
+            ->get();
+
+
 
             if ($result)
             {

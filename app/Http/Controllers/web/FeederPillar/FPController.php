@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web\FeederPillar;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FeederPillar;
+use App\Models\WorkPackage;
 use App\Models\Team;
 use App\Traits\Filter;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,8 @@ class FPController extends Controller
      */
     public function index(Request $request)
     {
+        $workPackages = WorkPackage::where('ba',Auth::user()->ba)->select('id','package_name')->get();
+
         if ($request->ajax())
         {
             $result = FeederPillar::query();
@@ -52,7 +55,7 @@ class FPController extends Controller
                 return "FP-" .$row->id;
             })->make(true);
         }
-        return view('feeder-pillar.index');
+        return view('feeder-pillar.index',[ 'workPackages'=>$workPackages]);
     }
 
     /**

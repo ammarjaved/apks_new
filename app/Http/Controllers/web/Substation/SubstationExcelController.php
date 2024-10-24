@@ -10,6 +10,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\WorkPackage;
+
 
 class SubstationExcelController extends Controller
 {
@@ -23,8 +25,32 @@ class SubstationExcelController extends Controller
         {
             $result = Substation::query();
             $result = $this->filter($result , 'visit_date',$req);
+            $result = $result->join('tbl_substation_geom as g', 'tbl_substation.geom_id', '=', 'g.id');
 
-            $result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();
+            if ($req->filled('workPackages'))
+            {
+                // Fetch the geometry of the work package
+
+                $workPackageGeom = WorkPackage::where('id', $req->workPackages)->value('geom');
+
+
+
+                // Execute the query
+                $result=  $result  ->whereRaw('ST_Within(g.geom, ?)', [$workPackageGeom]);
+               // return $result->get()->count();
+
+            }
+        //    $result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();
+    
+        $result = $result
+        ->whereNotNull('visit_date')
+        ->select(
+            'tbl_substation.*',  // Select all columns from main table
+            DB::raw('ST_X(g.geom) as x'),  // Specify g.geom for ST_X
+            DB::raw('ST_Y(g.geom) as y')   // Specify g.geom for ST_Y
+        )
+        ->get();
+           //return $result->get();
 
             if ($result)
             {

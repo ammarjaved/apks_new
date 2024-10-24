@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Substation;
 use App\Models\SubstationGeom;
+use App\Models\WorkPackage;
 use App\Models\Team;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,7 @@ class SubstationController extends Controller
      */
     public function index(Request $request)
     {
+        $workPackages = WorkPackage::where('ba',Auth::user()->ba)->select('id','package_name')->get();
 
         if ($request->ajax())
         {
@@ -49,7 +51,7 @@ class SubstationController extends Controller
 
         }
 
-        return view('substation.index');
+        return view('substation.index',[ 'workPackages'=>$workPackages]);
     }
 
     /**
