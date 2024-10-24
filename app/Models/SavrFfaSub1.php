@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SavrFfaSub1 extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_savr_ffa_sub1';
+    protected $table = 'tbl_savr_ffa_sub11';
 
     protected $fillable = [
         'id',
@@ -20,14 +20,14 @@ class SavrFfaSub1 extends Model
         'pole_no',
         'house_image',
         'ba',
-        'cycle',
         'joint_box',
         'house_renovation',
         'house_number',
         'geom',
         'nama_jalan',
         'image2',
-        'image3'
+        'image3',
+        'visit_date'
     ];
 
 

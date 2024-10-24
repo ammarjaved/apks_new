@@ -27,7 +27,7 @@ class FeederPillarLKSController extends Controller
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
 
-        $result = FeederPillar::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+        $result = FeederPillar::where('ba',Auth::user()->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
         $result = $result ->join('tbl_feeder_pillar_geom as g', 'tbl_feeder_pillar.geom_id', '=', 'g.id');
 
         if ($req->filled('workPackages'))
@@ -97,7 +97,7 @@ class FeederPillarLKSController extends Controller
         $fpdf->SetFont('Arial', 'B', 22);
 
 
-        $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+        $fpdf->Cell(180, 25, Auth::user()->ba .' ' .$req->visit_date );
         $fpdf->Ln();
 
         $fpdf->SetFont('Arial', 'B', 16);
@@ -289,7 +289,7 @@ class FeederPillarLKSController extends Controller
             // Move to the next line for the next row
         }
 
-        $pdfFileName = $req->ba.' - Feeder-pillar - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - Feeder-pillar - '.$req->visit_date.'.pdf';
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
 
@@ -337,7 +337,7 @@ class FeederPillarLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-            $fpdf->Cell(180, 15, strtoupper($req->ba) .' FEEDER PILLAR',0,1);
+            $fpdf->Cell(180, 15, strtoupper(Auth::user()->ba) .' FEEDER PILLAR',0,1);
             $fpdf->Cell(180, 25, 'PO NO :');
 
             // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
@@ -367,7 +367,7 @@ class FeederPillarLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Feeder-pillar - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = Auth::user()->ba.' - Feeder-pillar - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

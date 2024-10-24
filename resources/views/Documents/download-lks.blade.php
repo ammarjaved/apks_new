@@ -46,10 +46,10 @@
 
         console.log(workPackage);
 
-
+           var myurl= `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${encodeURIComponent(ba)}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}&workPackages=${workPackage}`;
             $.ajax(
                 {
-                    url: `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${ba}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}&workPackages=${workPackage}`,
+                    url:myurl,
                     method: 'GET',
                     success: function(response)
                     {
@@ -80,10 +80,10 @@
             $('#download-complete').html(index + 1)
             if (index < dates.length)
             {
-
+                  var url='/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + encodeURIComponent(ba) + '&visit_date=' + dates[index]+'&folder_name='+folderName+'&cycle='+cycle+'&workPackages='+workPackage;
                 $.ajax(
                     {
-                        url: '/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + ba + '&visit_date=' + dates[index]+'&folder_name='+folderName+'&cycle='+cycle+'&workPackages='+workPackage,
+                        url: url,
                         method: 'GET',
                         success: function(response)
                         {

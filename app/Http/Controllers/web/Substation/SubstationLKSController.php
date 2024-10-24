@@ -42,9 +42,13 @@ class SubstationLKSController extends Controller
 
 
 
-        $result = Substation::where('ba',$req->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+        $result = Substation::where('ba',Auth::user()->ba)->where('visit_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+
+
+
         $result = $result
                 ->join('tbl_substation_geom as g', 'tbl_substation.geom_id', '=', 'g.id');
+
 
         if ($req->filled('workPackages'))
         {
@@ -102,7 +106,7 @@ class SubstationLKSController extends Controller
         $fpdf->AddPage('L', 'A4');
         $fpdf->SetFont('Arial', 'B', 22);
 
-        $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+        $fpdf->Cell(180, 25, Auth::user()->ba .' ' .$req->visit_date );
         $fpdf->Ln();
         $fpdf->SetFont('Arial', 'B', 16);
 
@@ -304,7 +308,7 @@ class SubstationLKSController extends Controller
 
         }
         Carbon::now();
-        $pdfFileName = $req->ba.' - Pencawang - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - Pencawang - '.$req->visit_date.'.pdf';
 
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
@@ -354,7 +358,7 @@ class SubstationLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-            $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
+            $fpdf->Cell(180, 25, Auth::user()->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
             $fpdf->SetFont('Arial', 'B', 16);
                 // visit date table start
@@ -381,7 +385,7 @@ class SubstationLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Pencawang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = Auth::user()->ba.' - Pencawang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

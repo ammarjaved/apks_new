@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use App\Traits\Filter;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\SavrFfaSub1;
 
 class SavrFfaController extends Controller
 {
@@ -25,13 +25,11 @@ class SavrFfaController extends Controller
     {
 
         if ($request->ajax()) {
-            // if($request->filled('ba')){
-            // $ba = $request->filled('ba') ? $request->ba : Auth::user()->ba;
-            // $result = SavrFfa::where('ba',$ba);
-            // }else{
-                 $result = SavrFfa::query();
-            // }
-            $result = $this->filter($result , 'updated_at' , $request);
+
+
+        $result = SavrFfaSub1::query();
+        $result = $this->filter($result , 'visit_date' , $request);
+
 
             $result->when(true, function ($query) {
                 return $query->select(
@@ -41,16 +39,9 @@ class SavrFfaController extends Controller
                                 'pole_id',
                                 'pole_no',
                                 'reject_remarks',
-                                'updated_at'
+                                'visit_date'
                             );
             });
-
-            // return datatables()
-            //     ->of($result->get())->addColumn('ffa_id', function ($row) {
-
-            //         return "FFA-" .$row->id;
-            //     })
-            //     ->make(true);
 
                 return DataTables::eloquent($result)
                 ->addColumn('ffa_id', function ($row) {

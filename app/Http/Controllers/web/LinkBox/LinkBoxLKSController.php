@@ -22,7 +22,7 @@ class LinkBoxLKSController extends Controller
     public function generateByVisitDate(Fpdf $fpdf, Request $req)
     {
 
-        $result = LinkBox::where('ba',$req->ba)
+        $result = LinkBox::where('ba',Auth::user()->ba)
                             ->where('visit_date', $req->visit_date)
                             ->where('qa_status','Accept')
                             ->where('cycle',$req->cycle)
@@ -75,7 +75,7 @@ class LinkBoxLKSController extends Controller
         $fpdf->SetFont('Arial', 'B', 22);
 
 
-        $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+        $fpdf->Cell(180, 25, Auth::user()->ba .' ' .$req->visit_date );
         $fpdf->Ln();
 
         $fpdf->SetFont('Arial', 'B', 14);
@@ -313,7 +313,7 @@ class LinkBoxLKSController extends Controller
             // Move to the next line for the next row
         }
 
-        $pdfFileName = $req->ba.' - Link-Box - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - Link-Box - '.$req->visit_date.'.pdf';
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
         $folderPath = $req->folder_name .'/'. $pdfFileName;
@@ -353,7 +353,7 @@ class LinkBoxLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-                $fpdf->Cell(180, 15, strtoupper($req->ba) .' LINK BOX',0,1);
+                $fpdf->Cell(180, 15, strtoupper(Auth::user()->ba) .' LINK BOX',0,1);
                 $fpdf->Cell(180, 25, 'PO NO :');
             // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
@@ -382,7 +382,7 @@ class LinkBoxLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Pencawang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = Auth::user()->ba.' - Pencawang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

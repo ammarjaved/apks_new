@@ -23,7 +23,8 @@ class FFALKSController extends Controller
         $result = SavrFfaSub1::query();
 
 
-        $result = SavrFfaSub1::where('ba',$req->ba)
+
+        $result = SavrFfaSub1::where('ba',Auth::user()->ba)
                             ->whereRaw("DATE(visit_date) = ?::date", [$req->visit_date])
                             ->where('qa_status','Accept')
                             ->where('cycle',$req->cycle);
@@ -49,7 +50,7 @@ class FFALKSController extends Controller
                             'house_image',
                             'image2',
                             'image3',
-                             'visit_date',
+                            'visit_date',
                             'ba',
                             'cycle',
                             'joint_box',
@@ -64,7 +65,7 @@ class FFALKSController extends Controller
         $fpdf->AddPage('L', 'A4');
         $fpdf->SetFont('Arial', 'B', 22);
 
-        $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+        $fpdf->Cell(180, 25, Auth::user()->ba .' ' .$req->visit_date );
         $fpdf->Ln();
 
         $fpdf->SetFont('Arial', 'B', 14);
@@ -80,36 +81,40 @@ class FFALKSController extends Controller
         $fpdf->SetFont('Arial', 'B', 9);
 
         $sr_no = 0;
+        $entriesPerPage = 2;
+        $entryCount = 0;
         foreach ($data as $row) {
-           // if ($sr_no > 0 && $sr_no % 2 == 0) {
-                $fpdf->AddPage('L', 'A4');
+        //  if ($sr_no > 0 && $sr_no % 2 == 0) {
+        //         $fpdf->AddPage('L', 'A4');
+        //  }
+        $entryCount++;
 
+        if ($entryCount > $entriesPerPage) {
+            $fpdf->AddPage('L', 'A4');
+            $entryCount = 1;
+        }
             $sr_no++;
             $col1Width = 90;
             $col2Width = 90;
+        // Row 1
+        $cellHeight = 6;
 
-            // First row
-            $fpdf->Cell($col1Width, 6, 'SR # : ' . $sr_no, 0);
-            $fpdf->Cell($col2Width, 6, 'Tarikh Lawatan : ' . $row->visit_date, 0);
-            $fpdf->Ln();
+        // Row 1
+        $fpdf->Cell($col1Width/2, $cellHeight, 'SR # : ' . $sr_no, 0);
+        $fpdf->Cell($col2Width/2, $cellHeight, 'Tarikh Lawatan : ' . $row->visit_date, 0);
+        $fpdf->Cell($col1Width/2, $cellHeight, 'POLE ID : ' . $row->pole_id, 0);
+        $fpdf->Cell($col2Width/2, $cellHeight, 'NAMA JALAN : ' . $row->nama_jalan, 0);
+        $fpdf->Ln($cellHeight);
 
-            // Second row
-            $fpdf->Cell($col1Width, 6, 'POLE ID : ' . $row->pole_id, 0);
-            $fpdf->Cell($col2Width, 6, 'NAMA JALAN : ' . $row->nama_jalan, 0);
-            $fpdf->Ln();
+        // Row 2
+        $fpdf->Cell($col1Width/2, $cellHeight, 'POLE NO : ' . $row->pole_no, 0);
+        $fpdf->Cell($col2Width, $cellHeight, 'Koordinat : ' . $row->y . ' , ' . $row->x, 0);
+        $fpdf->Cell($col1Width/2, $cellHeight, 'No Rumah : ' . $row->house_number, 0);
+        $fpdf->Cell($col2Width/2, $cellHeight, 'FFW ID : ' . $row->id, 0);
+        $fpdf->Ln($cellHeight);
 
-            // Third row
-            $fpdf->Cell($col1Width, 6, 'POLE NO : ' . $row->pole_no, 0);
-            $fpdf->Cell($col2Width, 6, 'Koordinat : ' . $row->y . ' , ' . $row->x, 0);
-            $fpdf->Ln();
-
-            // Fourth row
-            $fpdf->Cell($col1Width, 6, 'No Rumah : ' . $row->house_number, 0);
-            $fpdf->Cell($col2Width, 6, 'FFW ID : ' . $row->id, 0);
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
-            $fpdf->Ln();
+        // Add a small space after the two rows
+        $fpdf->Ln(2);
 
             $fpdf->SetFont('Arial', 'B', 8);
 
@@ -136,10 +141,10 @@ class FFALKSController extends Controller
             $house_image = config('globals.APP_IMAGES_LOCALE_PATH').$row->house_image;
             if ($row->house_image != '' && file_exists($house_image))
             {
-                $fpdf->Image($house_image, $fpdf->GetX(), $fpdf->GetY(), 50, 50);
-                $fpdf->Cell(60);
+                $fpdf->Image($house_image, $fpdf->GetX(), $fpdf->GetY(), 30, 30);
+                $fpdf->Cell(40);
             } else {
-                $fpdf->Cell(60, 7, '');
+                $fpdf->Cell(40, 7, '');
             }
 
             // $fpdf->Ln();
@@ -147,33 +152,50 @@ class FFALKSController extends Controller
             $image2 = config('globals.APP_IMAGES_LOCALE_PATH').$row->image2;
             if ($row->image2 != '' && file_exists($image2))
             {
-                $fpdf->Image($image2, $fpdf->GetX(), $fpdf->GetY(), 50, 50);
-                $fpdf->Cell(60);
+                $fpdf->Image($image2, $fpdf->GetX(), $fpdf->GetY(), 30, 30);
+                $fpdf->Cell(40);
             } else {
-                $fpdf->Cell(60, 7, '');
+                $fpdf->Cell(40, 7, '');
             }
 
             $image3 = config('globals.APP_IMAGES_LOCALE_PATH').$row->image3;
             if ($row->image3 != '' && file_exists($image3))
             {
-                $fpdf->Image($image3, $fpdf->GetX(), $fpdf->GetY(), 50, 50);
-                $fpdf->Cell(60);
+                $fpdf->Image($image3, $fpdf->GetX(), $fpdf->GetY(), 30, 30);
+                $fpdf->Cell(40);
             } else {
-                $fpdf->Cell(60, 7, '');
+                $fpdf->Cell(40, 7, '');
             }
 
 
+            // $fpdf->SetY($imageY + $imageHeight + 10);
 
-            $fpdf->Ln();
-            $fpdf->Ln();
+            // if ($entryCount < $entriesPerPage) {
+            //     $fpdf->Ln(20); // Add space between entries on the same page
+            // }
+
+
             // $fpdf->Ln();
             // $fpdf->Ln();
             // $fpdf->Ln();
+            // $fpdf->Ln();
+            //  $fpdf->Ln();
+            //  $fpdf->Ln();
+            //  $fpdf->Ln();
 
             // Move to the next line for the next row
+
+
+          //  $fpdf->SetY($imageY + $imageHeight + 10);
+
+            if ($entryCount < $entriesPerPage) {
+                $fpdf->Ln(40);
+            }
+
+
         }
 
-        $pdfFileName = $req->ba.' - FFA - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - FFW - '.$req->visit_date.'.pdf';
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
         $folderPath = $req->folder_name .'/'. $pdfFileName;
@@ -191,11 +213,18 @@ class FFALKSController extends Controller
     public function gene(Fpdf $fpdf, Request $req)
     {
        // return $req;
+
+
+
         if ($req->ajax())
         {
             $result = SavrFfaSub1::query();
 
+
+
             $result = $this->filter($result , 'visit_date',$req)->where('qa_status','Accept')->whereNotNull('visit_date');
+
+          //  return   $result->get();
             if ($req->filled('workPackages'))
             {
                 // Fetch the geometry of the work package
@@ -212,7 +241,7 @@ class FFALKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-                $fpdf->Cell(180, 15, strtoupper($req->ba) .' FFA',0,1);
+                $fpdf->Cell(180, 15, strtoupper(Auth::user()->ba) .' FFW',0,1);
                 $fpdf->Cell(180, 25, 'PO NO :');
             // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
@@ -241,7 +270,7 @@ class FFALKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - FFA - Table - Of - Contents - '.$req->from_date.' - '.$req->to_date.'.pdf';
+            $pdfFileName =Auth::user()->ba.' - FFW - Table - Of - Contents - '.$req->from_date.' - '.$req->to_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

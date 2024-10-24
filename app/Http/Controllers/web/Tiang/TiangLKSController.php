@@ -29,7 +29,7 @@ class TiangLKSController extends Controller
         // return Tiang::first();
 
 
-        $result = Tiang::where('ba',$req->ba)->where('review_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
+        $result = Tiang::where('ba',Auth::user()->ba)->where('review_date', $req->visit_date)->where('qa_status','Accept')->where('cycle',$req->cycle);
 
 
 
@@ -129,7 +129,7 @@ class TiangLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
 
-            $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+            $fpdf->Cell(180, 25, Auth::user()->ba .' ' .$req->visit_date );
             $fpdf->Ln();
             $fpdf->SetFont('Arial', 'B', 16);
 
@@ -542,7 +542,7 @@ class TiangLKSController extends Controller
 
         }
 
-        $pdfFileName = $req->ba.' - Tiang - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - Tiang - '.$req->visit_date.'.pdf';
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
         $folderPath = $req->folder_name .'/'. $pdfFileName;
@@ -579,7 +579,7 @@ class TiangLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-                $fpdf->Cell(180, 15, strtoupper($req->ba) .' LKS LV',0,1);
+                $fpdf->Cell(180, 15, strtoupper(Auth::user()->ba) .' LKS LV',0,1);
                 $fpdf->Cell(180, 25, 'PO NO :');
             // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
@@ -608,7 +608,7 @@ class TiangLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Tiang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = Auth::user()->ba.' - Tiang - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

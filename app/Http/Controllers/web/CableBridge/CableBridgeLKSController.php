@@ -23,7 +23,7 @@ class CableBridgeLKSController extends Controller
         $result = CableBridge::query();
 
 
-        $result = CableBridge::where('ba',$req->ba)
+        $result = CableBridge::where('ba',Auth::user()->ba)
                             ->where('visit_date', $req->visit_date)
                             ->where('qa_status','Accept')
                             ->where('cycle',$req->cycle)
@@ -72,7 +72,7 @@ class CableBridgeLKSController extends Controller
         $fpdf->AddPage('L', 'A4');
         $fpdf->SetFont('Arial', 'B', 22);
 
-        $fpdf->Cell(180, 25, $req->ba .' ' .$req->visit_date );
+        $fpdf->Cell(180, 25, Auth::user()->ba.' ' .$req->visit_date );
         $fpdf->Ln();
 
         $fpdf->SetFont('Arial', 'B', 14);
@@ -255,7 +255,7 @@ class CableBridgeLKSController extends Controller
             // Move to the next line for the next row
         }
 
-        $pdfFileName = $req->ba.' - Cable-Bridge - '.$req->visit_date.'.pdf';
+        $pdfFileName = Auth::user()->ba.' - Cable-Bridge - '.$req->visit_date.'.pdf';
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');
         $folderPath = $req->folder_name .'/'. $pdfFileName;
@@ -293,7 +293,7 @@ class CableBridgeLKSController extends Controller
             $fpdf->AddPage('L', 'A4');
             $fpdf->SetFont('Arial', 'B', 22);
                 //add Heading
-                $fpdf->Cell(180, 15, strtoupper($req->ba) .' CABLE BRIDGE',0,1);
+                $fpdf->Cell(180, 15, strtoupper(Auth::user()->ba) .' CABLE BRIDGE',0,1);
                 $fpdf->Cell(180, 25, 'PO NO :');
             // $fpdf->Cell(180, 25, $req->ba .' LKS ( '. ($req->from_date?? ' All ') . ' - ' . ($req->to_date?? ' All ').' )');
             $fpdf->Ln();
@@ -322,7 +322,7 @@ class CableBridgeLKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            $pdfFileName = $req->ba.' - Cable Bridge - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
+            $pdfFileName = Auth::user()->ba.' - Cable Bridge - Table - Of - Contents - '.$req->from_date.' - '.$req->from_date.'.pdf';
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="' . $pdfFileName . '"');

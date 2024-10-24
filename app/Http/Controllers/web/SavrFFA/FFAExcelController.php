@@ -38,7 +38,7 @@ class FFAExcelController extends Controller
                 foreach ($result as $rec)
                 {
                  //   return $rec;
-                     $coords=$rec->x.','.$rec->y;
+                     $coords=$rec->y.','.$rec->x;
 
                     $worksheet->setCellValue('A' . $i, $i - 3);
                     $worksheet->setCellValue('B' . $i, $rec->pole_id);
@@ -60,9 +60,11 @@ class FFAExcelController extends Controller
                     $worksheet->setCellValue('M' . $i, $rec->ipc_terbakar);
                     $worksheet->setCellValue('N' . $i, $rec->house_renovation);
                     $worksheet->setCellValue('O' . $i, $rec->other);
-                    $worksheet->setCellValue('P' . $i, $rec->house_image);
-                    $worksheet->setCellValue('Q' . $i, $rec->image2);
-                    $worksheet->setCellValue('S' . $i, $rec->image3);
+                    $worksheet->setCellValue('P' . $i, 'http://121.121.232.53:89/'.$rec->house_image);
+                    $worksheet->setCellValue('Q' . $i, 'http://121.121.232.53:89/'.$rec->image2);
+                    if($rec->image3){
+                    $worksheet->setCellValue('S' . $i, 'http://121.121.232.53:89/'.$rec->image3);
+                    }
                     // $worksheet->setCellValue('U' . $i, $rec->bare_panjang_meter);
 
                     $i++;

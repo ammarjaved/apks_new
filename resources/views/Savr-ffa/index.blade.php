@@ -199,6 +199,10 @@
                             d.from_date = from_date;
                         }
 
+                        if (to_date) {
+                            d.to_date = to_date;
+                        }
+
                         if (excel_ba) {
                             d.ba = excel_ba;
                         }
@@ -207,9 +211,11 @@
                         if (qa_status) {
                             d.qa_status = qa_status;
                         }
-                        if(cycle){
+
+                        if (cycle) {
                             d.cycle = cycle;
                         }
+
                     }
                 },
                 columns: columns,

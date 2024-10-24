@@ -32,12 +32,14 @@ trait Filter
         //cheeck if request has from_date and ba is not empty then  add where  = request from_date
 
         if ($request->filled('from_date')) {
+
             $model->where($column, '>=', $request->from_date);
         }
 
         //cheeck if request has ba and ba is not empty then  add where ba = request ba
 
         if ($request->filled('to_date')) {
+          //  dd($column.','.$request->to_date);
             $model->where($column, '<=', $request->to_date);
         }
 
