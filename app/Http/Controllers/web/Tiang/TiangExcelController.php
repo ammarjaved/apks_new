@@ -23,6 +23,8 @@ class TiangExcelController extends Controller
 
     public function generateTiangExcel(Request $req)
     {
+
+  //     return $req;
         try
         {
 
@@ -57,8 +59,10 @@ class TiangExcelController extends Controller
                             'kaki_lima_defect_image','tapak_road_img','tapak_sidewalk_img','tapak_sidewalk_img','tapak_no_vehicle_entry_img','kawasan_bend_img',
                             'kawasan_road_img' , 'kawasan_forest_img' , 'kawasan_other_img']);
 
-            $query = Tiang::select('fp_road as road')
-                ->selectRaw("string_agg(distinct fp_name, ' , ') as fp_name")
+            $query = Tiang::select('fp_name as fp_name')
+
+                ->selectRaw("string_agg(distinct fp_road, ' , ') as road")
+                //->selectRaw("string_agg(distinct fp_name, ' , ') as fp_name")
                 ->selectRaw("string_agg(distinct review_date::text, ' , ') as review_date")
                 ->selectRaw("SUM(CASE WHEN size_tiang = '7.5' THEN 1 ELSE 0 END) as size_tiang_75")
                 ->selectRaw("SUM(CASE WHEN size_tiang = '9' THEN 1 ELSE 0 END) as size_tiang_9")
@@ -91,7 +95,8 @@ class TiangExcelController extends Controller
                 ->selectRaw("SUM(CASE WHEN (talian_utama_connection)::text ='one' THEN 1 ELSE 0 END ) as service")
                 ->selectRaw("MIN(section_from) as section_from")
                 ->selectRaw("MAX(section_to) as section_to")
-
+            //    ->selectRaw("geom_id")
+                ->selectRaw("string_agg(DISTINCT geom_id::text, ',') as geom_ids")
                 ->whereNotNull('review_date')
                 ->whereNotNull('fp_road');
                 $query = $this->filter($query , 'review_date',$req);
@@ -109,9 +114,10 @@ class TiangExcelController extends Controller
                 }
 
 
-                $roadStatistics = $query->groupBy('fp_road' )->get();
+              //  $roadStatistics = $query->groupBy('fp_road','geom_id' )->get();
+                $roadStatistics = $query->groupBy('fp_name' )->get();
 
-         //  return $roadStatistics;
+          // return $roadStatistics;
 
 
 
@@ -119,7 +125,7 @@ class TiangExcelController extends Controller
             {
 
                 if (Auth::user()->ba == 'KUALA LUMPUR PUSAT') {
-                    return $this->generateTiangKLPExcel($roadStatistics , $res , $ba , $defectsImg);
+                    return $this->generateTiangKLPExcel($roadStatistics , $res , $ba , $defectsImg,$req);
                 }
 
                 $excelFile = public_path('assets/excel-template/QR TIANG.xlsx');
@@ -450,7 +456,7 @@ class TiangExcelController extends Controller
                     ->with('failed', 'No records found ');
             }
         } catch (\Throwable $th) {
-           //  return $th->getMessage();
+             return $th->getMessage();
             return redirect()
                 ->back()
                 ->with('failed', 'Request Failed');
@@ -460,10 +466,18 @@ class TiangExcelController extends Controller
 
 
 
+    public function getReviewDateAgainstGeomId($geomid){
+        $rd = Tiang::where('geom_id', $geomid)->where('cycle',1)
+        ->select('review_date')
+        ->get();
+    return $rd->value('review_date');;
+    }
 
-    public function generateTiangKLPExcel($roadStatistics , $res , $ba , $defectsImg)
+
+    public function generateTiangKLPExcel($roadStatistics , $res , $ba , $defectsImg,$req)
     {
 
+       // return $roadStatistics;
         $excelFile = public_path('assets/excel-template/TIANG KL PUSAT.xlsx');
 
                 $spreadsheet = IOFactory::load($excelFile);
@@ -537,7 +551,7 @@ class TiangExcelController extends Controller
 
 
                 $i = 3;
-                foreach ($roadStatistics as $rec) {
+                foreach ($res as $rec) {
                     $worksheetOne->setCellValue('A' . $i, $i - 2);
                     $worksheetOne->setCellValue('B' . $i, $rec->fp_name);
 
@@ -546,10 +560,15 @@ class TiangExcelController extends Controller
                     // $worksheet->setCellValue('F' . $i, $rec->fp_name);
                     $worksheetOne->setCellValue('D' . $i, $rec->section_from );
                     $worksheetOne->setCellValue('E' . $i, $rec->section_to);
-
-                    $worksheetOne->setCellValue('H' . $i, $rec->review_date );
-
-
+                    if($req->cycle=='2'){
+                    $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id);
+                  //  return $c1_reviewdate;
+                    $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
+                    $worksheetOne->setCellValue('I' . $i, $rec->review_date );
+                    }
+                    if($req->cycle=='1'){
+                        $worksheetOne->setCellValue('H' . $i, $rec->review_date );
+                    }
 
 
                     $i++;
@@ -719,7 +738,6 @@ class TiangExcelController extends Controller
                 $secondWorksheet->getStyle('B:AL')->getFont()->setSize(9);
 
 
-
                 foreach ($res as $rec) {
                     $thirdWorksheet->setCellValue('A' . $i, $i - 3);
                     $thirdWorksheet->setCellValue('B' . $i, $rec->review_date);
@@ -758,7 +776,6 @@ class TiangExcelController extends Controller
                     $thirdWorksheet->setCellValue('S' . $i, 'AEROSYNERGY SOLUTIONS');
                     $thirdWorksheet->setCellValue('T' . $i, $rec->fp_road);
                     $thirdWorksheet->setCellValue('U' . $i, $rec->coords1);
-
 
 
                     $i++;

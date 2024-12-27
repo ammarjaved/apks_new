@@ -52,6 +52,7 @@
                         <select name="cycle" id="cycle" class="form-input form-control" >
                             <option value="1" selected>1</option>
                             <option value="2">2</option>
+                            <option value="3">3</option>
                         </select>
                     </div>
 
