@@ -65,6 +65,7 @@ use App\Http\Controllers\web\Tiang\TiangPembersihanByDefect;
 use App\Http\Controllers\web\Tiang\TiangSBUMReportController;
 use App\Http\Controllers\web\Tiang\TiangSearchController;
 use App\Http\Controllers\web\Tiang\TiangPembersihanController;
+use App\Http\Controllers\web\Tiang\TiangCurrentLeakageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,8 @@ Route::group(
                 /// tiang
 
                 Route::resource('tiang-talian-vt-and-vr', TiangContoller::class);
+                Route::get('generate-current-leakage-excel', [TiangCurrentLeakageController::class, 'generateTiangExcel'])->name('generate--current-leakage-excel');
+
                 Route::post('generate-tiang-talian-vt-and-vr-excel', [TiangExcelController::class, 'generateTiangExcel'])->name('generate-tiang-talian-vt-and-vr-excel');
                 Route::view('/tiang-talian-vt-and-vr-map', 'Tiang.map')->name('tiang-talian-vt-and-vr-map');
                 Route::get('/search/find-tiang', [TiangMapController::class, 'seacrh'])->name('tiang-search');

@@ -156,7 +156,7 @@ class FeederPillarPembersihanController extends Controller
                 // GET POSTER DATA AND IMMAGES
                 $advertisePoster = $advertisePoster
                                             ->where('advertise_poster_status', 'Yes')
-                                            ->select('images_advertise_poster','tbl_feeder_pillar.id','visit_date' , DB::raw('ST_X(g.geom) as x' ) , DB::raw('ST_Y(g.geom) as y'), 'image_advertisement_after_1')
+                                            ->select('images_advertise_poster','image_advertisement_during_1','tbl_feeder_pillar.id','visit_date' , DB::raw('ST_X(g.geom) as x' ) , DB::raw('ST_Y(g.geom) as y'), 'image_advertisement_after_1')
                                             ->orderBy('visit_date')
                                             ->get();
 
@@ -170,13 +170,19 @@ class FeederPillarPembersihanController extends Controller
                     $advertiseSheet->setCellValue('B'.$g, 'SEBELUM');
 
                     $advertiseSheet->mergeCells('I'.$g.':O'.$g);
-                    $advertiseSheet->setCellValue('I'.$g , 'SELEPAS');
+                    $advertiseSheet->setCellValue('I'.$g , 'SEMASA');
+
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$g);
+                    $advertiseSheet->setCellValue('P'.$g , 'SELEPAS');
+
 
                     $g++;
                     // Add image to cell
                     $k = $g +15;
                     $advertiseSheet->mergeCells('B'.$g.':H'.$k);
                     $advertiseSheet->mergeCells('I'.$g.':O'.$k);
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$k);
+
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->images_advertise_poster;
                     if ($advertise->images_advertise_poster != '' && file_exists($imagePath))
@@ -189,12 +195,23 @@ class FeederPillarPembersihanController extends Controller
                         $image->setWorksheet($advertiseSheet);
                     }
 
+                    $imagePath2 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_during_1;
+                    if ($advertise->image_advertisement_during_1 !='' && file_exists($imagePath2))
+                    {
+                        $image2 = new Drawing();
+                        $image2->setPath($imagePath1);
+                        $image2->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image2->setWidth(300); // Set the width of the image (adjust as needed)
+                        $image2->setHeight(300); // Set the height of the image (adjust as needed)
+                        $image2->setWorksheet($advertiseSheet);
+                    }
+
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_after_1;
                     if ($advertise->image_advertisement_after_1 !='' && file_exists($imagePath1))
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('P' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);

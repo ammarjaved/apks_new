@@ -178,6 +178,7 @@ class SubstationPembersihanController extends Controller
                 $advertisePoster = $advertisePoster->where('advertise_poster_status', 'Yes')
                                                    ->select(
                                                         'image_advertisement_before_1',
+                                                        'image_advertisement_during_1',
                                                         'tbl_substation.id',
                                                         'visit_date',
                                                         DB::raw('ST_X(g.geom) as x' ),
@@ -195,13 +196,17 @@ class SubstationPembersihanController extends Controller
                     $advertiseSheet->setCellValue('B'.$g, 'SEBELUM');
 
                     $advertiseSheet->mergeCells('I'.$g.':O'.$g);
-                    $advertiseSheet->setCellValue('I'.$g , 'SELEPAS');
+                    $advertiseSheet->setCellValue('I'.$g , 'SEMASA');
+
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$g);
+                    $advertiseSheet->setCellValue('P'.$g , 'SELEPAS');
 
                     $g++;
                     // Add image to cell
                     $k = $g +15;
                     $advertiseSheet->mergeCells('B'.$g.':H'.$k);
                     $advertiseSheet->mergeCells('I'.$g.':O'.$k);
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$k);
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_before_1;
                     if ($advertise->image_advertisement_before_1 != '' && file_exists($imagePath))
@@ -214,12 +219,23 @@ class SubstationPembersihanController extends Controller
                         $image->setWorksheet($advertiseSheet);
                     }
 
+                    $imagePath2 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_during_1;
+                    if ($advertise->image_advertisement_during_1 != '' && file_exists($imagePath2))
+                    {
+                        $image2 = new Drawing();
+                        $image2->setPath($imagePath);
+                        $image2->setCoordinates('I' . $g);
+                        $image2->setWidth(300);
+                        $image2->setHeight(300);
+                        $image2->setWorksheet($advertiseSheet);
+                    }
+
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->image_advertisement_after_1;
                     if ($advertise->image_advertisement_after_1 !=''&& file_exists($imagePath1))
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
-                        $image1->setCoordinates('I' . $g);
+                        $image1->setCoordinates('P' . $g);
                         $image1->setWidth(300);
                         $image1->setHeight(300);
                         $image1->setWorksheet($advertiseSheet);

@@ -106,8 +106,8 @@ class TiangPembersihanController extends Controller
 
                 // GET GATE DATA AND IMMAGES
                 $gateUnlocked = $gateUnlocked->whereRaw("(tiang_defect->>'creepers')::text = 'true'")->whereNotNull('remove_creepers_image')
-                        ->select('pole_image_1','tbl_savr.id','review_date' , DB::raw('ST_X(g.geom) as x' ), 'remove_creepers_image' , DB::raw('ST_Y(g.geom) as y'));
-               
+                        ->select('pole_image_1','remove_creepers_during_image','tbl_savr.id','review_date' , DB::raw('ST_X(g.geom) as x' ), 'remove_creepers_image' , DB::raw('ST_Y(g.geom) as y'));
+
 
                 $gateUnlocked =    $gateUnlocked->orderBy('tbl_savr.review_date')->get();
 
@@ -119,19 +119,24 @@ class TiangPembersihanController extends Controller
 
                 $g = 4;
                 $sr = 1;
+                //return $gateUnlocked;
                 foreach ($gateUnlocked as $gate)
                 {
                     $gateWorkSheet->mergeCells('B'.$g.':H'.$g);
                     $gateWorkSheet->setCellValue('B'.$g, 'SEBELUM');
 
                     $gateWorkSheet->mergeCells('I'.$g.':O'.$g);
-                    $gateWorkSheet->setCellValue('I'.$g , 'SELEPAS');
+                    $gateWorkSheet->setCellValue('I'.$g , 'SEMASA');
+
+                    $gateWorkSheet->mergeCells('P'.$g.':V'.$g);
+                    $gateWorkSheet->setCellValue('P'.$g , 'SELEPAS');
 
                     $g++;
                     // Add image to cell
                     $k = $g +15;
                     $gateWorkSheet->mergeCells('B'.$g.':H'.$k);
                     $gateWorkSheet->mergeCells('I'.$g.':O'.$k);
+                    $gateWorkSheet->mergeCells('P'.$g.':V'.$k);
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$gate->pole_image_1; // Provide the path to your image file
                     if ($gate->pole_image_1 !='' && file_exists($imagePath))
@@ -144,12 +149,24 @@ class TiangPembersihanController extends Controller
                         $image->setWorksheet($gateWorkSheet);
                     }
 
+                    $imagePath2 = config('globals.APP_IMAGES_LOCALE_PATH').$gate->remove_creepers_during_image; // Provide the path to your image file
+
+                    if ($gate->remove_creepers_during_image !='' && file_exists($imagePath2))
+                    {
+                        $image2 = new Drawing();
+                        $image2->setPath($imagePath2);
+                        $image2->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image2->setWidth(300); // Set the width of the image (adjust as needed)
+                        $image2->setHeight(300); // Set the height of the image (adjust as needed)
+                        $image2->setWorksheet($gateWorkSheet);
+                    }
+
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$gate->remove_creepers_image; // Provide the path to your image file
                     if ($gate->remove_creepers_image !='' && file_exists($imagePath1))
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('P' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($gateWorkSheet);
@@ -174,7 +191,7 @@ class TiangPembersihanController extends Controller
 
                 // GET POSTER DATA AND IMMAGES
                 $advertisePoster = $advertisePoster->whereNotNull("clean_banner_image")
-                        ->select('pole_image_2','tbl_savr.id','review_date' , DB::raw('ST_X(g.geom) as x' ) , DB::raw('ST_Y(g.geom) as y'), 'clean_banner_image');
+                        ->select('pole_image_2','clean_banner_during_image','tbl_savr.id','review_date' , DB::raw('ST_X(g.geom) as x' ) , DB::raw('ST_Y(g.geom) as y'), 'clean_banner_image');
 
 
 
@@ -191,13 +208,18 @@ class TiangPembersihanController extends Controller
                     $advertiseSheet->setCellValue('B'.$g, 'SEBELUM');
 
                     $advertiseSheet->mergeCells('I'.$g.':O'.$g);
-                    $advertiseSheet->setCellValue('I'.$g , 'SELEPAS');
+                    $advertiseSheet->setCellValue('I'.$g , 'SEMASA');
+
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$g);
+                    $advertiseSheet->setCellValue('P'.$g , 'SELEPAS');
 
                     $g++;
                     // Add image to cell
                     $k = $g +15;
                     $advertiseSheet->mergeCells('B'.$g.':H'.$k);
                     $advertiseSheet->mergeCells('I'.$g.':O'.$k);
+                    $advertiseSheet->mergeCells('P'.$g.':V'.$k);
+
 
                     $imagePath = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->pole_image_2;
                     if ($advertise->pole_image_2 != '' && file_exists($imagePath))
@@ -210,12 +232,24 @@ class TiangPembersihanController extends Controller
                         $image->setWorksheet($advertiseSheet);
                     }
 
+                    $imagePath2 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->clean_banner_during_image;
+                    if ($advertise->clean_banner_during_image !='' && file_exists($imagePath2))
+                    {
+                        $image2 = new Drawing();
+                        $image2->setPath($imagePath2);
+                        $image2->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image2->setWidth(300); // Set the width of the image (adjust as needed)
+                        $image2->setHeight(300); // Set the height of the image (adjust as needed)
+                        $image2->setWorksheet($advertiseSheet);
+                    }
+
+
                     $imagePath1 = config('globals.APP_IMAGES_LOCALE_PATH').$advertise->clean_banner_image;
                     if ($advertise->clean_banner_image !='' && file_exists($imagePath1))
                     {
                         $image1 = new Drawing();
                         $image1->setPath($imagePath1);
-                        $image1->setCoordinates('I' . $g); // Cell coordinate where you want to insert the image
+                        $image1->setCoordinates('P' . $g); // Cell coordinate where you want to insert the image
                         $image1->setWidth(300); // Set the width of the image (adjust as needed)
                         $image1->setHeight(300); // Set the height of the image (adjust as needed)
                         $image1->setWorksheet($advertiseSheet);

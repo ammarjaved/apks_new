@@ -59,10 +59,11 @@ class TiangExcelController extends Controller
                             'kaki_lima_defect_image','tapak_road_img','tapak_sidewalk_img','tapak_sidewalk_img','tapak_no_vehicle_entry_img','kawasan_bend_img',
                             'kawasan_road_img' , 'kawasan_forest_img' , 'kawasan_other_img']);
 
-            $query = Tiang::select('fp_name as fp_name')
+           // $query = Tiang::select('fp_name as fp_name')
+                $query = Tiang::select('fp_road as road')
 
-                ->selectRaw("string_agg(distinct fp_road, ' , ') as road")
-                //->selectRaw("string_agg(distinct fp_name, ' , ') as fp_name")
+                //->selectRaw("string_agg(distinct fp_road, ' , ') as road")
+                ->selectRaw("string_agg(distinct fp_name, ' , ') as fp_name")
                 ->selectRaw("string_agg(distinct review_date::text, ' , ') as review_date")
                 ->selectRaw("SUM(CASE WHEN size_tiang = '7.5' THEN 1 ELSE 0 END) as size_tiang_75")
                 ->selectRaw("SUM(CASE WHEN size_tiang = '9' THEN 1 ELSE 0 END) as size_tiang_9")
@@ -115,7 +116,9 @@ class TiangExcelController extends Controller
 
 
               //  $roadStatistics = $query->groupBy('fp_road','geom_id' )->get();
-                $roadStatistics = $query->groupBy('fp_name' )->get();
+               // $roadStatistics = $query->groupBy('fp_name' )->get();
+               $roadStatistics = $query->groupBy('fp_road' )->get();
+
 
           // return $roadStatistics;
 
@@ -466,8 +469,8 @@ class TiangExcelController extends Controller
 
 
 
-    public function getReviewDateAgainstGeomId($geomid){
-        $rd = Tiang::where('geom_id', $geomid)->where('cycle',1)
+    public function getReviewDateAgainstGeomId($geomid,$cycle){
+        $rd = Tiang::where('geom_id', $geomid)->where('cycle',$cycle)
         ->select('review_date')
         ->get();
     return $rd->value('review_date');;
@@ -561,10 +564,16 @@ class TiangExcelController extends Controller
                     $worksheetOne->setCellValue('D' . $i, $rec->section_from );
                     $worksheetOne->setCellValue('E' . $i, $rec->section_to);
                     if($req->cycle=='2'){
-                    $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id);
-                  //  return $c1_reviewdate;
+                    $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,1);
                     $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
                     $worksheetOne->setCellValue('I' . $i, $rec->review_date );
+                    }
+                    if($req->cycle=='3'){
+                    $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,1);
+                    $c2_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,2);
+                    $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
+                    $worksheetOne->setCellValue('I' . $i, $c2_reviewdate );
+                    $worksheetOne->setCellValue('J' . $i, $rec->review_date );
                     }
                     if($req->cycle=='1'){
                         $worksheetOne->setCellValue('H' . $i, $rec->review_date );
