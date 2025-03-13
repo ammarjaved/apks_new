@@ -121,6 +121,7 @@ class TiangRepository
         $data->five_feet_away = $request->five_feet_away;
         $data->ffa_no_of_houses = $request->ffa_no_of_houses;
         $data->ffa_house_no = $request->ffa_house_no;
+        $data->hazard_defect = $request->hazard_defect;
 
         // GET TIANG DEFECTS ARRAY FROM app/Constant/TiangCostants
         $defectsKeys = TiangConstants::TIANG_DEFECT;

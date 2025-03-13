@@ -510,7 +510,7 @@
                                         {{-- Line (Main / Service) --}}
 
                                         <tr>
-                                            <th rowspan="4">{{ __('messages.line_main_service') }}</th>
+                                            <th rowspan="5">{{ __('messages.line_main_service') }}</th>
                                             <td class="d-flex">
                                                 <input type="checkbox" name="talian_defect[joint]" id="joint" class="form-check">
                                                 <label for="joint"> {{ __('messages.joint') }}</label>
@@ -527,6 +527,12 @@
                                             <td class="d-flex">
                                                 <input type="checkbox" name="talian_defect[ground]" id="ground" class="form-check">
                                                 <label for="ground">{{ __('messages.Does_Not_Comply_With_Ground_Clearance') }}</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="d-flex">
+                                                <input type="checkbox" name="talian_defect[talian_sbum]" id="talian_sbum" class="form-check">
+                                                <label for="talian_sbum">talian_sbum</label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -595,10 +601,22 @@
 
                                         {{-- IPC --}}
                                         <tr>
-                                            <th rowspan="2">{{ __('messages.IPC') }}</th>
+                                            <th rowspan="4">{{ __('messages.IPC') }}</th>
                                             <td>
                                                 <input type="checkbox" name="ipc_defect[burn]" id="ipc_burn"class="form-check">
                                                 <label for="ipc_burn">{{ __('messages.Burn Effect') }} Burn Effect</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="d-flex">
+                                                <input type="checkbox" name="ipc_defect[ipc_n_krg2]" id="ipc_n_krg2" class="form-check">
+                                                <label for="ipc_n_krg2">Bilangan IPC Neutral Kurang 2</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="d-flex">
+                                                <input type="checkbox" name="ipc_defect[ec_tiada]" id="ec_tiada" class="form-check">
+                                                <label for="ec_tiada">Tiub Pemati (End Cap) Tiada / Tidak Pasang</label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -723,7 +741,7 @@
                                         {{-- Main Street --}}
 
                                         <tr>
-                                            <th rowspan="3">{{ __('messages.main_street') }}</th>
+                                            <th rowspan="4">{{ __('messages.main_street') }}</th>
                                             <td class="d-flex">
                                                 <input type="checkbox" name="kaki_lima_defect[date_wire]" id="street_date_wire" class="form-check">
                                                 <label for="street_date_wire">{{ __('messages.date_wire') }}</label>
@@ -733,6 +751,12 @@
                                             <td class="d-flex">
                                                 <input type="checkbox" name="kaki_lima_defect[burn]" id="street_burn" class="form-check">
                                                 <label for="street_burn">{{ __('messages.junction_box_date_burn_effect') }}</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="d-flex">
+                                                <input type="checkbox" name="kaki_lima_defect[usikan_pengguna]" id="usikan_pengguna" class="form-check">
+                                                <label for="usikan_pengguna">{{ __('messages.usikan_pengguna') }}</label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -904,6 +928,25 @@
                                                 <label for="arus_pada_umbgan_amp">{{ __('messages.Amp') }}</label>
                                                 <input type="text" name="umbang_defect[current_leakage_val]" id="arus_pada_umbgan_amp" class="form-control" required>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="">{{ __('messages.hazard_defect') }}</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-4 d-flex">
+                                                <input type="radio" name="hazard_defect" value="No" id="hazard_defect_no" class="form-check"  >
+                                                <label for="hazard_defect_no">{{ __('messages.no') }}</label>
+                                            </div>
+                                            <div class="col-md-4 d-flex">
+                                                <input type="radio" name="hazard_defect" value="Yes" id="hazard_defect_yes" class="form-check"  >
+                                                <label for="hazard_defect_yes">{{ __('messages.yes') }}</label>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

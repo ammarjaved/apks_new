@@ -23,7 +23,8 @@ return [
     'total_cable_bridge_defects' => 'Total Cable Bridge Defects',
     'total_savt_visited' => 'Total SAVT Visited',
     'total_savt_defects' => 'Total SAVT Defects',
-
+     'hazard_defect'=>'Malaysian - Dangerous / Poisonous Animals / Insects Within Asset Relief Limits
+     English - Haiwan / Serangga Merbahaya / Berbisa Dalam had Kelegaan Aset',
 
     //*************************end dashboard */
 
@@ -41,6 +42,10 @@ return [
     'tiang_talian_vt_&_vr' => 'Tiang + Talian VT & VR',
     'link_box_pelbagai_voltan' => 'Link Box Pelbagai Voltan',
     'cable_bridge' => 'Cable Bridge',
+    'talian_sbum'=>'Talian Atas Direntang Melintasi / Bersentuhan Dengan Bumbung',
+    'ipc_n_krg2'=>'Bilangan IPC Neutral Kurang 2 NOs',
+    'ec_tiada'=>'Tiub Pemati (End Cap) Tiada / Tidak Pasang',
+    'usikan_pengguna'=>'Usikan Pengguna',
 
 
     // ************************CABLE BRIDGE */

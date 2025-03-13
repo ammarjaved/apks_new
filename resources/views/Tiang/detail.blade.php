@@ -416,11 +416,12 @@
 
                                         {{-- Line (Main / Service) --}}
                                         <tr>
-                                            <th rowspan="4">{{ __('messages.line_main_service') }}</th>
+                                            <th rowspan="5">{{ __('messages.line_main_service') }}</th>
                                             {!! tiangDefactCheckBox('joint', $data->talian_defect, 'talian_defect', 'joint',false ) !!}
                                         </tr>
                                         <tr>{!! tiangDefactCheckBox('need_rentis', $data->talian_defect, 'talian_defect', 'need_rentis',false ) !!}</tr>
                                         <tr>{!! tiangDefactCheckBox( 'ground', $data->talian_defect, 'talian_defect', 'Does_Not_Comply_With_Ground_Clearance',false ) !!}</tr>
+                                        <tr>{!! tiangDefactCheckBox( 'talian_sbum', $data->talian_defect, 'talian_defect', 'talian_sbum',true ) !!}</tr>
                                         <tr>{!! tiangDefactCheckBox('other', $data->talian_defect, 'talian_defect', 'others',false ) !!}</tr>
 
                                         {{-- Umbang --}}
@@ -436,9 +437,11 @@
 
                                         {{-- IPC --}}
                                         <tr>
-                                            <th rowspan="2">{{ __('messages.IPC') }}</th>
+                                            <th rowspan="4">{{ __('messages.IPC') }}</th>
                                             {!! tiangDefactCheckBox('burn', $data->ipc_defect, 'ipc_defect', 'Burn Effect',false ) !!}
                                         </tr>
+                                        <tr>{!! tiangDefactCheckBox( 'ipc_n_krg2', $data->ipc_defect , 'ipc_defect','ipc_n_krg2',true ) !!}</tr>
+                                        <tr>{!! tiangDefactCheckBox( 'ec_tiada', $data->ipc_defect, 'ipc_defect','ec_tiada',true ) !!}</tr>
                                         <tr>{!! tiangDefactCheckBox('other', $data->ipc_defect, 'ipc_defect', 'others',false ) !!}</tr>
 
                                         {{-- Black Box --}}
@@ -488,10 +491,11 @@
 
                                         {{-- Main Street --}}
                                         <tr>
-                                            <th rowspan="3">{{ __('messages.main_street') }}</th>
+                                            <th rowspan="4">{{ __('messages.main_street') }}</th>
                                             {!! tiangDefactCheckBox('date_wire', $data->kaki_lima_defect, 'kaki_lima_defect', 'date_wire',false ) !!}
                                         </tr>
                                         <tr>{!! tiangDefactCheckBox('burn', $data->kaki_lima_defect, 'kaki_lima_defect',   'junction_box_date_burn_effect',false ) !!}</tr>
+                                        <tr>{!! tiangDefactCheckBox('usikan_pengguna', $data->kaki_lima_defect, 'kaki_lima_defect',   'usikan_pengguna',true ) !!}</tr>
                                         <tr>{!! tiangDefactCheckBox('other', $data->kaki_lima_defect, 'kaki_lima_defect',  'others',false ) !!}</tr>
                                     </table>
                                 </div>
@@ -698,6 +702,28 @@
                                     </div>
 
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-4"><label
+                                            for="">{{ __('messages.hazard_defect') }}
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 d-flex">
+                                        <input type="radio" name="hazard_defect" id="hazard_defect_no"
+                                            class="form-check" value="No"
+                                            {{ $data->hazard_defect === false ? 'checked' : '' }}>
+                                        <label for="hazard_defect_no">{{ __('messages.no') }}</label>
+                                    </div>
+
+                                    <div class="col-md-4 d-flex">
+                                        <input type="radio" name="hazard_defect" id="hazard_defect_yes"
+                                            class="form-check" value="Yes"
+                                            {{ $data->hazard_defect === true ? 'checked' : '' }}>
+                                        <label for="hazard_defect_yes">{{ __('messages.yes') }}</label>
+                                    </div>
+
+                                </div>
+
 
 
                                 <div class="row">

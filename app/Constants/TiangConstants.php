@@ -6,16 +6,16 @@ class TiangConstants
 {
     public const TIANG_DEFECT = [
         'tiang_defect'         => ['cracked', 'leaning', 'dim', 'creepers', 'other'],
-        'talian_defect'        => ['joint', 'need_rentis', 'ground', 'other'],
+        'talian_defect'        => ['joint', 'need_rentis', 'ground', 'other','talian_sbum'],
         'umbang_defect'        => ['breaking', 'creepers', 'cracked', 'stay_palte', 'other'],
-        'ipc_defect'           => ['burn', 'other'],
+        'ipc_defect'           => ['burn','ipc_n_krg2','ec_tiada','other'],
         'blackbox_defect'      => ['cracked', 'other'],
         'jumper'               => ['sleeve', 'burn', 'other'],
         'kilat_defect'         => ['broken', 'other'],
         'servis_defect'        => ['roof', 'won_piece', 'other'],
         'pembumian_defect'     => ['netural', 'other'],
         'bekalan_dua_defect'   => ['damage', 'other'],
-        'kaki_lima_defect'     => ['date_wire', 'burn', 'other'],
+        'kaki_lima_defect'     => ['date_wire', 'burn','usikan_pengguna','other'],
         'tapak_condition'      => ['road', 'side_walk', 'vehicle_entry'],
         'kawasan'              => ['road', 'bend', 'forest', 'other']
     ];
