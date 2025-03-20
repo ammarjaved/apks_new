@@ -310,10 +310,28 @@
                         {!! tiangSpanRadio(  $data->bare_span, 'bare_span', 's7_122',  true) !!}
 
                     {{-- BARE SPAN 3/132 --}}
+
                     <label for="s3_132">{{ __('messages.BARE_Span') }} 3/132</label>
                         {!! tiangSpanRadio(  $data->bare_span, 'bare_span', 's3_132',  true) !!}
                 </div>
             </div>
+
+            <div class="col-md-6 ">
+                <div class="card p-4">
+
+                    <label for="bil_umbang">BIL UMBANG</label>
+                    {!! tiangSpanRadio($data, 'bil_umbang', 'bil_umbang', true) !!}
+
+                    <label for="bil_black_box">Bil BLACK BOX</label>
+                    {!! tiangSpanRadio($data, 'bil_black_box', 'bil_black_box', true) !!}
+
+                    <label for="bil_lvpt">BIL LVPT</label>
+                    {!! tiangSpanRadio($data, 'bil_lvpt', 'bil_lvpt', true) !!}
+
+                </div>
+            </div>
+
+
         </div>
     </fieldset>
 

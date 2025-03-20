@@ -78,14 +78,16 @@ class TiangContoller extends Controller
     public function store(Request $request)
     {
         try {
-
+               //return $request->all();
             $create = $this->tiangRepository->store($request);
+           // return $create->all();
             $data = $this->tiangRepository->prepareData($create , $request);
+           // return  $data->all();
             $data->save();
 
             Session::flash('success', 'Request Success');
         } catch (\Throwable $th) {
-            // return $th->getMessage();
+           //  return $th->getMessage();
             Session::flash('failed', 'Request Failed');
         }
         return redirect()->route('tiang-talian-vt-and-vr.index', app()->getLocale());

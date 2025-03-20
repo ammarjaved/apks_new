@@ -449,6 +449,23 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6 ">
+                                        <div class="card p-4">
+
+                                            <label for="s7_173">BIL UMBANG</label>
+                                            {!! tiangSpanRadio('', 'bil_umbang', 'bil_umbang', true) !!}
+
+                                            <label for="s7_122">Bil BLACK BOX</label>
+                                            {!! tiangSpanRadio('', 'bil_black_box', 'bil_black_box', true) !!}
+
+                                            <label for="s3_132">BIL LVPT</label>
+                                            {!! tiangSpanRadio('', 'bil_lvpt', 'bil_lvpt', true) !!}
+
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </fieldset>
 

@@ -127,11 +127,12 @@ class TiangMapController extends Controller
         }
         $geomId = $data->pluck('geom_id');
 
+
         $geom =  DB::table('tbl_savr_geom')
                     ->where('id',$geomId)
                     ->select(
-                        \DB::raw('ST_X(geom) as x'),
-                        \DB::raw('ST_Y(geom) as y')
+                        DB::raw('ST_X(geom) as x'),
+                        DB::raw('ST_Y(geom) as y')
                     )->first();
 
 

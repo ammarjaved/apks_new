@@ -385,6 +385,23 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6 ">
+                                        <div class="card p-4">
+
+                                            <label for="bil_umbang">BIL UMBANG</label>
+                                            {!! tiangSpanRadio($data, 'bil_umbang', 'bil_umbang', true) !!}
+
+                                            <label for="bil_black_box">Bil BLACK BOX</label>
+                                            {!! tiangSpanRadio($data, 'bil_black_box', 'bil_black_box', true) !!}
+
+                                            <label for="bil_lvpt">BIL LVPT</label>
+                                            {!! tiangSpanRadio($data, 'bil_lvpt', 'bil_lvpt', true) !!}
+
+                                        </div>
+                                    </div>
+
+
+
 
 
 

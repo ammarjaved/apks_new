@@ -75,15 +75,61 @@ class TiangRepository
 
 
 
-    public function store($request){
+    // public function store($request){
+    //     $data = new Tiang();
+    //     $data->qa_status = 'pending';
+    //     $user = Auth::user()->name;
+    //     $data->created_by = $user;
+    //     if ($request->lat != '' && $request->log != '') {
+    //         $data->geom = DB::raw("ST_GeomFromText('POINT(" . $request->log . ' ' . $request->lat . ")',4326)");
+    //         $data->coords = number_format( $request->log , 5 )  .' , ' . number_format( $request->lat , 5);
+    //     }
+    //     return $data;
+    // }
+
+    public function store($request) {
+        // Create new Tiang instance
         $data = new Tiang();
         $data->qa_status = 'pending';
-        $user = Auth::user()->name;
-        $data->created_by = $user;
+
+        // Get user's BA
+        $userBA = Auth::user()->ba;
+        $data->created_by = Auth::user()->name;
+
+        // Get cycle number from tbl_cycle_info
+        $cycleInfo = DB::table('tbl_cycle_info')
+                       ->where('ba', $userBA)
+                       ->where('tbl_name', 'tbl_savr')
+                       ->first();
+
+        // Assign cycle number if found
+        if ($cycleInfo) {
+            $data->cycle = $cycleInfo->cycle;
+        }
+
+        // Check if coordinates are provided
         if ($request->lat != '' && $request->log != '') {
+            // Format the coordinates
+            $data->coords = number_format($request->log, 5) . ' , ' . number_format($request->lat, 5);
+
+            // First, insert the geometry into tbl_save_geom
+            $geomId = DB::table('tbl_savr_geom')->insertGetId([
+                'geom' => DB::raw("ST_GeomFromText('POINT(" . $request->log . ' ' . $request->lat . ")',4326)"),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+        // if ($request->lat != '' && $request->log != '') {
             $data->geom = DB::raw("ST_GeomFromText('POINT(" . $request->log . ' ' . $request->lat . ")',4326)");
             $data->coords = number_format( $request->log , 5 )  .' , ' . number_format( $request->lat , 5);
+        // }
+
+            // Store the geometry ID in $data
+            $data->geom_id = $geomId;
         }
+
+        // print_r($data);
+        // exit();
         return $data;
     }
 
@@ -91,10 +137,15 @@ class TiangRepository
 
     public function prepareData($data , $request)
     {
-        //  dd($data);
+       //   dd($data);
         $data->abc_span = $request->has('abc_span') ? json_encode($request->abc_span) : null;
         $data->pvc_span = $request->has('pvc_span') ? json_encode($request->pvc_span) : null;
         $data->bare_span = $request->has('bare_span') ? json_encode($request->bare_span) : null;
+
+        $data->bil_umbang = $request->has('bil_umbang') ? $request->bil_umbang['bil_umbang'] : null;
+        $data->bil_black_box = $request->has('bil_black_box') ? $request->bil_black_box['bil_black_box'] : null;
+        $data->bil_lvpt = $request->has('bil_lvpt') ? $request->bil_lvpt['bil_lvpt'] : null;
+
         $data->jarak_kelegaan = $request->jarak_kelegaan;
         $data->ba = $request->ba;
         $data->fp_name = $request->fp_name;
@@ -106,7 +157,6 @@ class TiangRepository
         $data->size_tiang = $request->size_tiang;
         $data->jenis_tiang = $request->jenis_tiang;
         $data->talian_utama = $request->talian_utama;
-
 
 
 

@@ -242,7 +242,7 @@ function tiangSpanRadio($value , $key , $subkey , $status)
     $name = $key ."_".$subkey;
     $disable = $status ? '' : 'disabled';
 
-    $other_key  =  isset($value->$subkey) && !in_array($value->$subkey, [1, 2, 3, 4]) && $value->$subkey != '' ? true : false;
+    $other_key  =  isset($value->$subkey) && !in_array($value->$subkey, [1, 2, 3, 4, 5, 6]) && $value->$subkey != '' ? true : false;
     $html .= "<div class='row mb-3'>
                     <div class='col-md-2 d-flex'>
                         <input type='radio' name='".$name."' id='".$name."_1' value='1' class='select-radio-value' ". (isset($value->$subkey) && $value->$subkey == 1 ? 'checked' : '') ." $disable>
@@ -262,6 +262,18 @@ function tiangSpanRadio($value , $key , $subkey , $status)
                     <div class='col-md-2 d-flex'>
                         <input type='radio' name='".$name."' id='".$name."_4' value='4' class='select-radio-value' ". (isset($value->$subkey) && $value->$subkey == 4 ? 'checked' : '') ." $disable>
                         <label for='".$name."_4' class='fw-400'>4</label>
+                    </div>
+
+                    <div class='col-md-2 d-flex'>
+                    <input type='radio' name='".$name."' id='".$name."_6' value='5' class='select-radio-value' ". (isset($value->$subkey) && $value->$subkey == 5 ? 'checked' : '') ." $disable>
+                    <label for='".$name."_5' class='fw-400'>5</label>
+                    </div>
+
+                    <div class='col-md-2 d-flex'>
+
+                    <input type='radio' name='".$name."' id='".$name."_6' value='6' class='select-radio-value' ". (isset($value->$subkey) && $value->$subkey == 6 ? 'checked' : '') ." $disable>
+                    <label for='".$name."_6' class='fw-400'>6</label>
+
                     </div>
 
                     <div class='col-md-2 d-flex'>
