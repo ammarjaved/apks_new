@@ -229,7 +229,6 @@ class TiangExcelController extends Controller
                         $secondWorksheet->setCellValue('K' . $i,  excelCheckBOc('cracked', $tiang_defect));
                         $secondWorksheet->setCellValue('M' . $i, excelCheckBOc('leaning', $tiang_defect));
                         $secondWorksheet->setCellValue('O' . $i, excelCheckBOc('dim', $tiang_defect));
-
                         $other_defects .= excelCheckBOc('other_value', $tiang_defect) == '1'? $tiang_defect->other_value : '';
                         // $secondWorksheet->setCellValue('Q' . $i, excelCheckBOc('current_leakage', $tiang_defect));
 
@@ -240,16 +239,17 @@ class TiangExcelController extends Controller
                         $secondWorksheet->setCellValue('Q' . $i, excelCheckBOc('joint', $talian_defect));
                         $secondWorksheet->setCellValue('S' . $i, excelCheckBOc('need_rentis', $talian_defect));
                         $secondWorksheet->setCellValue('U' . $i, excelCheckBOc('ground', $talian_defect));
+                        $secondWorksheet->setCellValue('w' . $i, excelCheckBOc('talian_sbum', $talian_defect));
                         $other_defects .= excelCheckBOc('other_value', $talian_defect) == '1'? ' , '. $talian_defect->other_value : '';
 
                     }
 
                     if ($secondRec->umbang_defect != '') {
                         $umbang_defect = json_decode($secondRec->umbang_defect);
-                        $secondWorksheet->setCellValue('W' . $i, excelCheckBOc('breaking', $umbang_defect));
-                        $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('creepers', $umbang_defect));
-                        $secondWorksheet->setCellValue('AA' . $i, excelCheckBOc('cracked', $umbang_defect));
-                        $secondWorksheet->setCellValue('AC' . $i, excelCheckBOc('stay_palte', $umbang_defect));
+                        $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('breaking', $umbang_defect));
+                        $secondWorksheet->setCellValue('AA' . $i, excelCheckBOc('creepers', $umbang_defect));
+                        $secondWorksheet->setCellValue('AC' . $i, excelCheckBOc('cracked', $umbang_defect));
+                        $secondWorksheet->setCellValue('AE' . $i, excelCheckBOc('stay_palte', $umbang_defect));
                         $other_defects .= excelCheckBOc('other_value', $umbang_defect) == '1'?' , '. $umbang_defect->other_value : '';
 
                         // $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('current_leakage', $umbang_defect));
@@ -258,67 +258,72 @@ class TiangExcelController extends Controller
 
                     if ($secondRec->ipc_defect != '') {
                         $ipc_defect = json_decode($secondRec->ipc_defect);
-                        $secondWorksheet->setCellValue('AE' . $i, excelCheckBOc('burn', $ipc_defect));
+                     //   $secondWorksheet->setCellValue('AG' . $i, excelCheckBOc('burn', $ipc_defect));
+                        $secondWorksheet->setCellValue('AG' . $i, excelCheckBOc('ipc_n_krg2', $ipc_defect));
+                        $secondWorksheet->setCellValue('AI' . $i, excelCheckBOc('ec_tiada', $ipc_defect));
                         $other_defects .= excelCheckBOc('other_value', $ipc_defect) == '1'?' , '. $ipc_defect->other_value : '';
 
                     }
 
                     if ($secondRec->blackbox_defect != '') {
                         $blackbox_defect = json_decode($secondRec->blackbox_defect);
-                        $secondWorksheet->setCellValue('AG' . $i, excelCheckBOc('cracked', $blackbox_defect));
+                        $secondWorksheet->setCellValue('AK' . $i, excelCheckBOc('cracked', $blackbox_defect));
                         $other_defects .= excelCheckBOc('other_value', $blackbox_defect) == '1'?' , '. $blackbox_defect->other_value : '';
 
                     }
 
                     if ($secondRec->jumper != '') {
                         $jumper = json_decode($secondRec->jumper);
-                        $secondWorksheet->setCellValue('AI' . $i, excelCheckBOc('sleeve', $jumper));
-                        $secondWorksheet->setCellValue('AK' . $i, excelCheckBOc('burn', $jumper));
+                        $secondWorksheet->setCellValue('AM' . $i, excelCheckBOc('sleeve', $jumper));
+                        $secondWorksheet->setCellValue('AO' . $i, excelCheckBOc('burn', $jumper));
                         $other_defects .= excelCheckBOc('other_value', $jumper) == '1'?' , '. $jumper->other_value : '';
 
                     }
 
                     if ($secondRec->kilat_defect != '') {
                         $kilat_defect = json_decode($secondRec->kilat_defect);
-                        $secondWorksheet->setCellValue('AM' . $i, excelCheckBOc('broken', $kilat_defect));
+                        $secondWorksheet->setCellValue('AQ' . $i, excelCheckBOc('broken', $kilat_defect));
                         $other_defects .= excelCheckBOc('other_value', $kilat_defect) == '1'?' , '. $kilat_defect->other_value : '';
 
                     }
 
                     if ($secondRec->servis_defect != '') {
                         $servis_defect = json_decode($secondRec->servis_defect);
-                        $secondWorksheet->setCellValue('AO' . $i, excelCheckBOc('roof', $servis_defect));
-                        $secondWorksheet->setCellValue('AQ' . $i, excelCheckBOc('won_piece', $servis_defect));
+                        $secondWorksheet->setCellValue('AS' . $i, excelCheckBOc('won_piece', $servis_defect));
+                       // $secondWorksheet->setCellValue('AU' . $i, excelCheckBOc('roof', $servis_defect));
                         $other_defects .= excelCheckBOc('other_value', $servis_defect) == '1'?' , '. $servis_defect->other_value : '';
 
                     }
 
                     if ($secondRec->pembumian_defect != '') {
                         $pembumian_defect = json_decode($secondRec->pembumian_defect);
-                        $secondWorksheet->setCellValue('AS' . $i, excelCheckBOc('netural', $pembumian_defect));
+                        $secondWorksheet->setCellValue('AU' . $i, excelCheckBOc('netural', $pembumian_defect));
                         $other_defects .= excelCheckBOc('other_value', $pembumian_defect) == '1'?' , '. $pembumian_defect->other_value : '';
 
                     }
 
                     if ($secondRec->bekalan_dua_defect != '') {
                         $bekalan_dua_defect =  json_decode($secondRec->bekalan_dua_defect);
-                        $secondWorksheet->setCellValue('AU' . $i, excelCheckBOc('damage', $bekalan_dua_defect));
+                        $secondWorksheet->setCellValue('AW' . $i, excelCheckBOc('damage', $bekalan_dua_defect));
                         $other_defects .= excelCheckBOc('other_value', $bekalan_dua_defect) == '1'?' , '. $bekalan_dua_defect->other_value : '';
 
                     }
 
                     if ($secondRec->kaki_lima_defect != '') {
                         $kaki_lima_defect = json_decode($secondRec->kaki_lima_defect);
-                        $secondWorksheet->setCellValue('AW' . $i, excelCheckBOc('date_wire', $kaki_lima_defect));
-                        $secondWorksheet->setCellValue('AY' . $i, excelCheckBOc('burn', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('AY' . $i, excelCheckBOc('date_wire', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('BA' . $i, excelCheckBOc('burn', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('BC' . $i, excelCheckBOc('usikan_pengguna', $kaki_lima_defect));
                         $other_defects .= excelCheckBOc('other_value', $kaki_lima_defect) == '1'?' , '. $kaki_lima_defect->other_value : '';
 
                     }
                     // $secondWorksheet->setCellValue('AK' . $i, $secondRec->total_defects);
-                    $secondWorksheet->setCellValue('BA' . $i, $other_defects);
+                    $secondWorksheet->setCellValue('BE' . $i, $secondRec->hazard_defect);
 
-                    $secondWorksheet->setCellValue('BC' . $i, $secondRec->coords1);
-                    $secondWorksheet->setCellValue('BD' . $i, $secondRec->total_defects);
+                    $secondWorksheet->setCellValue('BG' . $i, $other_defects);
+
+                    $secondWorksheet->setCellValue('BI' . $i, $secondRec->coords1);
+                    $secondWorksheet->setCellValue('BJ' . $i, $secondRec->total_defects);
 
                     $images = '';
                     foreach ($defectsImg as $defImg) {
@@ -327,14 +332,15 @@ class TiangExcelController extends Controller
 
                         }
                     }
-                    $secondWorksheet->setCellValue('BN' . $i, $images);
-                    $repair_date = $rec->repair_date != ''?date('Y-m-d', strtotime($rec->repair_date)) : '';
-                    $secondWorksheet->setCellValue('BF' . $i, $repair_date);
-                    $secondWorksheet->setCellValue('AN' . $i, $secondRec->remarks);
-                    $secondWorksheet->setCellValue('BH' . $i, '');
 
-                    $secondWorksheet->setCellValue('BL' . $i, $secondRec->id);
-                    $secondWorksheet->setCellValue('BM' . $i, $secondRec->review_date);
+                    $repair_date = $rec->repair_date != ''?date('Y-m-d', strtotime($rec->repair_date)) : '';
+                    $secondWorksheet->setCellValue('BK' . $i, $repair_date);
+                    $secondWorksheet->setCellValue('BM' . $i, $secondRec->remarks);
+                    //$secondWorksheet->setCellValue('BH' . $i, '');
+
+                    $secondWorksheet->setCellValue('BR' . $i, $secondRec->id);
+                    $secondWorksheet->setCellValue('BS' . $i, $secondRec->review_date);
+                    $secondWorksheet->setCellValue('BT' . $i, $images);
 
 
                     $dates =  TiangRepairDate::where('savr_id', $secondRec->id)->select('name','date')->get();
@@ -634,87 +640,92 @@ class TiangExcelController extends Controller
                         $secondWorksheet->setCellValue('M' . $i, excelCheckBOc('joint', $talian_defect));
                         $secondWorksheet->setCellValue('N' . $i, excelCheckBOc('need_rentis', $talian_defect));
                         $secondWorksheet->setCellValue('O' . $i, excelCheckBOc('ground', $talian_defect));
+                        $secondWorksheet->setCellValue('P' . $i, excelCheckBOc('talian_sbum', $talian_defect));
                         $other_defects .= excelCheckBOc('other_value', $talian_defect) == '1'? ' , '. $talian_defect->other_value : '';
 
                     }
 
                     if ($secondRec->umbang_defect != '') {
                         $umbang_defect = json_decode($secondRec->umbang_defect);
-                        $secondWorksheet->setCellValue('P' . $i, excelCheckBOc('breaking', $umbang_defect));
-                        $secondWorksheet->setCellValue('Q' . $i, excelCheckBOc('creepers', $umbang_defect));
-                        $secondWorksheet->setCellValue('R' . $i, excelCheckBOc('cracked', $umbang_defect));
-                        $secondWorksheet->setCellValue('S' . $i, excelCheckBOc('stay_palte', $umbang_defect));
+                        $secondWorksheet->setCellValue('Q' . $i, excelCheckBOc('breaking', $umbang_defect));
+                        $secondWorksheet->setCellValue('R' . $i, excelCheckBOc('creepers', $umbang_defect));
+                        $secondWorksheet->setCellValue('S' . $i, excelCheckBOc('cracked', $umbang_defect));
+                        $secondWorksheet->setCellValue('T' . $i, excelCheckBOc('stay_palte', $umbang_defect));
+                        $secondWorksheet->setCellValue('U' . $i, excelCheckBOc('current_leakage', $umbang_defect));
                         $other_defects .= excelCheckBOc('other_value', $umbang_defect) == '1'?' , '. $umbang_defect->other_value : '';
 
-                        // $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('current_leakage', $umbang_defect));
                     }
                     $secondWorksheet->setCellValue('T' . $i, $secondRec->umbang_defect_current_leakage == 'Yes' ? '1' : '0');
 
 
                     if ($secondRec->ipc_defect != '') {
                         $ipc_defect = json_decode($secondRec->ipc_defect);
-                        $secondWorksheet->setCellValue('U' . $i, excelCheckBOc('burn', $ipc_defect));
+                       // $secondWorksheet->setCellValue('U' . $i, excelCheckBOc('burn', $ipc_defect));
+                       $secondWorksheet->setCellValue('V' . $i, excelCheckBOc('ipc_n_krg2', $ipc_defect));
+                       $secondWorksheet->setCellValue('W' . $i, excelCheckBOc('ec_tiada', $ipc_defect));
                         $other_defects .= excelCheckBOc('other_value', $ipc_defect) == '1'?' , '. $ipc_defect->other_value : '';
 
                     }
 
                     if ($secondRec->blackbox_defect != '') {
                         $blackbox_defect = json_decode($secondRec->blackbox_defect);
-                        $secondWorksheet->setCellValue('V' . $i, excelCheckBOc('cracked', $blackbox_defect));
+                        $secondWorksheet->setCellValue('X' . $i, excelCheckBOc('cracked', $blackbox_defect));
                         $other_defects .= excelCheckBOc('other_value', $blackbox_defect) == '1'?' , '. $blackbox_defect->other_value : '';
 
                     }
 
                     if ($secondRec->jumper != '') {
                         $jumper = json_decode($secondRec->jumper);
-                        $secondWorksheet->setCellValue('W' . $i, excelCheckBOc('sleeve', $jumper));
-                        $secondWorksheet->setCellValue('X' . $i, excelCheckBOc('burn', $jumper));
+                        $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('sleeve', $jumper));
+                        $secondWorksheet->setCellValue('Z' . $i, excelCheckBOc('burn', $jumper));
                         $other_defects .= excelCheckBOc('other_value', $jumper) == '1'?' , '. $jumper->other_value : '';
 
                     }
 
                     if ($secondRec->kilat_defect != '') {
                         $kilat_defect = json_decode($secondRec->kilat_defect);
-                        $secondWorksheet->setCellValue('Y' . $i, excelCheckBOc('broken', $kilat_defect));
+                        $secondWorksheet->setCellValue('AA' . $i, excelCheckBOc('broken', $kilat_defect));
                         $other_defects .= excelCheckBOc('other_value', $kilat_defect) == '1'?' , '. $kilat_defect->other_value : '';
 
                     }
 
                     if ($secondRec->servis_defect != '') {
                         $servis_defect = json_decode($secondRec->servis_defect);
-                        $secondWorksheet->setCellValue('Z' . $i, excelCheckBOc('roof', $servis_defect));
-                        $secondWorksheet->setCellValue('AA' . $i, excelCheckBOc('won_piece', $servis_defect));
+                       // $secondWorksheet->setCellValue('AB' . $i, excelCheckBOc('roof', $servis_defect));
+                        $secondWorksheet->setCellValue('AB' . $i, excelCheckBOc('won_piece', $servis_defect));
                         $other_defects .= excelCheckBOc('other_value', $servis_defect) == '1'?' , '. $servis_defect->other_value : '';
 
                     }
 
                     if ($secondRec->pembumian_defect != '') {
                         $pembumian_defect = json_decode($secondRec->pembumian_defect);
-                        $secondWorksheet->setCellValue('AB' . $i, excelCheckBOc('netural', $pembumian_defect));
+                        $secondWorksheet->setCellValue('AC' . $i, excelCheckBOc('netural', $pembumian_defect));
                         $other_defects .= excelCheckBOc('other_value', $pembumian_defect) == '1'?' , '. $pembumian_defect->other_value : '';
 
                     }
 
                     if ($secondRec->bekalan_dua_defect != '') {
                         $bekalan_dua_defect =  json_decode($secondRec->bekalan_dua_defect);
-                        $secondWorksheet->setCellValue('AC' . $i, excelCheckBOc('damage', $bekalan_dua_defect));
+                        $secondWorksheet->setCellValue('AD' . $i, excelCheckBOc('damage', $bekalan_dua_defect));
                         $other_defects .= excelCheckBOc('other_value', $bekalan_dua_defect) == '1'?' , '. $bekalan_dua_defect->other_value : '';
 
                     }
 
                     if ($secondRec->kaki_lima_defect != '') {
                         $kaki_lima_defect = json_decode($secondRec->kaki_lima_defect);
-                        $secondWorksheet->setCellValue('AD' . $i, excelCheckBOc('date_wire', $kaki_lima_defect));
-                        $secondWorksheet->setCellValue('AE' . $i, excelCheckBOc('burn', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('AE' . $i, excelCheckBOc('date_wire', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('AF' . $i, excelCheckBOc('burn', $kaki_lima_defect));
+                        $secondWorksheet->setCellValue('BG' . $i, excelCheckBOc('usikan_pengguna', $kaki_lima_defect));
                         $other_defects .= excelCheckBOc('other_value', $kaki_lima_defect) == '1'?' , '. $kaki_lima_defect->other_value : '';
 
                     }
                     // $secondWorksheet->setCellValue('AK' . $i, $secondRec->total_defects);
                     // $secondWorksheet->setCellValue('BA' . $i, $other_defects);
+                    $secondWorksheet->setCellValue('AH' . $i, $secondRec->hazard_defect);
 
-                    $secondWorksheet->setCellValue('AF' . $i, $secondRec->total_defects);
-                    $secondWorksheet->setCellValue('AI' . $i, $other_defects);
-                    $secondWorksheet->setCellValue('AJ' . $i, $secondRec->coords1);
+                    $secondWorksheet->setCellValue('AI' . $i, $secondRec->total_defects);
+                    $secondWorksheet->setCellValue('AL' . $i, $other_defects);
+                    $secondWorksheet->setCellValue('AM' . $i, $secondRec->coords1);
 
 
                     $images = '';
@@ -724,7 +735,7 @@ class TiangExcelController extends Controller
 
                         }
                     }
-                    $secondWorksheet->setCellValue('AK' . $i, $images);
+                    $secondWorksheet->setCellValue('AN' . $i, $images);
 
                     $i++;
                 }
