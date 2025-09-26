@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use App\Traits\Filter;
 use Illuminate\Support\Facades\DB;
-use App\Models\SavrFfaSub1;
+//use App\Models\SavrFfaSub1;
+use App\MOdels\FfaSavr;
 
 class SavrFfaController extends Controller
 {
@@ -27,7 +28,7 @@ class SavrFfaController extends Controller
         if ($request->ajax()) {
 
 
-        $result = SavrFfaSub1::query();
+        $result = SavrFfa::query();
         $result = $this->filter($result , 'visit_date' , $request);
 
 
@@ -42,6 +43,7 @@ class SavrFfaController extends Controller
                                 'visit_date'
                             );
             });
+
 
                 return DataTables::eloquent($result)
                 ->addColumn('ffa_id', function ($row) {

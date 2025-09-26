@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\web\SavrFFA;
 
 use App\Http\Controllers\Controller;
-use App\Models\SavrFfaSub1;
+use App\Models\SavrFfa;
 use App\Traits\Filter;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -23,7 +23,7 @@ class FFAExcelController extends Controller
         try
         {
            // return $req;
-            $result = SavrFfaSub1::query();
+            $result = SavrFfa::query();
             $result = $this->filter($result , 'visit_date',$req);
 
             $result = $result->whereNotNull('visit_date')->select('*', DB::raw('ST_X(geom) as x'), DB::raw('ST_Y(geom) as y'))->get();

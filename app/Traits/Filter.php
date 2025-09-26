@@ -45,7 +45,8 @@ trait Filter
 
         if ($request->filled('cycle') && $request->cycle != 'undefined') {
             $model->where('cycle',  $request->cycle);
-        }else{
+        }
+        else{
             $model->where('cycle',  1);
         }
 

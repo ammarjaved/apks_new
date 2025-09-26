@@ -3,6 +3,8 @@
 /public/lib
 /public/apks_gopro
 /public/hot
+/public/vendor
+/public/vendor.rar
 /public/storage
 /storage/*.key
 /vendor

@@ -11,6 +11,7 @@ class SavrFfa extends Model
     protected $table = 'tbl_savr_ffa';
 
     protected $fillable = [
+         'id',
         'pole_id',
         'wayar_tertanggal',
         'ipc_terbakar',
@@ -19,11 +20,13 @@ class SavrFfa extends Model
         'pole_no',
         'house_image',
         'ba',
-        'cycle',
         'joint_box',
         'house_renovation',
         'house_number',
-        'geom'
+        'geom',
+        'image2',
+        'image3',
+        'visit_date'
     ];
 
 

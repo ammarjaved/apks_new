@@ -87,12 +87,14 @@ class TiangExcelController extends Controller
                 ->selectRaw("SUM(CASE WHEN (bare_span->'s3_132')::text <> '' AND (bare_span->'s3_132')::text <> 'null' AND (bare_span->'s3_132')::text <> '".'""'."' THEN (bare_span->>'s3_132')::integer ELSE 0 END) as bare_s7132")
 
                 // ->selectRaw("SUM(CASE WHEN (umbang_defect->'breaking')::text <> '' AND (bare_span->'breaking')::text <> 'null' THEN 1 ELSE 0 END) as bare_s7132")
-                ->selectRaw("SUM(CASE WHEN (blackbox_defect->'cracked')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (blackbox_defect->'other')::text = 'true' THEN 1 ELSE 0 END) as blackbox")
-                ->selectRaw("SUM(CASE WHEN (ipc_defect->'burn')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (ipc_defect->'other')::text = 'true' THEN 1 ELSE 0 END) as ipc")
-                ->selectRaw("SUM(CASE WHEN (umbang_defect->'breaking')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'creepers')::text = 'true' THEN 1 ELSE 0 END
-                + CASE WHEN (umbang_defect->'cracked')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'stay_palte')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'other')::text = 'true' THEN 1 ELSE 0 END
-                ) as umbagan")
-
+                // ->selectRaw("SUM(CASE WHEN (blackbox_defect->'cracked')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (blackbox_defect->'other')::text = 'true' THEN 1 ELSE 0 END) as blackbox")
+                // ->selectRaw("SUM(CASE WHEN (ipc_defect->'burn')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (ipc_defect->'other')::text = 'true' THEN 1 ELSE 0 END) as ipc")
+                ->selectRaw("SUM(COALESCE(NULLIF(bil_black_box, '')::integer, 0)) AS blackbox")
+                ->selectRaw("SUM(COALESCE(NULLIF(bil_lvpt, '')::integer, 0)) AS ipc")
+                // ->selectRaw("SUM(CASE WHEN (umbang_defect->'breaking')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'creepers')::text = 'true' THEN 1 ELSE 0 END
+                // + CASE WHEN (umbang_defect->'cracked')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'stay_palte')::text = 'true' THEN 1 ELSE 0 END + CASE WHEN (umbang_defect->'other')::text = 'true' THEN 1 ELSE 0 END
+                // ) as umbagan")
+                ->selectRaw("SUM(COALESCE(NULLIF(bil_umbang, '')::integer, 0)) AS umbagan")
                 ->selectRaw("SUM(CASE WHEN (talian_utama_connection)::text ='one' THEN 1 ELSE 0 END ) as service")
                 ->selectRaw("MIN(section_from) as section_from")
                 ->selectRaw("MAX(section_to) as section_to")
@@ -569,6 +571,9 @@ class TiangExcelController extends Controller
                     // $worksheet->setCellValue('F' . $i, $rec->fp_name);
                     $worksheetOne->setCellValue('D' . $i, $rec->section_from );
                     $worksheetOne->setCellValue('E' . $i, $rec->section_to);
+                    $worksheetOne->setCellValue('F' . $i, $rec->review_date);
+                    $worksheetOne->setCellValue('G' . $i, $rec->review_date);
+
                     if($req->cycle=='2'){
                     $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,1);
                     $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
@@ -580,6 +585,15 @@ class TiangExcelController extends Controller
                     $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
                     $worksheetOne->setCellValue('I' . $i, $c2_reviewdate );
                     $worksheetOne->setCellValue('J' . $i, $rec->review_date );
+                    }
+                    if($req->cycle=='4'){
+                        $c1_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,1);
+                        $c2_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,2);
+                        $c3_reviewdate=$this->getReviewDateAgainstGeomId($rec->geom_id,3);
+                        $worksheetOne->setCellValue('H' . $i, $c1_reviewdate);
+                        $worksheetOne->setCellValue('I' . $i, $c2_reviewdate );
+                        $worksheetOne->setCellValue('J' . $i, $c3_reviewdate );
+                        $worksheetOne->setCellValue('K' . $i, $rec->review_date );
                     }
                     if($req->cycle=='1'){
                         $worksheetOne->setCellValue('H' . $i, $rec->review_date );

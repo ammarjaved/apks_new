@@ -47,16 +47,17 @@
         console.log(workPackage);
 
            var myurl= `/{{app()->getLocale()}}/generate-{{$url}}-lks?ba=${encodeURIComponent(ba)}&from_date=${from_date}&to_date=${to_date}&cycle=${cycle}&workPackages=${workPackage}`;
-            $.ajax(
+           $.ajax(
                 {
                     url:myurl,
                     method: 'GET',
                     success: function(response)
                     {
 
+
                         $('.counts').html(response.visit_dates.length +1)
 
-                        console.log(response.pdfPath);
+
                         if (response.pdfPath)
                         {
                             pdfPaths.push(response.pdfPath);
@@ -81,7 +82,8 @@
             if (index < dates.length)
             {
                   var url='/{{app()->getLocale()}}/generate-{{$url}}-lks-by-visit-date?ba=' + encodeURIComponent(ba) + '&visit_date=' + dates[index]+'&folder_name='+folderName+'&cycle='+cycle+'&workPackages='+workPackage;
-                $.ajax(
+                console.log(url)
+                  $.ajax(
                     {
                         url: url,
                         method: 'GET',

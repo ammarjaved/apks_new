@@ -100,7 +100,7 @@
                         <div class="row">
 
                             {{-- TOTAL SUBSTATION VISITED --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center"> {{ __('messages.total_substation_visited') }}</h3>
                                     <p class="text-center mb-0 pb-0"> <span id="substation"></span> </p>
@@ -108,24 +108,38 @@
                             </div>
 
                             {{-- SUM SUBSTATION DEFECTS --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center"> {{ __('messages.total_substation_defects') }}</h3>
                                     <p class="text-center mb-0 pb-0"> <span id="substation_defects"></span> </p>
                                 </div>
                             </div>
 
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h3 class="text-center"> Total Repair Defects</h3>
+                                    <p class="text-center mb-0 pb-0"> <span id="substation_defects"></span> </p>
+                                </div>
+                            </div>
+
                             {{-- TOTAL SUBSTATION VISITED GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="suryed_substation-container" style="width:100%; height: 400px; margin: 0 auto"></div>
                                 </div>
                             </div>
 
                             {{-- SUM SUBSTATION DEFECTS GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="substation-container" style="width:100%; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <div id="substation-container1" style="width:100%; height: 400px; margin: 0 auto">
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +158,7 @@
                     <div class="card-body">
                         <div class="row">
                             {{-- TOTAL VISITED --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center">{{ __('messages.total_feeder_pillar_visited') }}</h3>
                                     <p class="text-center mb-0 pb-0"><span id="feeder_pillar"> </span></p>
@@ -152,24 +166,39 @@
                             </div>
 
                             {{-- DEFECTS SUM --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center"> {{ __('messages.total_feeder_pillar_defects') }}</h3>
                                     <p class="text-center mb-0 pb-0"><span id="feeder_pillar_defect"></span></p>
                                 </div>
                             </div>
 
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h3 class="text-center"> Total Repair Defects</h3>
+                                    <p class="text-center mb-0 pb-0"><span id="feeder_pillar_defect"></span></p>
+                                </div>
+                            </div>
+
+
                             {{-- TOTAL VISITED GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="suryed_feeder_pillar-container" style="width:100%; height: 400px; margin: 0 auto"></div>
                                 </div>
                             </div>
 
                             {{-- DEFECTS GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="feeder_pillar-container" style="width:100%; height: 400px; margin: 0 auto">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <div id="feeder_pillar-container1" style="width:100%; height: 400px; margin: 0 auto">
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +217,7 @@
                         <div class="row">
 
                             {{-- TOTAL VISITED --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center">{{ __('messages.total_tiang_visited') }} </h3>
                                     <p class="text-center mb-0 pb-0"><span id="tiang"> </span></p>
@@ -196,24 +225,38 @@
                             </div>
 
                             {{-- DEFECTS SUM --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <h3 class="text-center"> {{ __('messages.total_tiang_defects') }}</h3>
                                     <p class="text-center mb-0 pb-0"><span id="tiang_defect"> </span></p>
                                 </div>
                             </div>
 
+
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h3 class="text-center"> Total Repaired Defects</h3>
+                                    <p class="text-center mb-0 pb-0"><span id="tiang_defect"> </span></p>
+                                </div>
+                            </div>
+
                             {{-- VISITED GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="suryed_tiang-container" style="width:100%; height: 400px; margin: 0 auto"></div>
                                 </div>
                             </div>
 
                             {{-- DEFECTS GRAPH --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card p-3">
                                     <div id="tiang-container" style="width:100%; height: 400px; margin: 0 auto"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <div id="tiang-container1" style="width:100%; height: 400px; margin: 0 auto"></div>
                                 </div>
                             </div>
 
@@ -424,11 +467,14 @@
             // console.log(data['patrolling']);
             $("#patrolling-container").html('')
             $("#substation-container").html('')
+            $("#substation-container1").html('')
             $("#feeder_pillar-container").html('')
+            $("#feeder_pillar-container1").html('')
             $("#link_box-container").html('')
             $("#link_box-container").html('')
             $("#cable_bridge-container").html('')
             $("#tiang-container").html('')
+            $("#tiang-container1").html('')
 
             // $("#suryed_patrolling-container").html('')
             $("#suryed_substation-container").html('')
@@ -450,6 +496,12 @@
             if (id == "patrolling-container") {
                 barName = 'KM'
                 titleName = 'KM Patrol'
+            }
+
+            if (id == "substation-container1" ||id == "feeder_pillar-container1" ||id == "tiang-container1") {
+                barName = ''
+                titleName = 'Total Repaired'
+                tName='Repaired'
             }
             Highcharts.chart(id, {
                 chart: {
@@ -525,8 +577,16 @@
                         makeArray(data['substation'], 'substation-container', 'Defects')
                     }
 
+                    if (data && data['substation'] != '') {
+                        makeArray(data['substation'], 'substation-container1', 'Defects')
+                    }
+
                     if (data && data['feeder_pillar'] != '') {
                         makeArray(data['feeder_pillar'], 'feeder_pillar-container', 'Defects')
+                    }
+
+                    if (data && data['feeder_pillar'] != '') {
+                        makeArray(data['feeder_pillar'], 'feeder_pillar-container1', 'Defects')
                     }
 
                     if (data && data['link_box'] != '') {
@@ -539,6 +599,10 @@
 
                     if (data && data['tiang'] != '') {
                         makeArray(data['tiang'], 'tiang-container', 'Defects')
+                    }
+
+                    if (data && data['tiang'] != '') {
+                        makeArray(data['tiang'], 'tiang-container1', 'Defects')
                     }
 
                     if (data && data['savt'] != '') {
