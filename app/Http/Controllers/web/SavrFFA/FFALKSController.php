@@ -22,7 +22,7 @@ class FFALKSController extends Controller
 
         $result = SavrFfa::where('ba', Auth::user()->ba)
                             ->whereRaw("DATE(visit_date) = ?::date", [$req->visit_date])
-                           // ->where('qa_status', 'Accept')
+                            ->where('qa_status', 'Accept')
                             ->where('cycle', $req->cycle);
 
         if ($req->filled('workPackages')) {
@@ -73,6 +73,7 @@ class FFALKSController extends Controller
         $sr_no = 0;
         $entriesPerPage = 2;
         $entryCount = 0;
+        $pageNumber = 1;
 
         foreach ($data as $row) {
             $entryCount++;
@@ -80,12 +81,18 @@ class FFALKSController extends Controller
             if ($entryCount > $entriesPerPage) {
                 $fpdf->AddPage('L', 'A4');
                 $entryCount = 1;
+                $pageNumber++;
             }
 
             $sr_no++;
             $col1Width = 90;
             $col2Width = 90;
             $cellHeight = 6;
+
+            // Add spacing logic: space on page 1 for first entry, and on page 2+ for both entries
+            if (($pageNumber == 1 && $entryCount == 1) || ($pageNumber > 1)) {
+                $fpdf->Ln(10);
+            }
 
             // Row 1
             $fpdf->Cell($col1Width/2, $cellHeight, 'SR # : ' . $sr_no, 0);
@@ -127,44 +134,43 @@ class FFALKSController extends Controller
             // Handle images
             $house_image = config('globals.APP_IMAGES_LOCALE_PATH').$row->house_image;
             if ($row->house_image != '' && file_exists($house_image)) {
-                $fpdf->Image($house_image, $fpdf->GetX(), $fpdf->GetY(), 60, 60);
-                $fpdf->Cell(40);
+                $fpdf->Image($house_image, $fpdf->GetX(), $fpdf->GetY(), 50, 40);
+                $fpdf->Cell(60);
             } else {
-                $fpdf->Cell(40, 7, '');
+                $fpdf->Cell(60, 7, '');
             }
 
             $image2 = config('globals.APP_IMAGES_LOCALE_PATH').$row->image2;
             if ($row->image2 != '' && file_exists($image2)) {
-                $fpdf->Image($image2, $fpdf->GetX(), $fpdf->GetY(), 60, 60);
-                $fpdf->Cell(40);
+                $fpdf->Image($image2, $fpdf->GetX(), $fpdf->GetY(), 50, 40);
+                $fpdf->Cell(60);
             } else {
-                $fpdf->Cell(40, 7, '');
+                $fpdf->Cell(60, 7, '');
             }
 
             $image3 = config('globals.APP_IMAGES_LOCALE_PATH').$row->image3;
             if ($row->image3 != '' && file_exists($image3)) {
-                $fpdf->Image($image3, $fpdf->GetX(), $fpdf->GetY(), 60, 60);
-                $fpdf->Cell(40);
+                $fpdf->Image($image3, $fpdf->GetX(), $fpdf->GetY(), 50, 40);
+                $fpdf->Cell(60);
             } else {
-                $fpdf->Cell(40, 7, '');
+                $fpdf->Cell(60, 7, '');
             }
 
             if ($entryCount < $entriesPerPage) {
                 $fpdf->Ln(40);
-                $fpdf->Ln(20);
             }
         }
 
-        // FIX: Clean filename and ensure proper path construction
+        // Clean filename and ensure proper path construction
         $visitDate = date('Y-m-d', strtotime($req->visit_date));
         $baName = preg_replace('/[^A-Za-z0-9\-_]/', '_', Auth::user()->ba);
         $pdfFileName = $baName . '_FFW_' . $visitDate . '.pdf';
 
-        // FIX 1: Ensure proper folder path construction using DIRECTORY_SEPARATOR
+        // Ensure proper folder path construction using DIRECTORY_SEPARATOR
         $basePath = 'D:' . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR;
         $fullFolderPath = $basePath . $req->folder_name;
 
-        // FIX 2: Use Laravel's File facade to create directory
+        // Use Laravel's File facade to create directory
         if (!File::isDirectory($fullFolderPath)) {
             try {
                 File::makeDirectory($fullFolderPath, 0755, true, true);
@@ -192,10 +198,10 @@ class FFALKSController extends Controller
             ], 500);
         }
 
-        // FIX 3: Use proper path separator consistently
+        // Use proper path separator consistently
         $pdfFilePath = $fullFolderPath . DIRECTORY_SEPARATOR . $pdfFileName;
 
-        // FIX 4: Add error handling for file output
+        // Add error handling for file output
         try {
             $fpdf->output('F', $pdfFilePath);
         } catch (\Exception $e) {
@@ -222,7 +228,7 @@ class FFALKSController extends Controller
             $result = SavrFfa::query();
 
             $result = $this->filter($result, 'visit_date', $req)
-                          // ->where('qa_status', 'Accept')
+                           ->where('qa_status', 'Accept')
                            ->whereNotNull('visit_date');
 
             if ($req->filled('workPackages')) {
@@ -265,14 +271,14 @@ class FFALKSController extends Controller
             $fpdf->Ln();
             $fpdf->Ln();
 
-            // FIX: Clean filename by removing invalid characters and formatting dates
+            // Clean filename by removing invalid characters and formatting dates
             $fromDate = $req->from_date ? date('Y-m-d', strtotime($req->from_date)) : 'All';
             $toDate = $req->to_date ? date('Y-m-d', strtotime($req->to_date)) : 'All';
             $baName = preg_replace('/[^A-Za-z0-9\-_]/', '_', Auth::user()->ba);
 
             $pdfFileName = $baName . '_FFW_Table_Of_Contents_' . $fromDate . '_to_' . $toDate . '.pdf';
 
-            // FIX 5: Improved folder creation and path handling
+            // Improved folder creation and path handling
             $userID = Auth::user()->id;
             $folderName = 'temporary-FFA-folder-' . $userID;
 
@@ -311,7 +317,7 @@ class FFALKSController extends Controller
             // Normalize the file path using DIRECTORY_SEPARATOR consistently
             $pdfFilePath = $folderPath . DIRECTORY_SEPARATOR . $pdfFileName;
 
-            // FIX 6: Add error handling for PDF output
+            // Add error handling for PDF output
             try {
                 $fpdf->output('F', $pdfFilePath);
             } catch (\Exception $e) {
