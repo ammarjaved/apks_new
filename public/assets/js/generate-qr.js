@@ -40,9 +40,16 @@ $(function(){
 
     url_split = url.split('-');
 
+    if(url_split[1]=='ffa'){
+        to_date= localStorage[url_split[1] + '_to']??'';
+        from_date= localStorage[url_split[1] + '_from']??'';
+        cycle= localStorage[url_split[1] + '_cycle']??1;
+    }else{
+
     to_date= localStorage[url_split[0] + '_to']??'';
     from_date= localStorage[url_split[0] + '_from']??'';
     cycle= localStorage[url_split[0] + '_cycle']??1;
+    }
 
     $('#excel_from_date').val(from_date)
     $('#excel_to_date').val(to_date)
@@ -292,10 +299,17 @@ function resetIndex(){
     $('#excel_to_date').val('');
     $('#qa_status').val('');
     $('#status').val('');
+    $('#cycle').val('');
 
+    if(url_split[1]=='ffa'){
+        localStorage.removeItem(url_split[1]+"_to");
+        localStorage.removeItem(url_split[1]+"_from");
+        localStorage.removeItem(url_split[1]+'_cycle');
+    }else{
     localStorage.removeItem(url_split[0]+"_to");
     localStorage.removeItem(url_split[0]+"_from");
-
+    localStorage.removeItem(url_split[0]+'_cycle');
+    }
     table.ajax.reload();
 
 }

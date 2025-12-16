@@ -476,7 +476,7 @@ class TiangExcelController extends Controller
                 $worksheetOne->setCellValue('H' . $i, $rec->review_date);
             }
 
-            $worksheetOne->setCellValue('N' . $i, $rec->id);
+            $worksheetOne->setCellValue('O' . $i, $rec->id);
             $i++;
         }
 

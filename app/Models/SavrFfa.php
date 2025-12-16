@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class SavrFfa extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_savr_ffa_sub11';
+    //protected $table = 'tbl_savr_ffa_sub11';
+    protected $table = 'tbl_savr_ffa';
 
     protected $fillable = [
          'id',
