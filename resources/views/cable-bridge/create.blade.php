@@ -63,7 +63,7 @@
     </section>
 
     <section class="content container">
- 
+
         {{-- CARD START --}}
         <div class=" card col-md-12 p-4 ">
             <div class="form-input ">
@@ -245,7 +245,7 @@
                                 <option value="No">No</option>
                             </select>
                         </div>
-                    </div>  
+                    </div>
 
                     {{-- BUSHY --}}
                     <div class="row">
@@ -361,12 +361,12 @@
                     {{-- HIDDEN LAT LOG --}}
                     <input type="hidden" name="lat" id="lat" required class="form-control">
                     <input type="hidden" name="log" id="log" class="form-control">
-                    
+
                     {{-- MAP ERROR DIV --}}
                     <div class="text-center">
                         <strong><span class="text-danger map-error"></span></strong>
                     </div>
-                    
+
                     {{-- MAP DIV --}}
                     <div id="map"></div>
 
@@ -398,7 +398,8 @@
                     ['B4', 'CHERAS', 3.14197346621987, 101.849883983416],
                     ['B4', 'BANTING', 2.82111390453244, 101.505890775541],
                     ['B4', 'BANGI',2.965810949933260,101.81881303103104 ],
-                    ['B4', 'PUTRAJAYA & CYBERJAYA', 2.92875032271019,101.675338316575]
+                    ['B4', 'PUTRAJAYA & CYBERJAYA', 2.92875032271019,101.675338316575],
+                    ['B4', 'PUCHONG', 2.971632230751114, 101.62918173453126]
                 ];
                 const userBa = "{{Auth::user()->ba}}";
                 $(document).ready(function() {

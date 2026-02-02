@@ -106,7 +106,7 @@
                                 <div class="col-md-4"><label for="ba">{{ __('messages.ba') }}</label></div>
                                 <div class="col-md-4"><select name="ba_s" id="ba_s" class="form-control" required
                                         onchange="getWp(this)">
-                                        <option value="" hidden>select zone</option>
+                                        <option value="" hidden>select BA</option>
 
                                     </select>
                                     <input type="hidden" name="ba" id="ba">
@@ -271,7 +271,7 @@
                                 </div>
                             </div>
 
-                            
+
                             <div class="row">
                                 <div class="col-md-4"><label
                                         for="advertise_poster_status">{{ __('messages.cleaning_illegal_ads_banners') }}</label>
@@ -287,7 +287,7 @@
                             </div>
 
 
-                            
+
 
                             <div class="row">
                                 <div class="col-md-4">
@@ -310,7 +310,7 @@
                                 <div class="col-md-4">
                                     <input type="file" name="image_name_plate" id="image_name_plate"
                                         accept="image/*" class="form-control" required>
-                                     
+
                                 </div>
                             </div>
 
@@ -442,7 +442,8 @@
             ['B4', 'CHERAS', 3.14197346621987, 101.849883983416],
             ['B4', 'BANTING', 2.82111390453244, 101.505890775541],
             ['B4', 'BANGI', 2.965810949933260, 101.81881303103104],
-            ['B4', 'PUTRAJAYA & CYBERJAYA', 2.92875032271019, 101.675338316575]
+            ['B4', 'PUTRAJAYA & CYBERJAYA', 2.92875032271019, 101.675338316575],
+            ['B4', 'PUCHONG', 2.971632230751114, 101.62918173453126]
         ];
 
         const userBa = "{{ Auth::user()->ba }}";

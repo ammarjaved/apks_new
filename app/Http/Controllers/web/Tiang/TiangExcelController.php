@@ -22,7 +22,7 @@ class TiangExcelController extends Controller
         try {
             $startTime = microtime(true);
             ini_set('memory_limit', '4096M');
-            set_time_limit(300);
+            set_time_limit(30000);
 
             Log::info('Excel generation started');
 

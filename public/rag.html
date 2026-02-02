@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Database RAG Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+            color: #1a1a1a;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-bottom: 3px solid #5568d3;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .config-bar {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .config-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-item label {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .config-item select, .config-item input {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+            background: white;
+        }
+
+        .config-item input {
+            width: 160px;
+        }
+
+        .btn-small {
+            padding: 5px 12px;
+            border-radius: 5px;
+            border: none;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-small:hover {
+            background: #5568d3;
+        }
+
+        .db-selector {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .db-btn {
+            padding: 5px 12px;
+            border-radius: 5px;
+            border: 1px solid #667eea;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .db-btn:hover {
+            background: #f0f4ff;
+        }
+
+        .db-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .results-area {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #999;
+            padding: 60px 20px;
+            font-size: 1.1rem;
+        }
+
+        .welcome-message h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .result-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .result-header h3 {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .result-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .query-display {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .sql-display {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .sql-display code {
+            color: #a9dc76;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .result-table-wrapper {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 500px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .result-table thead {
+            background: #667eea;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .result-table th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .result-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .result-table tbody tr:hover {
+            background: #e8eaff;
+        }
+
+        .result-table td {
+            padding: 10px 15px;
+        }
+
+        .result-count {
+            background: #e8eaff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .error-display {
+            background: #ffe5e5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            width: 380px;
+            background: white;
+            border-left: 2px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #fafafa;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.assistant .message-bubble {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .system-message {
+            text-align: center;
+            color: #999;
+            font-size: 0.75rem;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .examples-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .example-chip {
+            padding: 5px 10px;
+            border-radius: 12px;
+            border: 1px solid #667eea;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+
+        .example-chip:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 0.85rem;
+            font-family: inherit;
+            resize: none;
+            min-height: 40px;
+            max-height: 80px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .chat-panel {
+                width: 100%;
+                height: 350px;
+                border-left: none;
+                border-top: 2px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Area -->
+        <div class="main-area">
+            <div class="header">
+                <h1>🗄️ Database Query Assistant</h1>
+                <p>Natural language database queries powered by AI</p>
+            </div>
+
+            <div class="config-bar">
+                <div class="config-item">
+                    <label>Database:</label>
+                    <div id="dbButtons" class="db-selector"></div>
+                </div>
+                <div class="config-item">
+                    <label>Model:</label>
+                    <select id="ollamaModel">
+                        <option value="llama2">Llama 2</option>
+                        <option value="llama3">Llama 3</option>
+                        <option value="mistral">Mistral</option>
+                        <option value="codellama">Code Llama</option>
+                        <option value="phi">Phi</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label>API URL:</label>
+                    <input type="text" id="apiUrl" value="http://121.121.232.53:8191/rag.php">
+                </div>
+                <button class="btn-small" onclick="loadDatabases()">🔄 Reload</button>
+            </div>
+
+            <div class="results-area" id="resultsArea">
+                <div class="welcome-message">
+                    <h2>👋 Welcome!</h2>
+                    <p>Ask questions about your database using the chat panel on the right.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #999;">Results will appear here</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <span>💬 Chat</span>
+                <button class="clear-btn" onclick="clearChat()" title="Clear chat">🗑️</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="system-message">Ask me anything about your database!</div>
+            </div>
+
+            <div class="chat-input-area">
+               <!-- <div class="examples-row">
+                    <div class="example-chip" onclick="sendMessage('Show sales data')">💼 Sales</div>
+                    <div class="example-chip" onclick="sendMessage('Monthly totals')">📊 Totals</div>
+                    <div class="example-chip" onclick="sendMessage('Employee hours')">⏰ Hours</div>
+                    <div class="example-chip" onclick="sendMessage('View schema')">📋 Schema</div>
+                </div>-->
+                <div class="input-row">
+                    <textarea 
+                        id="chatInput" 
+                        class="chat-input"
+                        placeholder="Ask about your database..."
+                        onkeydown="handleKeyPress(event)"
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <span id="btnText">Send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="ollamaUrl" value="http://localhost:11434">
+
+    <script>
+        let selectedDatabase = 'aero_foods';
+        let chatHistory = [];
+
+        function formatTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function addChatMessage(text, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = text;
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = formatTime();
+            
+            messageDiv.appendChild(bubble);
+            messageDiv.appendChild(time);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const systemDiv = document.createElement('div');
+            systemDiv.className = 'system-message';
+            systemDiv.textContent = text;
+            chatMessages.appendChild(systemDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function displayResults(data, userQuery) {
+            const resultsArea = document.getElementById('resultsArea');
+            
+            let html = '<div class="result-container">';
+            
+            // Header
+            html += '<div class="result-header">';
+            html += `<h3>📊 Query Results</h3>`;
+            html += `<div class="result-meta">Database: <strong>${selectedDatabase}</strong> | ${formatTime()}</div>`;
+            html += '</div>';
+            
+            // User Query
+            html += '<div class="query-display">';
+            html += `<strong>Question:</strong> ${userQuery}`;
+            html += '</div>';
+            
+            // SQL Query
+            if (data.sql_query) {
+                html += '<div class="sql-display">';
+                html += `<code>${escapeHtml(data.sql_query)}</code>`;
+                html += '</div>';
+            }
+            
+            // Results
+            if (data.query_result) {
+                if (data.query_result.success && data.query_result.rows) {
+                    html += `<div class="result-count">📊 Found ${data.query_result.rows.length} row(s)</div>`;
+                    
+                    if (data.query_result.rows.length > 0) {
+                        html += '<div class="result-table-wrapper">';
+                        html += createResultTable(data.query_result.rows);
+                        html += '</div>';
+                    }
+                } else if (!data.query_result.success) {
+                    html += `<div class="error-display">❌ Error: ${escapeHtml(data.query_result.error)}</div>`;
+                }
+            } else if (data.response) {
+                // Show AI response if no SQL was generated
+                html += `<div class="query-display">${escapeHtml(data.response)}</div>`;
+            }
+            
+            html += '</div>';
+            
+            resultsArea.innerHTML = html;
+        }
+
+        function createResultTable(rows) {
+            const columns = Object.keys(rows[0]);
+            
+            let html = '<table class="result-table">';
+            html += '<thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${escapeHtml(col)}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            rows.forEach(row => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    const value = row[col];
+                    if (value === null) {
+                        html += '<td style="color: #999; font-style: italic;">NULL</td>';
+                    } else {
+                        html += `<td>${escapeHtml(String(value))}</td>`;
+                    }
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function sendMessage(predefinedMessage) {
+            const input = document.getElementById('chatInput');
+            const message = predefinedMessage || input.value.trim();
+            
+            if (!message) return;
+            
+            const sendBtn = document.getElementById('sendBtn');
+            const btnText = document.getElementById('btnText');
+            
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // Disable send button
+            sendBtn.disabled = true;
+            btnText.innerHTML = '<div class="spinner"></div>';
+            
+            try {
+                const apiUrl = document.getElementById('apiUrl').value.trim();
+                const ollamaUrl = document.getElementById('ollamaUrl').value.trim();
+                const ollamaModel = document.getElementById('ollamaModel').value;
+                
+                const response = await fetch(`${apiUrl}?action=query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: message,
+                        database: selectedDatabase,
+                        ollama_url: ollamaUrl,
+                        ollama_model: ollamaModel
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Add AI response to chat
+                    const aiResponse = data.sql_query ? '✓ Query generated and executed' : data.response;
+                    addChatMessage(aiResponse, 'assistant');
+                    
+                    // Display results in main area
+                    displayResults(data, message);
+                } else {
+                    addChatMessage(`Error: ${data.error}`, 'assistant');
+                    
+                    const resultsArea = document.getElementById('resultsArea');
+                    resultsArea.innerHTML = `<div class="result-container"><div class="error-display">❌ ${escapeHtml(data.error)}</div></div>`;
+                }
+            } catch (error) {
+                addChatMessage(`Connection Error: ${error.message}`, 'assistant');
+                
+                const resultsArea = document.getElementById('resultsArea');
+                resultsArea.innerHTML = `<div class="result-container"><div class="error-display">❌ ${escapeHtml(error.message)}</div></div>`;
+            } finally {
+                sendBtn.disabled = false;
+                btnText.textContent = 'Send';
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function loadDatabases() {
+            const apiUrl = document.getElementById('apiUrl').value.trim();
+            
+            try {
+                const response = await fetch(`${apiUrl}?action=list_databases`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const dbButtons = document.getElementById('dbButtons');
+                    dbButtons.innerHTML = '';
+                    
+                    data.databases.forEach((db, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'db-btn' + (index === 0 ? ' active' : '');
+                        btn.textContent = db;
+                        btn.onclick = () => selectDatabase(db);
+                        dbButtons.appendChild(btn);
+                    });
+                    
+                    if (data.databases.length > 0) {
+                        selectedDatabase = data.databases[0];
+                    }
+                    
+                    addSystemMessage(`✅ Connected to ${data.databases.length} database(s)`);
+                }
+            } catch (error) {
+                console.error('Failed to load databases:', error);
+                addSystemMessage(`❌ Failed to load databases`);
+            }
+        }
+
+        function selectDatabase(db) {
+            selectedDatabase = db;
+            document.querySelectorAll('.db-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === db) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            addSystemMessage(`🔄 Switched to: ${db}`);
+        }
+
+        function clearChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '<div class="system-message">Chat cleared. Start fresh!</div>';
+            chatHistory = [];
+            
+            const resultsArea = document.getElementById('resultsArea');
+            resultsArea.innerHTML = `
+                <div class="welcome-message">
+                    <h2>👋 Welcome!</h2>
+                    <p>Ask questions about your database using the chat panel.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #999;">Results will appear here</p>
+                </div>
+            `;
+        }
+
+        // Auto-resize textarea
+        document.getElementById('chatInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+        });
+
+        // Load databases on page load
+        window.addEventListener('load', () => {
+            setTimeout(loadDatabases, 500);
+        });
+    </script>
+</body>
+</html>

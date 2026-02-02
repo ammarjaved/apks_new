@@ -78,7 +78,7 @@
                     </select>
                 </div>
 
-                {{-- <div class="col-md-2">
+                <div class="col-md-2">
                     <label for="from_date">Fom</label>
                     <input type="date" class="form-control" id="from_date" onchange="filterByDate(this)" />
                 </div>
@@ -86,7 +86,7 @@
                 <div class="col-md-2">
                     <label for="to_date">To</label>
                     <input type="date" class="form-control" id="to_date" onchange="filterByDate(this)" />
-                </div> --}}
+                </div>
 
                 <div class="col-md-2">
                     <label for="cycle">Cycle</label>
